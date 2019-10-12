@@ -1,0 +1,14 @@
+{
+  "name": "client",
+  "version": "0.0.1",
+  "description": "Code \"src/api/api.ts\" is generated from `swagger/run.sh`.",
+  "main": "build/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "superagent": "5.1.0"
+  }
+}
