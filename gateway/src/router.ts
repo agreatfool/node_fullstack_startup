@@ -1,6 +1,6 @@
 import * as Router from "koa-router";
 
-import {createUser, getUser, updateUser} from "./service/user";
+import {createUser, getUser, updateUser} from "./controller/user";
 
 export const router = new Router();
 

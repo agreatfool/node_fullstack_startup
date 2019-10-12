@@ -8,137 +8,82 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * @swagger
- * tags:
- *   name: Users
- *   description: User management
- */
-/**
- * @swagger
- * definitions:
- *   UserResponse:
- *     type: object
- *     properties:
- *       code:
- *         type: integer
- *         format: int32
- *         example: 200
- *       data:
- *         $ref: '#/definitions/User'
- */
-/**
- * @swagger
- * /users/{id}:
- *   get:
- *     tags:
- *       - Users
- *     description: Get user info by id
- *     operationId: getUser
- *     produces:
- *       - application/json
- *     parameters:
- *       - name: id
- *         description: User Id
- *         in: path
- *         required: true
- *         schema:
- *           type: integer
- *           format: int64
- *     responses:
- *       200:
- *         description: User info
- *         schema:
- *           $ref: '#/definitions/UserResponse'
- */
-exports.getUser = (ctx) => __awaiter(this, void 0, void 0, function* () {
-    ctx.body = {
-        code: 200,
-        data: {
-            id: ctx.params.id,
-            name: `name of ${ctx.params.id}`,
-            age: ctx.params.id,
-            gender: "male",
-            skills: [
-                {
-                    id: 173,
-                    name: "skill1",
-                }, {
-                    id: 174,
-                    name: "skill2",
-                },
-            ],
-        },
-    };
+const grpc = require("grpc");
+const api_grpc_pb_1 = require("../proto/api_grpc_pb");
+const api_pb_1 = require("../proto/api_pb");
+const client = new api_grpc_pb_1.UserServiceClient("127.0.0.1:50051", grpc.credentials.createInsecure());
+exports.getUser = (id) => __awaiter(this, void 0, void 0, function* () {
+    return new Promise((resolve, reject) => {
+        const request = new api_pb_1.GetUserReq();
+        request.setId(id);
+        client.getUser(request, (err, user) => {
+            if (err != null) {
+                reject(err);
+                return;
+            }
+            resolve(transformIUser(user));
+        });
+    });
 });
-/**
- * @swagger
- * /users:
- *   post:
- *     tags:
- *       - Users
- *     description: Create user
- *     operationId: createUser
- *     produces:
- *       - application/json
- *     parameters:
- *       - name: user
- *         description: User info
- *         in: body
- *         required: true
- *         schema:
- *           $ref: '#/definitions/User'
- *     responses:
- *       200:
- *         description: User info
- *         schema:
- *           $ref: '#/definitions/UserResponse'
- */
-exports.createUser = (ctx) => __awaiter(this, void 0, void 0, function* () {
-    ctx.body = {
-        code: 200,
-        data: {
-            id: ctx.request.body.id,
-            name: ctx.request.body.name,
-            age: ctx.request.body.age,
-            gender: ctx.request.body.gender,
-            skills: ctx.request.body.skills,
-        },
-    };
+exports.createUser = (user) => __awaiter(this, void 0, void 0, function* () {
+    return new Promise((resolve, reject) => {
+        client.createUser(transformUser(user), (err, res) => {
+            if (err != null) {
+                reject(err);
+                return;
+            }
+            resolve(transformIUser(res));
+        });
+    });
 });
-/**
- * @swagger
- * /users:
- *   put:
- *     tags:
- *       - Users
- *     description: Update user
- *     operationId: updateUser
- *     produces:
- *       - application/json
- *     parameters:
- *       - name: user
- *         description: User info
- *         in: body
- *         required: true
- *         schema:
- *           $ref: '#/definitions/User'
- *     responses:
- *       200:
- *         description: User info
- *         schema:
- *           $ref: '#/definitions/UserResponse'
- */
-exports.updateUser = (ctx) => __awaiter(this, void 0, void 0, function* () {
-    ctx.body = {
-        code: 200,
-        data: {
-            id: ctx.request.body.id,
-            name: ctx.request.body.name,
-            age: ctx.request.body.age,
-            gender: ctx.request.body.gender,
-            skills: ctx.request.body.skills,
-        },
-    };
+exports.updateUser = (user) => __awaiter(this, void 0, void 0, function* () {
+    return new Promise((resolve, reject) => {
+        client.createUser(transformUser(user), (err, res) => {
+            if (err != null) {
+                reject(err);
+                return;
+            }
+            resolve(transformIUser(res));
+        });
+    });
 });
+const transformUser = (user) => {
+    const res = new api_pb_1.User();
+    res.setId(user.id);
+    res.setName(user.name);
+    res.setAge(user.age);
+    res.setGender(user.gender);
+    for (const skill of user.skills) {
+        res.addSkills(transformSkill(skill));
+    }
+    return res;
+};
+const transformSkill = (skill) => {
+    const res = new api_pb_1.Skill();
+    res.setId(skill.id);
+    res.setName(skill.name);
+    return res;
+};
+const transformIUser = (user) => {
+    return {
+        id: user.getId(),
+        name: user.getName(),
+        age: user.getAge(),
+        gender: user.getGender(),
+        skills: transformISkills(user.getSkillsList()),
+    };
+};
+const transformISkill = (skill) => {
+    return {
+        id: skill.getId(),
+        name: skill.getName(),
+    };
+};
+const transformISkills = (skills) => {
+    const res = [];
+    for (const skill of skills) {
+        res.push(transformISkill(skill));
+    }
+    return res;
+};
 //# sourceMappingURL=user.js.map

@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package com.api;
+
+message Skill {
+    int64 id = 1;
+    string name = 2;
+}
+
+message User {
+    int64 id = 1;
+    string name = 2;
+    int32 age = 3;
+    string gender = 4;
+    repeated Skill skills = 5;
+}
+
+message GetUserReq {
+    int64 id = 1;
+}
+
+service UserService {
+    rpc GetUser (GetUserReq) returns (User) {}
+    rpc CreateUser (User) returns (User) {}
+    rpc UpdateUser (User) returns (User) {}
+}
