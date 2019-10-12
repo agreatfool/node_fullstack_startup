@@ -34,6 +34,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  *     tags:
  *       - Users
  *     description: Get user info by id
+ *     operationId: getUser
  *     produces:
  *       - application/json
  *     parameters:
@@ -77,6 +78,7 @@ exports.getUser = (ctx) => __awaiter(this, void 0, void 0, function* () {
  *     tags:
  *       - Users
  *     description: Create user
+ *     operationId: createUser
  *     produces:
  *       - application/json
  *     parameters:
@@ -111,6 +113,7 @@ exports.createUser = (ctx) => __awaiter(this, void 0, void 0, function* () {
  *     tags:
  *       - Users
  *     description: Update user
+ *     operationId: updateUser
  *     produces:
  *       - application/json
  *     parameters:

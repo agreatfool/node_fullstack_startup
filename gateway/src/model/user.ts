@@ -27,6 +27,15 @@ import {ISkill} from "./skill";
  *         enum:
  *           - male
  *           - female
+ *       skills:
+ *         type: array
+ *         items:
+ *           $ref: '#/definitions/Skill'
+ *         example:
+ *           - id: 1234
+ *             name: "Hiring"
+ *           - id: 1273
+ *             name: "Programming"
  */
 export interface IUser {
     id: number;

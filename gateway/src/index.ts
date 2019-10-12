@@ -18,7 +18,7 @@ const swaggerSpec = swaggerJSDoc({
     explorer: true,
     swaggerDefinition: {
         basePath: apiBaseUrl,
-        host: `${host}:${port}`,
+        host: `${process.env.TEST_HOST}:${port}`,
         info: {
             description: "REST API demo",
             title: "REST API demo",

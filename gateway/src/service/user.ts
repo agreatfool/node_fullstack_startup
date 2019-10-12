@@ -32,6 +32,7 @@ import {IUser} from "../model/user";
  *     tags:
  *       - Users
  *     description: Get user info by id
+ *     operationId: getUser
  *     produces:
  *       - application/json
  *     parameters:
@@ -76,6 +77,7 @@ export const getUser = async (ctx: Koa.Context) => {
  *     tags:
  *       - Users
  *     description: Create user
+ *     operationId: createUser
  *     produces:
  *       - application/json
  *     parameters:
@@ -111,6 +113,7 @@ export const createUser = async (ctx: Koa.Context) => {
  *     tags:
  *       - Users
  *     description: Update user
+ *     operationId: updateUser
  *     produces:
  *       - application/json
  *     parameters:

@@ -119,13 +119,17 @@ class Generator {
         const tsSourceCode = CodeGen.getTypescriptCode({
             className: "Api",
             swagger: SPEC,
+            template: {
+                // build/index.js => build/../../src/templates/class.mustache
+                class: LibFs.readFileSync(LibPath.join(__dirname, "..", "src", "templates", "class.mustache"), "utf-8"),
+            },
         });
 
         LibFs.writeFileSync(LibPath.join(ARGS_OUTPUT, "api.ts"), tsSourceCode);
     }
 }
 
-new Generator().run().then((_) => _).catch(_ => console.log(_));
+new Generator().run().then((_) => _).catch((_) => console.log(_));
 
 process.on("uncaughtException", (error: Error) => {
     console.error(`Process on uncaughtException error = ${error.stack}`);
