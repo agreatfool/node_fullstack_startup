@@ -15,7 +15,7 @@
     "node-fetch": "2.6.0",
     "shelljs": "0.8.3",
     "swagger-js-codegen": "1.13.0",
-    "swagger-typescript-codegen": "^3.0.1",
+    "swagger-typescript-codegen": "3.0.1",
     "yaml": "1.7.1"
   },
   "devDependencies": {
