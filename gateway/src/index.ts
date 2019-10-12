@@ -8,8 +8,8 @@ import {router} from "./router";
 const koaSwagger = require("koa2-swagger-ui");
 
 const app = new Koa();
-const host = "127.0.0.1";
-const port = 3000;
+const host = process.env.HTTP_HOST;
+const port = process.env.HTTP_PORT;
 const apiVersion = "v1.0";
 const apiBaseUrl = `/api/${apiVersion}`;
 
@@ -64,4 +64,6 @@ app.use(async (ctx: Koa.Context, next) => {
     return next();
 });
 
+console.log(`Listening: ${host}:${port}`);
+// @ts-ignore
 app.listen(port, host);
