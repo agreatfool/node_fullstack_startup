@@ -11,7 +11,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Koa = require("koa");
 const swaggerJSDoc = require("swagger-jsdoc");
 const bodyParser = require("koa-bodyparser");
-const router_1 = require("./router");
+const router_1 = require("./controller/router");
 const koaSwagger = require("koa2-swagger-ui");
 const app = new Koa();
 const host = process.env.HTTP_HOST;

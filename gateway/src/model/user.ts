@@ -5,6 +5,7 @@ import {ISkill} from "./skill";
  * definitions:
  *   User:
  *     type: object
+ *     description: User info
  *     required:
  *       - name
  *       - age
@@ -14,23 +15,28 @@ import {ISkill} from "./skill";
  *       id:
  *         type: integer
  *         format: int64
+ *         description: User id
  *         example: 1453
  *       name:
  *         type: string
+ *         description: User name
  *         example: "david"
  *       age:
  *         type: integer
  *         format: int32
+ *         description: User age
  *         example: 32
  *       gender:
  *         type: string
  *         enum:
  *           - male
- *           - female
+ *           - femal
+ *         description: User gender
  *       skills:
  *         type: array
  *         items:
  *           $ref: '#/definitions/Skill'
+ *         description: User skills
  *         example:
  *           - id: 1234
  *             name: "Hiring"
