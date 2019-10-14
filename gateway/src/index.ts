@@ -3,7 +3,7 @@ import * as swaggerJSDoc from "swagger-jsdoc";
 import {SwaggerDefinition} from "swagger-jsdoc";
 import * as bodyParser from "koa-bodyparser";
 
-import {router} from "./router";
+import {router} from "./controller/router";
 
 const koaSwagger = require("koa2-swagger-ui");
 
