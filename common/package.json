@@ -1,20 +1,18 @@
 {
-  "name": "server",
+  "name": "common",
   "version": "0.0.1",
   "description": "",
   "main": "build/index.js",
+  "types": "build/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "MIT",
-  "dependencies": {
-    "common": "file:../common",
+  "devDependencies": {
+    "@types/node": "12.7.12",
     "grpc": "1.24.0",
     "grpc_tools_node_protoc_ts": "2.5.5",
     "typeorm": "0.2.20"
-  },
-  "devDependencies": {
-    "@types/node": "12.7.12"
   }
 }

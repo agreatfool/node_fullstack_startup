@@ -1,9 +1,7 @@
 #!/usr/bin/env node
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const grpc = require("grpc");
-const api_grpc_pb_1 = require("./proto/api_grpc_pb");
-const api_pb_1 = require("./proto/api_pb");
+const common_1 = require("common");
 class ServerImpl {
     getUser(call, callback) {
         const id = call.request.getId();
@@ -24,7 +22,7 @@ class ServerImpl {
         callback(null, user);
     }
     generateUser(id, name, age, gener, skills) {
-        const user = new api_pb_1.User();
+        const user = new common_1.Pb.User();
         user.setId(id);
         user.setName(name);
         user.setAge(age);
@@ -33,16 +31,16 @@ class ServerImpl {
         return user;
     }
     generateSkill(id, name) {
-        const skill = new api_pb_1.Skill();
+        const skill = new common_1.Pb.Skill();
         skill.setId(id);
         skill.setName(name);
         return skill;
     }
 }
 function startServer() {
-    const server = new grpc.Server();
-    server.addService(api_grpc_pb_1.UserServiceService, new ServerImpl());
-    server.bind("127.0.0.1:50051", grpc.ServerCredentials.createInsecure());
+    const server = new common_1.grpc.Server();
+    server.addService(common_1.GrpcPb.UserServiceService, new ServerImpl());
+    server.bind("127.0.0.1:50051", common_1.grpc.ServerCredentials.createInsecure());
     server.start();
     console.log("Server started, listening: 127.0.0.1:50051");
 }

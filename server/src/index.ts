@@ -1,12 +1,9 @@
 #!/usr/bin/env node
 
-import * as grpc from "grpc";
+import {Pb, GrpcPb, grpc} from "common";
 
-import {UserServiceService, IUserServiceServer} from "./proto/api_grpc_pb";
-import {GetUserReq, Skill, User} from "./proto/api_pb";
-
-class ServerImpl implements IUserServiceServer {
-    public getUser(call: grpc.ServerUnaryCall<GetUserReq>, callback: grpc.sendUnaryData<User>) {
+class ServerImpl implements GrpcPb.IUserServiceServer {
+    public getUser(call: grpc.ServerUnaryCall<Pb.GetUserReq>, callback: grpc.sendUnaryData<Pb.User>) {
         const id = call.request.getId();
 
         const user = this.generateUser(id, `getUser name: ${id}`, 32, "male", [
@@ -17,20 +14,20 @@ class ServerImpl implements IUserServiceServer {
         callback(null, user);
     }
 
-    public createUser(call: grpc.ServerUnaryCall<User>, callback: grpc.sendUnaryData<User>) {
-        const req: User = call.request;
+    public createUser(call: grpc.ServerUnaryCall<Pb.User>, callback: grpc.sendUnaryData<Pb.User>) {
+        const req: Pb.User = call.request;
         const user = this.generateUser(req.getId(), req.getName(), req.getAge(), req.getGender(), req.getSkillsList());
         callback(null, user);
     }
 
-    public updateUser(call: grpc.ServerUnaryCall<User>, callback: grpc.sendUnaryData<User>) {
-        const req: User = call.request;
+    public updateUser(call: grpc.ServerUnaryCall<Pb.User>, callback: grpc.sendUnaryData<Pb.User>) {
+        const req: Pb.User = call.request;
         const user = this.generateUser(req.getId(), req.getName(), req.getAge(), req.getGender(), req.getSkillsList());
         callback(null, user);
     }
 
-    private generateUser(id: number, name: string, age: number, gener: string, skills: Skill[]): User {
-        const user = new User();
+    private generateUser(id: number, name: string, age: number, gener: string, skills: Pb.Skill[]): Pb.User {
+        const user = new Pb.User();
 
         user.setId(id);
         user.setName(name);
@@ -41,8 +38,8 @@ class ServerImpl implements IUserServiceServer {
         return user;
     }
 
-    private generateSkill(id: number, name: string): Skill {
-        const skill = new Skill();
+    private generateSkill(id: number, name: string): Pb.Skill {
+        const skill = new Pb.Skill();
 
         skill.setId(id);
         skill.setName(name);
@@ -54,7 +51,7 @@ class ServerImpl implements IUserServiceServer {
 function startServer() {
     const server = new grpc.Server();
 
-    server.addService(UserServiceService, new ServerImpl());
+    server.addService(GrpcPb.UserServiceService, new ServerImpl());
     server.bind("127.0.0.1:50051", grpc.ServerCredentials.createInsecure());
     server.start();
 

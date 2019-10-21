@@ -1,3 +1,5 @@
+import { Id, IId } from "./id";
+import { IUser, User } from "./user";
 /**
  * @swagger
  * definitions:
@@ -16,8 +18,15 @@
  *         type: string
  *         description: Skill name
  *         example: "programming"
+ *       user:
+ *         $ref: '#/definitions/User'
+ *
  */
-export interface ISkill {
-    id: number;
+export declare class Skill extends Id {
     name: string;
+    user: User;
+}
+export interface ISkill extends IId {
+    name: string;
+    user: IUser;
 }

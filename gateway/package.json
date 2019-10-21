@@ -9,6 +9,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "common": "file:../common",
     "grpc": "1.24.0",
     "grpc_tools_node_protoc_ts": "2.5.5",
     "koa": "2.8.2",

@@ -23,5 +23,5 @@ protoc \
 
 # TypeScript compiling
 mkdir -p build/proto
-cp -r ./src/proto/*.js build/proto
+cp -r ./src/proto/* build/proto
 tsc

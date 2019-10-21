@@ -9,8 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const grpc = require("grpc");
 const common_1 = require("common");
-const client = new common_1.GrpcPb.UserServiceClient("127.0.0.1:50051", common_1.grpc.credentials.createInsecure());
+const client = new common_1.GrpcPb.UserServiceClient("127.0.0.1:50051", grpc.credentials.createInsecure());
 exports.getUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return new Promise((resolve, reject) => {
         const request = new common_1.Pb.GetUserReq();

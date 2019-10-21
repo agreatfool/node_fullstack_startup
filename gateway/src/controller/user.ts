@@ -1,5 +1,6 @@
 import * as Koa from "koa";
-import {IUser} from "../model/user";
+
+import {UserModel} from "common";
 
 import * as UserService from "../service/user";
 
@@ -77,12 +78,12 @@ export const getUser = async (ctx: Koa.Context) => {
  */
 export const createUser = async (ctx: Koa.Context) => {
     ctx.body = await UserService.createUser({
-        id: ctx.request.body.id,
-        name: ctx.request.body.name,
-        age: ctx.request.body.age,
-        gender: ctx.request.body.gender,
-        skills: ctx.request.body.skills,
-    } as IUser);
+        id: (ctx.request as any).body.id,
+        name: (ctx.request as any).body.name,
+        age: (ctx.request as any).body.age,
+        gender: (ctx.request as any).body.gender,
+        skills: (ctx.request as any).body.skills,
+    } as UserModel.IUser);
 };
 
 /**
@@ -110,10 +111,10 @@ export const createUser = async (ctx: Koa.Context) => {
  */
 export const updateUser = async (ctx: Koa.Context) => {
     ctx.body = await UserService.updateUser({
-        id: ctx.request.body.id,
-        name: ctx.request.body.name,
-        age: ctx.request.body.age,
-        gender: ctx.request.body.gender,
-        skills: ctx.request.body.skills,
-    } as IUser);
+        id: (ctx.request as any).body.id,
+        name: (ctx.request as any).body.name,
+        age: (ctx.request as any).body.age,
+        gender: (ctx.request as any).body.gender,
+        skills: (ctx.request as any).body.skills,
+    } as UserModel.IUser);
 };
