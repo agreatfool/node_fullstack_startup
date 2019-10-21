@@ -1,0 +1,57 @@
+version: "2"
+
+networks:
+  net:
+    driver: "bridge"
+
+volumes:
+  mysql_data:
+    driver: "local"
+  redis_data:
+    driver: "local"
+
+services:
+  # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+  # -* MYSQL
+  # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+  mysql:
+    image: "mysql:5.6.45"
+    container_name: "mysql"
+    hostname: "mysql"
+    networks:
+      - "net"
+    ports:
+      - "13306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ${BASEPATH}/vendor/mysql/config/my.cnf:/etc/mysql/my.cnf
+      - ${BASEPATH}/vendor/mysql/schema/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    restart: "always"
+    environment:
+      MYSQL_ROOT_PASSWORD: "abc123_"
+      MYSQL_DATABASE: "fullstack"
+    command: [
+      "--bind-address=0.0.0.0",
+      "--character-set-server=utf8mb4",
+      "--collation-server=utf8mb4_unicode_ci",
+      "--max-connections=500",
+      "--max-allowed-packet=33554432" # 32M
+    ]
+  # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+  # -* REDIS
+  # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+  redis:
+    image: "redis:5.0.6-alpine3.10"
+    container_name: "redis"
+    hostname: "redis"
+    networks:
+      - "net"
+    ports:
+      - "16379:6379"
+    volumes:
+      - redis_data:/data
+      - ${BASEPATH}/vendor/redis/redis.conf:/usr/local/etc/redis/redis.conf
+    restart: "always"
+  # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+  # -* REDIS
+  # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
