@@ -1,4 +1,4 @@
-import {PrimaryGeneratedColumn} from "typeorm";
+import {Entity, PrimaryGeneratedColumn} from "typeorm";
 
 /**
  * @swagger
@@ -15,10 +15,12 @@ import {PrimaryGeneratedColumn} from "typeorm";
  *         description: Object id
  *         example: 1
  */
+@Entity({synchronize: false})
 export class Id {
     @PrimaryGeneratedColumn("increment", {type: "int"})
-    public id: number;
+    public id?: number;
 }
+
 export interface IId {
-    id: number;
+    id?: number;
 }

@@ -24,9 +24,9 @@ import { IUser, User } from "./user";
  */
 export declare class Skill extends Id {
     name: string;
-    user: User;
+    user?: User;
 }
 export interface ISkill extends IId {
     name: string;
-    user: IUser;
+    user?: IUser;
 }

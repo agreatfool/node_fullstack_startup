@@ -1,6 +1,6 @@
 import {ISkill, Skill} from "./skill";
 import {Id, IId} from "./id";
-import {Column, OneToMany} from "typeorm";
+import {Column, Entity, OneToMany} from "typeorm";
 
 export enum UserGender {
     MALE = "male",
@@ -42,6 +42,7 @@ export enum UserGender {
  *               $ref: '#/definitions/Skill'
  *             description: User skills
  */
+@Entity()
 export class User extends Id {
     @Column({type: "varchar", length: 255})
     public name: string;
@@ -54,12 +55,12 @@ export class User extends Id {
     })
     public gender: UserGender;
     @OneToMany(() => Skill, (skill) => skill.user)
-    public skills: Skill[];
+    public skills?: Skill[];
 }
 
 export interface IUser extends IId {
     name: string;
     age: number;
-    gender: string;
-    skills: ISkill[];
+    gender: UserGender;
+    skills?: ISkill[];
 }

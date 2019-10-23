@@ -25,11 +25,14 @@ const typeorm_1 = require("typeorm");
  *         description: Object id
  *         example: 1
  */
-class Id {
-}
+let Id = class Id {
+};
 __decorate([
     typeorm_1.PrimaryGeneratedColumn("increment", { type: "int" }),
     __metadata("design:type", Number)
 ], Id.prototype, "id", void 0);
+Id = __decorate([
+    typeorm_1.Entity({ synchronize: false })
+], Id);
 exports.Id = Id;
 //# sourceMappingURL=id.js.map

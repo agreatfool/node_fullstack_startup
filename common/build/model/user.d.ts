@@ -43,11 +43,11 @@ export declare class User extends Id {
     name: string;
     age: number;
     gender: UserGender;
-    skills: Skill[];
+    skills?: Skill[];
 }
 export interface IUser extends IId {
     name: string;
     age: number;
-    gender: string;
-    skills: ISkill[];
+    gender: UserGender;
+    skills?: ISkill[];
 }

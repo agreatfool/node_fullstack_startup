@@ -34,8 +34,8 @@ const user_1 = require("./user");
  *         $ref: '#/definitions/User'
  *
  */
-class Skill extends id_1.Id {
-}
+let Skill = class Skill extends id_1.Id {
+};
 __decorate([
     typeorm_1.Column({ type: "varchar", length: 255 }),
     __metadata("design:type", String)
@@ -44,5 +44,8 @@ __decorate([
     typeorm_1.ManyToOne(() => user_1.User, (user) => user.skills),
     __metadata("design:type", user_1.User)
 ], Skill.prototype, "user", void 0);
+Skill = __decorate([
+    typeorm_1.Entity()
+], Skill);
 exports.Skill = Skill;
 //# sourceMappingURL=skill.js.map

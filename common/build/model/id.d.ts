@@ -14,8 +14,8 @@
  *         example: 1
  */
 export declare class Id {
-    id: number;
+    id?: number;
 }
 export interface IId {
-    id: number;
+    id?: number;
 }

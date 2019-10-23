@@ -52,8 +52,8 @@ var UserGender;
  *               $ref: '#/definitions/Skill'
  *             description: User skills
  */
-class User extends id_1.Id {
-}
+let User = class User extends id_1.Id {
+};
 __decorate([
     typeorm_1.Column({ type: "varchar", length: 255 }),
     __metadata("design:type", String)
@@ -74,5 +74,8 @@ __decorate([
     typeorm_1.OneToMany(() => skill_1.Skill, (skill) => skill.user),
     __metadata("design:type", Array)
 ], User.prototype, "skills", void 0);
+User = __decorate([
+    typeorm_1.Entity()
+], User);
 exports.User = User;
 //# sourceMappingURL=user.js.map

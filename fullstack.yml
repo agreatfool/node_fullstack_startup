@@ -1,0 +1,19 @@
+# -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+# -* TypeOrm
+# -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+database:
+  type: "mysql"
+  host: "127.0.0.1"
+  port: 13306
+  username: "root"
+  password: "abc123_"
+  database: "fullstack"
+  charset: "utf8mb4"
+  synchronize: true # sync schema from source code to db instance, shall be FALSE in production env
+  logging: ["query", "error"]
+  cache:
+    type: "redis"
+    options:
+      host: "127.0.0.1"
+      port: 16379
+    duration: 300000 # 5 minutes
