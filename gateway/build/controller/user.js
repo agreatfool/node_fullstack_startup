@@ -9,7 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const UserService = require("../service/user");
+const ApiService = require("../service/api");
+const utility_1 = require("../utility/utility");
 /**
  * @swagger
  * tags:
@@ -28,6 +29,22 @@ const UserService = require("../service/user");
  *         example: 200
  *       data:
  *         $ref: '#/definitions/User'
+ *   UserWithSkillsResponse:
+ *     type: object
+ *     properties:
+ *       code:
+ *         type: integer
+ *         format: int32
+ *         example: 200
+ *       data:
+ *         type: object
+ *         properties:
+ *           user:
+ *             $ref: '#/definitions/User'
+ *           skills:
+ *             type: array
+ *             items:
+ *               $ref: '#/definitions/Skill'
  */
 /**
  * @swagger
@@ -54,7 +71,42 @@ const UserService = require("../service/user");
  *           $ref: '#/definitions/UserResponse'
  */
 exports.getUser = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
-    ctx.body = yield UserService.getUser(ctx.params.id);
+    let res = yield ApiService.getUser(ctx.params.id);
+    if (res.id === 0) {
+        res = {};
+    }
+    ctx.body = utility_1.buildResponse(200, res);
+});
+/**
+ * @swagger
+ * /users/skills/{id}:
+ *   get:
+ *     tags:
+ *       - Users
+ *     description: Get user info & skills info by user id
+ *     operationId: getUserWithSkills
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: id
+ *         description: User Id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           format: int64
+ *     responses:
+ *       200:
+ *         description: User info & skills info
+ *         schema:
+ *           $ref: '#/definitions/UserWithSkillsResponse'
+ */
+exports.getUserWithSkills = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
+    const res = yield ApiService.getUserWithSkills(ctx.params.id);
+    if (res.user.id === 0) {
+        res.user = {};
+    }
+    ctx.body = utility_1.buildResponse(200, res);
 });
 /**
  * @swagger
@@ -80,13 +132,46 @@ exports.getUser = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
  *           $ref: '#/definitions/UserResponse'
  */
 exports.createUser = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
-    ctx.body = yield UserService.createUser({
-        id: ctx.request.body.id,
+    ctx.body = utility_1.buildResponse(200, yield ApiService.createUser({
         name: ctx.request.body.name,
         age: ctx.request.body.age,
         gender: ctx.request.body.gender,
-        skills: ctx.request.body.skills,
-    });
+    }));
+});
+/**
+ * @swagger
+ * /users/skills:
+ *   post:
+ *     tags:
+ *       - Users
+ *     description: Create user with skills
+ *     operationId: createUserWithSkills
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: data
+ *         description: Request body data
+ *         in: body
+ *         required: true
+ *         schema:
+ *           type: object
+ *           required:
+ *             - user
+ *           properties:
+ *             user:
+ *               $ref: '#/definitions/User'
+ *             skills:
+ *               type: array
+ *               items:
+ *                 $ref: '#/definitions/Skill'
+ *     responses:
+ *       200:
+ *         description: User info
+ *         schema:
+ *           $ref: '#/definitions/UserResponse'
+ */
+exports.createUserWithSkills = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
+    ctx.body = utility_1.buildResponse(200, yield ApiService.createUserWithSkills(ctx.request.body.user, ctx.request.body.skills));
 });
 /**
  * @swagger
@@ -112,12 +197,15 @@ exports.createUser = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
  *           $ref: '#/definitions/UserResponse'
  */
 exports.updateUser = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
-    ctx.body = yield UserService.updateUser({
+    let res = yield ApiService.updateUser({
         id: ctx.request.body.id,
         name: ctx.request.body.name,
         age: ctx.request.body.age,
         gender: ctx.request.body.gender,
-        skills: ctx.request.body.skills,
     });
+    if (res.id === 0) {
+        res = {};
+    }
+    ctx.body = utility_1.buildResponse(200, res);
 });
 //# sourceMappingURL=user.js.map

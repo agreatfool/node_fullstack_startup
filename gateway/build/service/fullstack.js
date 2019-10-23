@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const common_1 = require("common");
+const Transformer = require("common/build/utility/transformer");
 const client = new common_1.GrpcPb.FullstackClient("127.0.0.1:50051", common_1.grpc.credentials.createInsecure());
 exports.getUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return new Promise((resolve, reject) => {
@@ -43,6 +44,21 @@ exports.updateUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
                 return;
             }
             resolve(transformIUser(res));
+        });
+    });
+});
+exports.getUserSkills = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    return new Promise((resolve, reject) => {
+        const request = new common_1.Pb.GetUserSkillsReq();
+        request.setId(id);
+        client.getUserSkills(request, (err, res) => {
+            if (err != null) {
+                reject(err);
+                return;
+            }
+            resolve(res.getSkillsList().map((pb) => {
+                return Transformer.Skill.P2I(pb);
+            }));
         });
     });
 });
@@ -85,4 +101,4 @@ const transformISkills = (skills) => {
     }
     return res;
 };
-//# sourceMappingURL=user.js.map
+//# sourceMappingURL=fullstack.js.map

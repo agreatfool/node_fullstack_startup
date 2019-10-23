@@ -29,7 +29,6 @@ var UserGender;
  *           - name
  *           - age
  *           - gender
- *           - skills
  *         properties:
  *           name:
  *             type: string
@@ -46,11 +45,6 @@ var UserGender;
  *               - male
  *               - female
  *             description: User gender
- *           skills:
- *             type: array
- *             items:
- *               $ref: '#/definitions/Skill'
- *             description: User skills
  */
 let User = class User extends id_1.Id {
 };

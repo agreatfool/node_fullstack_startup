@@ -3,7 +3,7 @@
 import * as LibPath from "path";
 import "reflect-metadata";
 import {Config, Database, grpc, GrpcPb} from "common";
-import {UserServiceImpl} from "./service/user";
+import {ApiServiceImpl} from "./service/api";
 import {createConnection} from "typeorm";
 
 const startServer = async () => {
@@ -14,7 +14,7 @@ const startServer = async () => {
     // start server
     const server = new grpc.Server();
 
-    server.addService(GrpcPb.UserServiceService, new UserServiceImpl());
+    server.addService(GrpcPb.ApiService, new ApiServiceImpl());
     server.bind("127.0.0.1:50051", grpc.ServerCredentials.createInsecure());
     server.start();
 

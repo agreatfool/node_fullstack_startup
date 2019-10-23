@@ -1,28 +1,22 @@
 import {Id, IId} from "./id";
 import {Column, Entity, ManyToOne} from "typeorm";
-import {IUser, User} from "./user";
+import {User} from "./user";
 
 /**
  * @swagger
  * definitions:
  *   Skill:
- *     type: object
- *     description: Skill info
- *     required:
- *       - name
- *     properties:
- *       id:
- *         type: integer
- *         format: int64
- *         description: Skill Id
- *         example: 172
- *       name:
- *         type: string
- *         description: Skill name
- *         example: "programming"
- *       user:
- *         $ref: '#/definitions/User'
- *
+ *     allOf:
+ *       - $ref: "#/definitions/IdObj"
+ *       - type: object
+ *         description: Skill info
+ *         required:
+ *           - name
+ *         properties:
+ *           name:
+ *             type: string
+ *             description: Skill name
+ *             example: "programming"
  */
 @Entity()
 export class Skill extends Id {
@@ -34,5 +28,4 @@ export class Skill extends Id {
 
 export interface ISkill extends IId {
     name: string;
-    user?: IUser;
 }

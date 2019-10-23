@@ -13,11 +13,12 @@ const Koa = require("koa");
 const swaggerJSDoc = require("swagger-jsdoc");
 const bodyParser = require("koa-bodyparser");
 const router_1 = require("./controller/router");
+const pkg = require("../package.json");
 const koaSwagger = require("koa2-swagger-ui");
 const app = new Koa();
 const host = process.env.HTTP_HOST;
 const port = process.env.HTTP_PORT;
-const apiVersion = "v1.0";
+const apiVersion = `v${pkg.version}`;
 const apiBaseUrl = `/api/${apiVersion}`;
 const swaggerSpec = swaggerJSDoc({
     apis: ["**/*.ts"],
@@ -26,9 +27,9 @@ const swaggerSpec = swaggerJSDoc({
         basePath: apiBaseUrl,
         host: `${process.env.TEST_HOST}:${port}`,
         info: {
-            description: "REST API demo",
-            title: "REST API demo",
-            version: "1.0.0",
+            description: "Fullstack app Api",
+            title: "Fullstack app Api",
+            version: pkg.version,
         },
     },
 });
@@ -60,12 +61,21 @@ app.use((ctx, next) => __awaiter(void 0, void 0, void 0, function* () {
         ctx.body = JSON.stringify(swaggerSpec, null, 4);
     }
     else {
-        ctx.res.statusCode = 404;
-        ctx.body = "404 page";
+        ctx.status = 200;
+        ctx.body = {
+            code: 404,
+            data: "Resource not found",
+        };
     }
     return next();
 }));
 console.log(`Listening: ${host}:${port}`);
 // @ts-ignore
 app.listen(port, host);
+process.on("uncaughtException", (err) => {
+    console.log(`process on uncaughtException error: ${err}`);
+});
+process.on("unhandledRejection", (err) => {
+    console.log(`process on unhandledRejection error: ${err}`);
+});
 //# sourceMappingURL=index.js.map

@@ -19,7 +19,6 @@ export enum UserGender {
  *           - name
  *           - age
  *           - gender
- *           - skills
  *         properties:
  *           name:
  *             type: string
@@ -36,11 +35,6 @@ export enum UserGender {
  *               - male
  *               - female
  *             description: User gender
- *           skills:
- *             type: array
- *             items:
- *               $ref: '#/definitions/Skill'
- *             description: User skills
  */
 @Entity()
 export class User extends Id {
@@ -62,5 +56,4 @@ export interface IUser extends IId {
     name: string;
     age: number;
     gender: UserGender;
-    skills?: ISkill[];
 }

@@ -10,20 +10,48 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
-const transformer_1 = require("common/build/utility/transformer");
+const common_1 = require("common");
+exports.fetchUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield typeorm_1.getConnection()
+        .getRepository(common_1.UserModel.User)
+        .findOne({
+        where: { id: userId },
+    });
+});
 exports.fetchUserWithSkills = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield typeorm_1.getConnection()
+        .getRepository(common_1.UserModel.User)
+        .createQueryBuilder("user")
+        .where({ id: userId })
+        .leftJoinAndSelect("user.skills", "skill")
+        .getOne();
+});
+exports.createUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
+    const userModel = common_1.Transformer.User.I2M(user);
+    userModel.id = undefined; // use auto id
+    return yield typeorm_1.getConnection()
+        .getRepository(common_1.UserModel.User)
+        .save(userModel);
+});
+exports.updateUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
+    const userModel = common_1.Transformer.User.I2M(user);
+    return yield typeorm_1.getConnection()
+        .getRepository(common_1.UserModel.User)
+        .update({ id: userModel.id }, userModel);
 });
 exports.createUserWithSkills = (user, skills) => __awaiter(void 0, void 0, void 0, function* () {
     let result;
-    user.skills = skills;
     const connection = typeorm_1.getConnection();
     const queryRunner = connection.createQueryRunner();
     yield queryRunner.connect();
     yield queryRunner.startTransaction();
     try {
-        result = yield queryRunner.manager.save(transformer_1.userI2M(user));
+        const userModel = common_1.Transformer.User.I2M(user);
+        userModel.id = undefined; // use auto id
+        console.log(userModel);
+        result = yield queryRunner.manager.save(userModel);
         for (const skill of skills) {
-            const skillModel = transformer_1.skillI2M(skill);
+            const skillModel = common_1.Transformer.Skill.I2M(skill);
             skillModel.user = result;
             yield queryRunner.manager.save(skillModel);
         }
@@ -31,6 +59,7 @@ exports.createUserWithSkills = (user, skills) => __awaiter(void 0, void 0, void 
     }
     catch (err) {
         yield queryRunner.rollbackTransaction();
+        throw err;
     }
     finally {
         yield queryRunner.release();

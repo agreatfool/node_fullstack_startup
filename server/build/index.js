@@ -13,7 +13,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const LibPath = require("path");
 require("reflect-metadata");
 const common_1 = require("common");
-const user_1 = require("./service/user");
+const api_1 = require("./service/api");
 const typeorm_1 = require("typeorm");
 const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
     // init system
@@ -21,7 +21,7 @@ const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
     yield typeorm_1.createConnection(common_1.Database.getConnectionOptions());
     // start server
     const server = new common_1.grpc.Server();
-    server.addService(common_1.GrpcPb.UserServiceService, new user_1.UserServiceImpl());
+    server.addService(common_1.GrpcPb.ApiService, new api_1.ApiServiceImpl());
     server.bind("127.0.0.1:50051", common_1.grpc.ServerCredentials.createInsecure());
     server.start();
     console.log("Server started, listening: 127.0.0.1:50051");

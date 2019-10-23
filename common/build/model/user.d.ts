@@ -1,4 +1,4 @@
-import { ISkill, Skill } from "./skill";
+import { Skill } from "./skill";
 import { Id, IId } from "./id";
 export declare enum UserGender {
     MALE = "male",
@@ -16,7 +16,6 @@ export declare enum UserGender {
  *           - name
  *           - age
  *           - gender
- *           - skills
  *         properties:
  *           name:
  *             type: string
@@ -33,11 +32,6 @@ export declare enum UserGender {
  *               - male
  *               - female
  *             description: User gender
- *           skills:
- *             type: array
- *             items:
- *               $ref: '#/definitions/Skill'
- *             description: User skills
  */
 export declare class User extends Id {
     name: string;
@@ -49,5 +43,4 @@ export interface IUser extends IId {
     name: string;
     age: number;
     gender: UserGender;
-    skills?: ISkill[];
 }

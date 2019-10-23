@@ -3,7 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const common_1 = require("common");
 const UserDao = require("../dao/user");
 const Transformer = require("common/build/utility/transformer");
-class FullstackServiceImpl {
+const SkillDao = require("../dao/skill");
+class ApiServiceImpl {
     getUser(call, callback) {
         const id = call.request.getId();
         const user = this.generateUser(id, `getUser name: ${id}`, 32, "male", [
@@ -29,6 +30,21 @@ class FullstackServiceImpl {
         const user = this.generateUser(req.getId(), req.getName(), req.getAge(), req.getGender(), req.getSkillsList());
         callback(null, user);
     }
+    getUserSkills(call, callback) {
+        const id = call.request.getId();
+        SkillDao.fetchUserSkills(id)
+            .then((skills) => {
+            console.log(skills);
+            const res = new common_1.Pb.GetUserSkillsRes();
+            res.setSkillsList(skills.map((skill) => {
+                return Transformer.Skill.M2P(skill);
+            }));
+            callback(null, res);
+        })
+            .catch((err) => {
+            callback(err, null);
+        });
+    }
     generateUser(id, name, age, gener, skills) {
         const user = new common_1.Pb.User();
         user.setId(id);
@@ -45,5 +61,5 @@ class FullstackServiceImpl {
         return skill;
     }
 }
-exports.FullstackServiceImpl = FullstackServiceImpl;
-//# sourceMappingURL=user.js.map
+exports.ApiServiceImpl = ApiServiceImpl;
+//# sourceMappingURL=fullstack.js.map

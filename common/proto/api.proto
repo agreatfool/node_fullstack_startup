@@ -12,15 +12,43 @@ message User {
     string name = 2;
     int32 age = 3;
     string gender = 4;
-    repeated Skill skills = 5;
 }
 
 message GetUserReq {
     int64 id = 1;
 }
 
-service UserService {
-    rpc GetUser (GetUserReq) returns (User) {}
-    rpc CreateUser (User) returns (User) {}
-    rpc UpdateUser (User) returns (User) {}
+message CreateUserReq {
+    User user = 1;
+    repeated Skill skills = 2;
+}
+
+message GetUserWithSkillsRes {
+    User user = 1;
+    repeated Skill skills = 2;
+}
+
+message GetSkillsReq {
+    int64 id = 1;
+}
+
+message GetSkillsRes {
+    repeated Skill skills = 1;
+}
+
+service Api {
+    rpc GetUser (GetUserReq) returns (User) {
+    }
+    rpc GetUserWithSkills (GetUserReq) returns (GetUserWithSkillsRes) {
+    }
+    rpc CreateUser (User) returns (User) {
+    }
+    rpc CreateUserWithSkills (CreateUserReq) returns (User) {
+    }
+    rpc UpdateUser (User) returns (User) {
+    }
+    rpc GetSkills (GetSkillsReq) returns (GetSkillsRes) {
+    }
+    rpc UpdateSkill (Skill) returns (Skill) {
+    }
 }

@@ -16,23 +16,17 @@ const user_1 = require("./user");
  * @swagger
  * definitions:
  *   Skill:
- *     type: object
- *     description: Skill info
- *     required:
- *       - name
- *     properties:
- *       id:
- *         type: integer
- *         format: int64
- *         description: Skill Id
- *         example: 172
- *       name:
- *         type: string
- *         description: Skill name
- *         example: "programming"
- *       user:
- *         $ref: '#/definitions/User'
- *
+ *     allOf:
+ *       - $ref: "#/definitions/IdObj"
+ *       - type: object
+ *         description: Skill info
+ *         required:
+ *           - name
+ *         properties:
+ *           name:
+ *             type: string
+ *             description: Skill name
+ *             example: "programming"
  */
 let Skill = class Skill extends id_1.Id {
 };
