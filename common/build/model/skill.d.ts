@@ -1,5 +1,7 @@
+/// <reference types="hapi__joi" />
 import { Id, IId } from "./id";
 import { User } from "./user";
+import * as Joi from "@hapi/joi";
 /**
  * @swagger
  * definitions:
@@ -23,3 +25,5 @@ export declare class Skill extends Id {
 export interface ISkill extends IId {
     name: string;
 }
+export declare const SkillSchemaNonId: Joi.ObjectSchema;
+export declare const SkillSchema: Joi.ObjectSchema;

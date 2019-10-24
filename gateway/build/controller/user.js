@@ -9,8 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const common_1 = require("common");
 const ApiService = require("../service/api");
 const utility_1 = require("../utility/utility");
+const Joi = require("@hapi/joi");
 /**
  * @swagger
  * tags:
@@ -71,6 +73,11 @@ const utility_1 = require("../utility/utility");
  *           $ref: '#/definitions/UserResponse'
  */
 exports.getUser = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
+    const { error } = yield utility_1.validateWithJoi(common_1.IdModel.IdSchema, ctx.params);
+    if (error) {
+        ctx.body = utility_1.buildResponse(-1, error);
+        return;
+    }
     let res = yield ApiService.getUser(ctx.params.id);
     if (res.id === 0) {
         res = {};
@@ -102,6 +109,11 @@ exports.getUser = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
  *           $ref: '#/definitions/UserWithSkillsResponse'
  */
 exports.getUserWithSkills = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
+    const { error } = yield utility_1.validateWithJoi(common_1.IdModel.IdSchema, ctx.params);
+    if (error) {
+        ctx.body = utility_1.buildResponse(-1, error);
+        return;
+    }
     const res = yield ApiService.getUserWithSkills(ctx.params.id);
     if (res.user.id === 0) {
         res.user = {};
@@ -132,6 +144,11 @@ exports.getUserWithSkills = (ctx) => __awaiter(void 0, void 0, void 0, function*
  *           $ref: '#/definitions/UserResponse'
  */
 exports.createUser = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
+    const { error } = yield utility_1.validateWithJoi(common_1.UserModel.UserSchemaNonId, ctx.request.body);
+    if (error) {
+        ctx.body = utility_1.buildResponse(-1, error);
+        return;
+    }
     ctx.body = utility_1.buildResponse(200, yield ApiService.createUser({
         name: ctx.request.body.name,
         age: ctx.request.body.age,
@@ -171,6 +188,23 @@ exports.createUser = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
  *           $ref: '#/definitions/UserResponse'
  */
 exports.createUserWithSkills = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
+    const validations = [];
+    validations.push({ schema: Joi.object({
+            user: common_1.UserModel.UserSchemaNonId,
+            skills: Joi.array(),
+        }), data: ctx.request.body });
+    if (ctx.request.body.hasOwnProperty("skills")
+        && ctx.request.body.skills.hasOwnProperty("length")) {
+        // {skills: Joi.array().items(SkillModel.SkillSchemaNonId)} not working, shall be fixed later
+        for (const skill of ctx.request.body.skills) {
+            validations.push({ schema: common_1.SkillModel.SkillSchemaNonId, data: skill });
+        }
+    }
+    const error = yield utility_1.validateWithJoiMulti(validations);
+    if (error) {
+        ctx.body = utility_1.buildResponse(-1, error);
+        return;
+    }
     ctx.body = utility_1.buildResponse(200, yield ApiService.createUserWithSkills(ctx.request.body.user, ctx.request.body.skills));
 });
 /**
@@ -197,6 +231,11 @@ exports.createUserWithSkills = (ctx) => __awaiter(void 0, void 0, void 0, functi
  *           $ref: '#/definitions/UserResponse'
  */
 exports.updateUser = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
+    const { error } = yield utility_1.validateWithJoi(common_1.UserModel.UserSchema, ctx.request.body);
+    if (error) {
+        ctx.body = utility_1.buildResponse(-1, error);
+        return;
+    }
     let res = yield ApiService.updateUser({
         id: ctx.request.body.id,
         name: ctx.request.body.name,

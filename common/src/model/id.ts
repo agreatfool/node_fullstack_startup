@@ -1,4 +1,5 @@
 import {Entity, PrimaryGeneratedColumn} from "typeorm";
+import * as Joi from "@hapi/joi";
 
 /**
  * @swagger
@@ -24,3 +25,5 @@ export class Id {
 export interface IId {
     id?: number;
 }
+
+export const IdSchema = Joi.object().keys({id: Joi.number().integer().required()});

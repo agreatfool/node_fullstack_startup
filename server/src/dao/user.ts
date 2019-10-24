@@ -47,7 +47,6 @@ export const createUserWithSkills = async (
     try {
         const userModel = Transformer.User.I2M(user);
         userModel.id = undefined; // use auto id
-        console.log(userModel);
 
         result = await queryRunner.manager.save(userModel);
         for (const skill of skills) {

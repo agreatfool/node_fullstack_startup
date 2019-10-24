@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const skill_1 = require("./skill");
 const id_1 = require("./id");
 const typeorm_1 = require("typeorm");
+const Joi = require("@hapi/joi");
 var UserGender;
 (function (UserGender) {
     UserGender["MALE"] = "male";
@@ -72,4 +73,11 @@ User = __decorate([
     typeorm_1.Entity()
 ], User);
 exports.User = User;
+const schema = {
+    name: Joi.string().required(),
+    age: Joi.number().integer().min(1).max(130).required(),
+    gender: Joi.string().valid(UserGender.MALE, UserGender.FEMALE).required(),
+};
+exports.UserSchemaNonId = Joi.object().keys(schema);
+exports.UserSchema = id_1.IdSchema.keys(schema);
 //# sourceMappingURL=user.js.map

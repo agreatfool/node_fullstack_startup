@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
+const Joi = require("@hapi/joi");
 /**
  * @swagger
  * definitions:
@@ -35,4 +36,5 @@ Id = __decorate([
     typeorm_1.Entity({ synchronize: false })
 ], Id);
 exports.Id = Id;
+exports.IdSchema = Joi.object().keys({ id: Joi.number().integer().required() });
 //# sourceMappingURL=id.js.map

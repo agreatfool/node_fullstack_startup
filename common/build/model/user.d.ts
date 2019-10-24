@@ -1,5 +1,7 @@
+/// <reference types="hapi__joi" />
 import { Skill } from "./skill";
 import { Id, IId } from "./id";
+import * as Joi from "@hapi/joi";
 export declare enum UserGender {
     MALE = "male",
     FEMALE = "female"
@@ -44,3 +46,5 @@ export interface IUser extends IId {
     age: number;
     gender: UserGender;
 }
+export declare const UserSchemaNonId: Joi.ObjectSchema;
+export declare const UserSchema: Joi.ObjectSchema;

@@ -1,9 +1,9 @@
 import * as Koa from "koa";
 
-import {SkillModel} from "common";
+import {IdModel, SkillModel, UserModel} from "common";
 
 import * as ApiService from "../service/api";
-import {buildResponse} from "../utility/utility";
+import {buildResponse, validateWithJoi} from "../utility/utility";
 
 /**
  * @swagger
@@ -62,6 +62,12 @@ import {buildResponse} from "../utility/utility";
  *           $ref: '#/definitions/SkillsResponse'
  */
 export const getSkills = async (ctx: Koa.Context) => {
+    const {error} = await validateWithJoi(IdModel.IdSchema, ctx.params);
+    if (error) {
+        ctx.body = buildResponse(-1, error);
+        return;
+    }
+
     ctx.body = buildResponse(200, await ApiService.getSkills(ctx.params.id));
 };
 
@@ -89,6 +95,12 @@ export const getSkills = async (ctx: Koa.Context) => {
  *           $ref: '#/definitions/SkillResponse'
  */
 export const updateSkill = async (ctx: Koa.Context) => {
+    const {error} = await validateWithJoi(SkillModel.SkillSchema, (ctx.request as any).body);
+    if (error) {
+        ctx.body = buildResponse(-1, error);
+        return;
+    }
+
     let res = await ApiService.updateSkill({
         id: (ctx.request as any).body.id,
         name: (ctx.request as any).body.name,

@@ -1,6 +1,7 @@
-import {Id, IId} from "./id";
+import {Id, IdSchema, IId} from "./id";
 import {Column, Entity, ManyToOne} from "typeorm";
 import {User} from "./user";
+import * as Joi from "@hapi/joi";
 
 /**
  * @swagger
@@ -29,3 +30,7 @@ export class Skill extends Id {
 export interface ISkill extends IId {
     name: string;
 }
+
+const schema = {name: Joi.string().required()};
+export const SkillSchemaNonId = Joi.object().keys(schema);
+export const SkillSchema = IdSchema.keys(schema);

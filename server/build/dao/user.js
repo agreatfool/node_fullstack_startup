@@ -48,7 +48,6 @@ exports.createUserWithSkills = (user, skills) => __awaiter(void 0, void 0, void 
     try {
         const userModel = common_1.Transformer.User.I2M(user);
         userModel.id = undefined; // use auto id
-        console.log(userModel);
         result = yield queryRunner.manager.save(userModel);
         for (const skill of skills) {
             const skillModel = common_1.Transformer.Skill.I2M(skill);

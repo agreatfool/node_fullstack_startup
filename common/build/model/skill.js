@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const id_1 = require("./id");
 const typeorm_1 = require("typeorm");
 const user_1 = require("./user");
+const Joi = require("@hapi/joi");
 /**
  * @swagger
  * definitions:
@@ -42,4 +43,7 @@ Skill = __decorate([
     typeorm_1.Entity()
 ], Skill);
 exports.Skill = Skill;
+const schema = { name: Joi.string().required() };
+exports.SkillSchemaNonId = Joi.object().keys(schema);
+exports.SkillSchema = id_1.IdSchema.keys(schema);
 //# sourceMappingURL=skill.js.map

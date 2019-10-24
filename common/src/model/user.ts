@@ -1,6 +1,7 @@
-import {ISkill, Skill} from "./skill";
-import {Id, IId} from "./id";
+import {Skill} from "./skill";
+import {Id, IdSchema, IId} from "./id";
 import {Column, Entity, OneToMany} from "typeorm";
+import * as Joi from "@hapi/joi";
 
 export enum UserGender {
     MALE = "male",
@@ -57,3 +58,11 @@ export interface IUser extends IId {
     age: number;
     gender: UserGender;
 }
+
+const schema = {
+    name: Joi.string().required(),
+    age: Joi.number().integer().min(1).max(130).required(),
+    gender: Joi.string().valid(UserGender.MALE, UserGender.FEMALE).required(),
+};
+export const UserSchemaNonId = Joi.object().keys(schema);
+export const UserSchema = IdSchema.keys(schema);

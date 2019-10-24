@@ -1,3 +1,5 @@
+/// <reference types="hapi__joi" />
+import * as Joi from "@hapi/joi";
 /**
  * @swagger
  * definitions:
@@ -19,3 +21,4 @@ export declare class Id {
 export interface IId {
     id?: number;
 }
+export declare const IdSchema: Joi.ObjectSchema;

@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const common_1 = require("common");
 const ApiService = require("../service/api");
 const utility_1 = require("../utility/utility");
 /**
@@ -66,6 +67,11 @@ const utility_1 = require("../utility/utility");
  *           $ref: '#/definitions/SkillsResponse'
  */
 exports.getSkills = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
+    const { error } = yield utility_1.validateWithJoi(common_1.IdModel.IdSchema, ctx.params);
+    if (error) {
+        ctx.body = utility_1.buildResponse(-1, error);
+        return;
+    }
     ctx.body = utility_1.buildResponse(200, yield ApiService.getSkills(ctx.params.id));
 });
 /**
@@ -92,6 +98,11 @@ exports.getSkills = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
  *           $ref: '#/definitions/SkillResponse'
  */
 exports.updateSkill = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
+    const { error } = yield utility_1.validateWithJoi(common_1.SkillModel.SkillSchema, ctx.request.body);
+    if (error) {
+        ctx.body = utility_1.buildResponse(-1, error);
+        return;
+    }
     let res = yield ApiService.updateSkill({
         id: ctx.request.body.id,
         name: ctx.request.body.name,

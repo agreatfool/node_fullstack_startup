@@ -1,9 +1,10 @@
 import * as Koa from "koa";
 
-import {UserModel} from "common";
+import {IdModel, SkillModel, UserModel} from "common";
 
 import * as ApiService from "../service/api";
-import {buildResponse} from "../utility/utility";
+import {buildResponse, validateWithJoi, validateWithJoiMulti} from "../utility/utility";
+import * as Joi from "@hapi/joi";
 
 /**
  * @swagger
@@ -67,6 +68,12 @@ import {buildResponse} from "../utility/utility";
  *           $ref: '#/definitions/UserResponse'
  */
 export const getUser = async (ctx: Koa.Context) => {
+    const {error} = await validateWithJoi(IdModel.IdSchema, ctx.params);
+    if (error) {
+        ctx.body = buildResponse(-1, error);
+        return;
+    }
+
     let res = await ApiService.getUser(ctx.params.id);
     if (res.id === 0) {
         res = {} as UserModel.IUser;
@@ -99,6 +106,12 @@ export const getUser = async (ctx: Koa.Context) => {
  *           $ref: '#/definitions/UserWithSkillsResponse'
  */
 export const getUserWithSkills = async (ctx: Koa.Context) => {
+    const {error} = await validateWithJoi(IdModel.IdSchema, ctx.params);
+    if (error) {
+        ctx.body = buildResponse(-1, error);
+        return;
+    }
+
     const res = await ApiService.getUserWithSkills(ctx.params.id);
     if (res.user.id === 0) {
         res.user = {} as UserModel.IUser;
@@ -130,6 +143,12 @@ export const getUserWithSkills = async (ctx: Koa.Context) => {
  *           $ref: '#/definitions/UserResponse'
  */
 export const createUser = async (ctx: Koa.Context) => {
+    const {error} = await validateWithJoi(UserModel.UserSchemaNonId, (ctx.request as any).body);
+    if (error) {
+        ctx.body = buildResponse(-1, error);
+        return;
+    }
+
     ctx.body = buildResponse(200, await ApiService.createUser({
         name: (ctx.request as any).body.name,
         age: (ctx.request as any).body.age,
@@ -170,6 +189,24 @@ export const createUser = async (ctx: Koa.Context) => {
  *           $ref: '#/definitions/UserResponse'
  */
 export const createUserWithSkills = async (ctx: Koa.Context) => {
+    const validations = [] as Array<{ schema: Joi.AnySchema, data: any }>;
+    validations.push({schema: Joi.object({
+        user: UserModel.UserSchemaNonId,
+        skills: Joi.array(),
+    }), data: (ctx.request as any).body});
+    if ((ctx.request as any).body.hasOwnProperty("skills")
+        && (ctx.request as any).body.skills.hasOwnProperty("length")) {
+        // {skills: Joi.array().items(SkillModel.SkillSchemaNonId)} not working, shall be fixed later
+        for (const skill of (ctx.request as any).body.skills) {
+            validations.push({schema: SkillModel.SkillSchemaNonId, data: skill});
+        }
+    }
+    const error = await validateWithJoiMulti(validations);
+    if (error) {
+        ctx.body = buildResponse(-1, error);
+        return;
+    }
+
     ctx.body = buildResponse(200, await ApiService.createUserWithSkills(
         (ctx.request as any).body.user,
         (ctx.request as any).body.skills,
@@ -200,6 +237,12 @@ export const createUserWithSkills = async (ctx: Koa.Context) => {
  *           $ref: '#/definitions/UserResponse'
  */
 export const updateUser = async (ctx: Koa.Context) => {
+    const {error} = await validateWithJoi(UserModel.UserSchema, (ctx.request as any).body);
+    if (error) {
+        ctx.body = buildResponse(-1, error);
+        return;
+    }
+
     let res = await ApiService.updateUser({
         id: (ctx.request as any).body.id,
         name: (ctx.request as any).body.name,
