@@ -144,6 +144,27 @@ export namespace GetUserWithSkillsRes {
     }
 }
 
+export class GetSkillReq extends jspb.Message { 
+    getId(): number;
+    setId(value: number): void;
+
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): GetSkillReq.AsObject;
+    static toObject(includeInstance: boolean, msg: GetSkillReq): GetSkillReq.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: GetSkillReq, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetSkillReq;
+    static deserializeBinaryFromReader(message: GetSkillReq, reader: jspb.BinaryReader): GetSkillReq;
+}
+
+export namespace GetSkillReq {
+    export type AsObject = {
+        id: number,
+    }
+}
+
 export class GetSkillsReq extends jspb.Message { 
     getId(): number;
     setId(value: number): void;
@@ -185,5 +206,33 @@ export class GetSkillsRes extends jspb.Message {
 export namespace GetSkillsRes {
     export type AsObject = {
         skillsList: Array<Skill.AsObject>,
+    }
+}
+
+export class UpdateSkillReq extends jspb.Message { 
+    getUserid(): number;
+    setUserid(value: number): void;
+
+
+    hasSkill(): boolean;
+    clearSkill(): void;
+    getSkill(): Skill | undefined;
+    setSkill(value?: Skill): void;
+
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): UpdateSkillReq.AsObject;
+    static toObject(includeInstance: boolean, msg: UpdateSkillReq): UpdateSkillReq.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: UpdateSkillReq, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): UpdateSkillReq;
+    static deserializeBinaryFromReader(message: UpdateSkillReq, reader: jspb.BinaryReader): UpdateSkillReq;
+}
+
+export namespace UpdateSkillReq {
+    export type AsObject = {
+        userid: number,
+        skill?: Skill.AsObject,
     }
 }

@@ -9,6 +9,7 @@ exports.router.get("/users/skills/:id", user_1.getUserWithSkills);
 exports.router.post("/users", user_1.createUser);
 exports.router.post("/users/skills", user_1.createUserWithSkills);
 exports.router.put("/users", user_1.updateUser);
-exports.router.get("/skills/:id", skill_1.getSkills);
+exports.router.get("/skills/:id", skill_1.getSkill);
+exports.router.get("/skills/users/:id", skill_1.getSkills);
 exports.router.put("/skills", skill_1.updateSkill);
 //# sourceMappingURL=router.js.map

@@ -15,6 +15,17 @@ function deserialize_com_api_CreateUserReq(buffer_arg) {
   return api_pb.CreateUserReq.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_com_api_GetSkillReq(arg) {
+  if (!(arg instanceof api_pb.GetSkillReq)) {
+    throw new Error('Expected argument of type com.api.GetSkillReq');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_com_api_GetSkillReq(buffer_arg) {
+  return api_pb.GetSkillReq.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_com_api_GetSkillsReq(arg) {
   if (!(arg instanceof api_pb.GetSkillsReq)) {
     throw new Error('Expected argument of type com.api.GetSkillsReq');
@@ -68,6 +79,17 @@ function serialize_com_api_Skill(arg) {
 
 function deserialize_com_api_Skill(buffer_arg) {
   return api_pb.Skill.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_com_api_UpdateSkillReq(arg) {
+  if (!(arg instanceof api_pb.UpdateSkillReq)) {
+    throw new Error('Expected argument of type com.api.UpdateSkillReq');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_com_api_UpdateSkillReq(buffer_arg) {
+  return api_pb.UpdateSkillReq.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
 function serialize_com_api_User(arg) {
@@ -138,6 +160,17 @@ var ApiService = exports.ApiService = {
     responseSerialize: serialize_com_api_User,
     responseDeserialize: deserialize_com_api_User,
   },
+  getSkill: {
+    path: '/com.api.Api/GetSkill',
+    requestStream: false,
+    responseStream: false,
+    requestType: api_pb.GetSkillReq,
+    responseType: api_pb.Skill,
+    requestSerialize: serialize_com_api_GetSkillReq,
+    requestDeserialize: deserialize_com_api_GetSkillReq,
+    responseSerialize: serialize_com_api_Skill,
+    responseDeserialize: deserialize_com_api_Skill,
+  },
   getSkills: {
     path: '/com.api.Api/GetSkills',
     requestStream: false,
@@ -153,10 +186,10 @@ var ApiService = exports.ApiService = {
     path: '/com.api.Api/UpdateSkill',
     requestStream: false,
     responseStream: false,
-    requestType: api_pb.Skill,
+    requestType: api_pb.UpdateSkillReq,
     responseType: api_pb.Skill,
-    requestSerialize: serialize_com_api_Skill,
-    requestDeserialize: deserialize_com_api_Skill,
+    requestSerialize: serialize_com_api_UpdateSkillReq,
+    requestDeserialize: deserialize_com_api_UpdateSkillReq,
     responseSerialize: serialize_com_api_Skill,
     responseDeserialize: deserialize_com_api_Skill,
   },

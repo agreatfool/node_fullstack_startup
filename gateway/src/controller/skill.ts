@@ -1,9 +1,10 @@
 import * as Koa from "koa";
 
-import {IdModel, SkillModel, UserModel} from "common";
+import {IdModel, SkillModel} from "common";
 
 import * as ApiService from "../service/api";
 import {buildResponse, validateWithJoi} from "../utility/utility";
+import * as Joi from "@hapi/joi";
 
 /**
  * @swagger
@@ -40,6 +41,40 @@ import {buildResponse, validateWithJoi} from "../utility/utility";
 /**
  * @swagger
  * /skills/{id}:
+ *   get:
+ *     tags:
+ *       - Skills
+ *     description: Get skill info
+ *     operationId: getSkill
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: id
+ *         description: Skill Id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           format: int64
+ *     responses:
+ *       200:
+ *         description: Skill info
+ *         schema:
+ *           $ref: '#/definitions/SkillResponse'
+ */
+export const getSkill = async (ctx: Koa.Context) => {
+    const {error} = await validateWithJoi(IdModel.IdSchema, ctx.params);
+    if (error) {
+        ctx.body = buildResponse(-1, error);
+        return;
+    }
+
+    ctx.body = buildResponse(200, await ApiService.getSkill(ctx.params.id));
+};
+
+/**
+ * @swagger
+ * /skills/users/{id}:
  *   get:
  *     tags:
  *       - Skills
@@ -82,12 +117,21 @@ export const getSkills = async (ctx: Koa.Context) => {
  *     produces:
  *       - application/json
  *     parameters:
- *       - name: skill
- *         description: Skill info
+ *       - name: data
+ *         description: Request body data
  *         in: body
  *         required: true
  *         schema:
- *           $ref: '#/definitions/Skill'
+ *           type: object
+ *           required:
+ *             - user
+ *           properties:
+ *             id:
+ *               type: integer
+ *               format: int64
+ *               description: User id
+ *             skill:
+ *               $ref: '#/definitions/Skill'
  *     responses:
  *       200:
  *         description: Skill info
@@ -95,16 +139,18 @@ export const getSkills = async (ctx: Koa.Context) => {
  *           $ref: '#/definitions/SkillResponse'
  */
 export const updateSkill = async (ctx: Koa.Context) => {
-    const {error} = await validateWithJoi(SkillModel.SkillSchema, (ctx.request as any).body);
+    const {error} = await validateWithJoi(Joi.object({
+        id: Joi.number().integer().required(),
+        skill: SkillModel.SkillSchema,
+    }), (ctx.request as any).body);
     if (error) {
         ctx.body = buildResponse(-1, error);
         return;
     }
 
-    let res = await ApiService.updateSkill({
-        id: (ctx.request as any).body.id,
-        name: (ctx.request as any).body.name,
-    }) as SkillModel.ISkill;
+    let res = await ApiService.updateSkill(
+        (ctx.request as any).body.id, (ctx.request as any).body.skill,
+    ) as SkillModel.ISkill;
     if (res.id === 0) {
         res = {} as SkillModel.ISkill;
     }

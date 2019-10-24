@@ -12,6 +12,7 @@ interface IApiService extends grpc.ServiceDefinition<grpc.UntypedServiceImplemen
     createUser: IApiService_ICreateUser;
     createUserWithSkills: IApiService_ICreateUserWithSkills;
     updateUser: IApiService_IUpdateUser;
+    getSkill: IApiService_IGetSkill;
     getSkills: IApiService_IGetSkills;
     updateSkill: IApiService_IUpdateSkill;
 }
@@ -61,6 +62,15 @@ interface IApiService_IUpdateUser extends grpc.MethodDefinition<api_pb.User, api
     responseSerialize: grpc.serialize<api_pb.User>;
     responseDeserialize: grpc.deserialize<api_pb.User>;
 }
+interface IApiService_IGetSkill extends grpc.MethodDefinition<api_pb.GetSkillReq, api_pb.Skill> {
+    path: string; // "/com.api.Api/GetSkill"
+    requestStream: boolean; // false
+    responseStream: boolean; // false
+    requestSerialize: grpc.serialize<api_pb.GetSkillReq>;
+    requestDeserialize: grpc.deserialize<api_pb.GetSkillReq>;
+    responseSerialize: grpc.serialize<api_pb.Skill>;
+    responseDeserialize: grpc.deserialize<api_pb.Skill>;
+}
 interface IApiService_IGetSkills extends grpc.MethodDefinition<api_pb.GetSkillsReq, api_pb.GetSkillsRes> {
     path: string; // "/com.api.Api/GetSkills"
     requestStream: boolean; // false
@@ -70,12 +80,12 @@ interface IApiService_IGetSkills extends grpc.MethodDefinition<api_pb.GetSkillsR
     responseSerialize: grpc.serialize<api_pb.GetSkillsRes>;
     responseDeserialize: grpc.deserialize<api_pb.GetSkillsRes>;
 }
-interface IApiService_IUpdateSkill extends grpc.MethodDefinition<api_pb.Skill, api_pb.Skill> {
+interface IApiService_IUpdateSkill extends grpc.MethodDefinition<api_pb.UpdateSkillReq, api_pb.Skill> {
     path: string; // "/com.api.Api/UpdateSkill"
     requestStream: boolean; // false
     responseStream: boolean; // false
-    requestSerialize: grpc.serialize<api_pb.Skill>;
-    requestDeserialize: grpc.deserialize<api_pb.Skill>;
+    requestSerialize: grpc.serialize<api_pb.UpdateSkillReq>;
+    requestDeserialize: grpc.deserialize<api_pb.UpdateSkillReq>;
     responseSerialize: grpc.serialize<api_pb.Skill>;
     responseDeserialize: grpc.deserialize<api_pb.Skill>;
 }
@@ -88,8 +98,9 @@ export interface IApiServer {
     createUser: grpc.handleUnaryCall<api_pb.User, api_pb.User>;
     createUserWithSkills: grpc.handleUnaryCall<api_pb.CreateUserReq, api_pb.User>;
     updateUser: grpc.handleUnaryCall<api_pb.User, api_pb.User>;
+    getSkill: grpc.handleUnaryCall<api_pb.GetSkillReq, api_pb.Skill>;
     getSkills: grpc.handleUnaryCall<api_pb.GetSkillsReq, api_pb.GetSkillsRes>;
-    updateSkill: grpc.handleUnaryCall<api_pb.Skill, api_pb.Skill>;
+    updateSkill: grpc.handleUnaryCall<api_pb.UpdateSkillReq, api_pb.Skill>;
 }
 
 export interface IApiClient {
@@ -108,12 +119,15 @@ export interface IApiClient {
     updateUser(request: api_pb.User, callback: (error: grpc.ServiceError | null, response: api_pb.User) => void): grpc.ClientUnaryCall;
     updateUser(request: api_pb.User, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: api_pb.User) => void): grpc.ClientUnaryCall;
     updateUser(request: api_pb.User, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: api_pb.User) => void): grpc.ClientUnaryCall;
+    getSkill(request: api_pb.GetSkillReq, callback: (error: grpc.ServiceError | null, response: api_pb.Skill) => void): grpc.ClientUnaryCall;
+    getSkill(request: api_pb.GetSkillReq, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: api_pb.Skill) => void): grpc.ClientUnaryCall;
+    getSkill(request: api_pb.GetSkillReq, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: api_pb.Skill) => void): grpc.ClientUnaryCall;
     getSkills(request: api_pb.GetSkillsReq, callback: (error: grpc.ServiceError | null, response: api_pb.GetSkillsRes) => void): grpc.ClientUnaryCall;
     getSkills(request: api_pb.GetSkillsReq, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: api_pb.GetSkillsRes) => void): grpc.ClientUnaryCall;
     getSkills(request: api_pb.GetSkillsReq, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: api_pb.GetSkillsRes) => void): grpc.ClientUnaryCall;
-    updateSkill(request: api_pb.Skill, callback: (error: grpc.ServiceError | null, response: api_pb.Skill) => void): grpc.ClientUnaryCall;
-    updateSkill(request: api_pb.Skill, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: api_pb.Skill) => void): grpc.ClientUnaryCall;
-    updateSkill(request: api_pb.Skill, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: api_pb.Skill) => void): grpc.ClientUnaryCall;
+    updateSkill(request: api_pb.UpdateSkillReq, callback: (error: grpc.ServiceError | null, response: api_pb.Skill) => void): grpc.ClientUnaryCall;
+    updateSkill(request: api_pb.UpdateSkillReq, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: api_pb.Skill) => void): grpc.ClientUnaryCall;
+    updateSkill(request: api_pb.UpdateSkillReq, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: api_pb.Skill) => void): grpc.ClientUnaryCall;
 }
 
 export class ApiClient extends grpc.Client implements IApiClient {
@@ -133,10 +147,13 @@ export class ApiClient extends grpc.Client implements IApiClient {
     public updateUser(request: api_pb.User, callback: (error: grpc.ServiceError | null, response: api_pb.User) => void): grpc.ClientUnaryCall;
     public updateUser(request: api_pb.User, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: api_pb.User) => void): grpc.ClientUnaryCall;
     public updateUser(request: api_pb.User, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: api_pb.User) => void): grpc.ClientUnaryCall;
+    public getSkill(request: api_pb.GetSkillReq, callback: (error: grpc.ServiceError | null, response: api_pb.Skill) => void): grpc.ClientUnaryCall;
+    public getSkill(request: api_pb.GetSkillReq, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: api_pb.Skill) => void): grpc.ClientUnaryCall;
+    public getSkill(request: api_pb.GetSkillReq, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: api_pb.Skill) => void): grpc.ClientUnaryCall;
     public getSkills(request: api_pb.GetSkillsReq, callback: (error: grpc.ServiceError | null, response: api_pb.GetSkillsRes) => void): grpc.ClientUnaryCall;
     public getSkills(request: api_pb.GetSkillsReq, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: api_pb.GetSkillsRes) => void): grpc.ClientUnaryCall;
     public getSkills(request: api_pb.GetSkillsReq, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: api_pb.GetSkillsRes) => void): grpc.ClientUnaryCall;
-    public updateSkill(request: api_pb.Skill, callback: (error: grpc.ServiceError | null, response: api_pb.Skill) => void): grpc.ClientUnaryCall;
-    public updateSkill(request: api_pb.Skill, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: api_pb.Skill) => void): grpc.ClientUnaryCall;
-    public updateSkill(request: api_pb.Skill, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: api_pb.Skill) => void): grpc.ClientUnaryCall;
+    public updateSkill(request: api_pb.UpdateSkillReq, callback: (error: grpc.ServiceError | null, response: api_pb.Skill) => void): grpc.ClientUnaryCall;
+    public updateSkill(request: api_pb.UpdateSkillReq, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: api_pb.Skill) => void): grpc.ClientUnaryCall;
+    public updateSkill(request: api_pb.UpdateSkillReq, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: api_pb.Skill) => void): grpc.ClientUnaryCall;
 }

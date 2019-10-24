@@ -11,13 +11,13 @@ export const buildResponse = <T>(code: number, data: T) => {
 export const validateWithJoi = async (schema: Joi.AnySchema, data: any): Promise<{ error: Error, value: any }> => {
     try {
         return {
-            error: undefined,
+            error: null,
             value: await schema.validateAsync(data),
         };
     } catch (err) {
         return {
             error: err,
-            value: undefined,
+            value: null,
         };
     }
 };
@@ -29,5 +29,5 @@ export const validateWithJoiMulti = async (data: Array<{ schema: Joi.AnySchema, 
             return error;
         }
     }
-    return undefined;
+    return null;
 };

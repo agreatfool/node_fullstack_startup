@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const common_1 = require("common");
 const ApiService = require("../service/api");
 const utility_1 = require("../utility/utility");
+const Joi = require("@hapi/joi");
 /**
  * @swagger
  * tags:
@@ -45,6 +46,38 @@ const utility_1 = require("../utility/utility");
 /**
  * @swagger
  * /skills/{id}:
+ *   get:
+ *     tags:
+ *       - Skills
+ *     description: Get skill info
+ *     operationId: getSkill
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: id
+ *         description: Skill Id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           format: int64
+ *     responses:
+ *       200:
+ *         description: Skill info
+ *         schema:
+ *           $ref: '#/definitions/SkillResponse'
+ */
+exports.getSkill = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
+    const { error } = yield utility_1.validateWithJoi(common_1.IdModel.IdSchema, ctx.params);
+    if (error) {
+        ctx.body = utility_1.buildResponse(-1, error);
+        return;
+    }
+    ctx.body = utility_1.buildResponse(200, yield ApiService.getSkill(ctx.params.id));
+});
+/**
+ * @swagger
+ * /skills/users/{id}:
  *   get:
  *     tags:
  *       - Skills
@@ -85,12 +118,21 @@ exports.getSkills = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
  *     produces:
  *       - application/json
  *     parameters:
- *       - name: skill
- *         description: Skill info
+ *       - name: data
+ *         description: Request body data
  *         in: body
  *         required: true
  *         schema:
- *           $ref: '#/definitions/Skill'
+ *           type: object
+ *           required:
+ *             - user
+ *           properties:
+ *             id:
+ *               type: integer
+ *               format: int64
+ *               description: User id
+ *             skill:
+ *               $ref: '#/definitions/Skill'
  *     responses:
  *       200:
  *         description: Skill info
@@ -98,15 +140,15 @@ exports.getSkills = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
  *           $ref: '#/definitions/SkillResponse'
  */
 exports.updateSkill = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
-    const { error } = yield utility_1.validateWithJoi(common_1.SkillModel.SkillSchema, ctx.request.body);
+    const { error } = yield utility_1.validateWithJoi(Joi.object({
+        id: Joi.number().integer().required(),
+        skill: common_1.SkillModel.SkillSchema,
+    }), ctx.request.body);
     if (error) {
         ctx.body = utility_1.buildResponse(-1, error);
         return;
     }
-    let res = yield ApiService.updateSkill({
-        id: ctx.request.body.id,
-        name: ctx.request.body.name,
-    });
+    let res = yield ApiService.updateSkill(ctx.request.body.id, ctx.request.body.skill);
     if (res.id === 0) {
         res = {};
     }

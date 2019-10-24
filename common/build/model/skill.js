@@ -36,6 +36,10 @@ __decorate([
     __metadata("design:type", String)
 ], Skill.prototype, "name", void 0);
 __decorate([
+    typeorm_1.Column("int"),
+    __metadata("design:type", Number)
+], Skill.prototype, "userId", void 0);
+__decorate([
     typeorm_1.ManyToOne(() => user_1.User, (user) => user.skills),
     __metadata("design:type", user_1.User)
 ], Skill.prototype, "user", void 0);

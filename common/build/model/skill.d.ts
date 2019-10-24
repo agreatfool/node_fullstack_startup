@@ -20,10 +20,12 @@ import * as Joi from "@hapi/joi";
  */
 export declare class Skill extends Id {
     name: string;
+    userId: number;
     user?: User;
 }
 export interface ISkill extends IId {
     name: string;
+    userId?: number;
 }
 export declare const SkillSchemaNonId: Joi.ObjectSchema;
 export declare const SkillSchema: Joi.ObjectSchema;

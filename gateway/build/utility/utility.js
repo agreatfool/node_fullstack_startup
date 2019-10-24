@@ -18,14 +18,14 @@ exports.buildResponse = (code, data) => {
 exports.validateWithJoi = (schema, data) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         return {
-            error: undefined,
+            error: null,
             value: yield schema.validateAsync(data),
         };
     }
     catch (err) {
         return {
             error: err,
-            value: undefined,
+            value: null,
         };
     }
 });
@@ -36,6 +36,6 @@ exports.validateWithJoiMulti = (data) => __awaiter(void 0, void 0, void 0, funct
             return error;
         }
     }
-    return undefined;
+    return null;
 });
 //# sourceMappingURL=utility.js.map

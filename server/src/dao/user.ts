@@ -1,11 +1,21 @@
 import {getConnection, UpdateResult} from "typeorm";
 import {SkillModel, Transformer, UserModel} from "common";
+import {genCacheKey} from "../utility/utility";
+
+const CACHE_USER = "User:%USER_ID%";
+const CACHE_USER_TTL = 3600000; // milliseconds, 1 hour
+export const CACHE_USER_WITH_SKILLS = "UserWithSkills:%USER_ID%";
+const CACHE_USER_WITH_SKILLS_TTL = 3600000; // milliseconds, 1 hour
 
 export const fetchUser = async (userId: number): Promise<UserModel.User> => {
     return await getConnection()
         .getRepository(UserModel.User)
         .findOne({
             where: {id: userId},
+            cache: {
+                id: genCacheKey(CACHE_USER, {"%USER_ID%": userId}),
+                milliseconds: CACHE_USER_TTL,
+            },
         });
 };
 
@@ -15,6 +25,7 @@ export const fetchUserWithSkills = async (userId: number) => {
         .createQueryBuilder("user")
         .where({id: userId})
         .leftJoinAndSelect("user.skills", "skill")
+        .cache(genCacheKey(CACHE_USER_WITH_SKILLS, {"%USER_ID%": userId}), CACHE_USER_WITH_SKILLS_TTL)
         .getOne();
 };
 
@@ -30,9 +41,17 @@ export const createUser = async (user: UserModel.IUser): Promise<UserModel.User>
 export const updateUser = async (user: UserModel.IUser): Promise<UpdateResult> => {
     const userModel = Transformer.User.I2M(user);
 
-    return await getConnection()
+    const result = await getConnection()
         .getRepository(UserModel.User)
         .update({id: userModel.id}, userModel);
+    if (result.raw.hasOwnProperty("affectedRows") && result.raw.affectedRows > 0) {
+        await getConnection().queryResultCache.remove([
+            genCacheKey(CACHE_USER, {"%USER_ID%": user.id}),
+            genCacheKey(CACHE_USER_WITH_SKILLS, {"%USER_ID%": user.id}),
+        ]);
+    }
+
+    return result;
 };
 
 export const createUserWithSkills = async (

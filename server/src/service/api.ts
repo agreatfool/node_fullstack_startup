@@ -86,6 +86,21 @@ export class ApiServiceImpl implements GrpcPb.IApiServer {
             });
     }
 
+    public getSkill(call: grpc.ServerUnaryCall<Pb.GetSkillReq>, callback: grpc.sendUnaryData<Pb.Skill>) {
+        const id = call.request.getId();
+
+        SkillDao.fetchSkill(id)
+            .then((skill: SkillModel.Skill) => {
+                if (!skill) {
+                    return callback(null, new Pb.Skill());
+                }
+                callback(null, Transformer.Skill.M2P(skill));
+            })
+            .catch((err: Error) => {
+                callback(err, null);
+            });
+    }
+
     public getSkills(call: grpc.ServerUnaryCall<Pb.GetSkillsReq>, callback: grpc.sendUnaryData<Pb.GetSkillsRes>) {
         const id = call.request.getId();
 
@@ -102,11 +117,11 @@ export class ApiServiceImpl implements GrpcPb.IApiServer {
             });
     }
 
-    public updateSkill(call: grpc.ServerUnaryCall<Pb.Skill>, callback: grpc.sendUnaryData<Pb.Skill>) {
-        const req: Pb.Skill = call.request;
+    public updateSkill(call: grpc.ServerUnaryCall<Pb.UpdateSkillReq>, callback: grpc.sendUnaryData<Pb.Skill>) {
+        const req: Pb.UpdateSkillReq = call.request;
 
-        SkillDao.updateSkill(Transformer.Skill.P2I(req))
-            .then(() => SkillDao.fetchSkill(req.getId()))
+        SkillDao.updateSkill(req.getUserid(), Transformer.Skill.P2I(req.getSkill()))
+            .then(() => SkillDao.fetchSkill(req.getSkill().getId()))
             .then((skill: SkillModel.Skill) => {
                 if (!skill) {
                     return callback(null, new Pb.Skill());

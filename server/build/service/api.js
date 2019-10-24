@@ -72,6 +72,19 @@ class ApiServiceImpl {
             callback(err, null);
         });
     }
+    getSkill(call, callback) {
+        const id = call.request.getId();
+        SkillDao.fetchSkill(id)
+            .then((skill) => {
+            if (!skill) {
+                return callback(null, new common_1.Pb.Skill());
+            }
+            callback(null, common_1.Transformer.Skill.M2P(skill));
+        })
+            .catch((err) => {
+            callback(err, null);
+        });
+    }
     getSkills(call, callback) {
         const id = call.request.getId();
         SkillDao.fetchUserSkills(id)
@@ -88,8 +101,8 @@ class ApiServiceImpl {
     }
     updateSkill(call, callback) {
         const req = call.request;
-        SkillDao.updateSkill(common_1.Transformer.Skill.P2I(req))
-            .then(() => SkillDao.fetchSkill(req.getId()))
+        SkillDao.updateSkill(req.getUserid(), common_1.Transformer.Skill.P2I(req.getSkill()))
+            .then(() => SkillDao.fetchSkill(req.getSkill().getId()))
             .then((skill) => {
             if (!skill) {
                 return callback(null, new common_1.Pb.Skill());

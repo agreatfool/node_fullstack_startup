@@ -28,12 +28,21 @@ message GetUserWithSkillsRes {
     repeated Skill skills = 2;
 }
 
+message GetSkillReq {
+    int64 id = 1;
+}
+
 message GetSkillsReq {
     int64 id = 1;
 }
 
 message GetSkillsRes {
     repeated Skill skills = 1;
+}
+
+message UpdateSkillReq {
+    int64 userId = 1;
+    Skill skill = 2;
 }
 
 service Api {
@@ -47,8 +56,10 @@ service Api {
     }
     rpc UpdateUser (User) returns (User) {
     }
+    rpc GetSkill (GetSkillReq) returns (Skill) {
+    }
     rpc GetSkills (GetSkillsReq) returns (GetSkillsRes) {
     }
-    rpc UpdateSkill (Skill) returns (Skill) {
+    rpc UpdateSkill (UpdateSkillReq) returns (Skill) {
     }
 }

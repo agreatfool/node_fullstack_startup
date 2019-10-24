@@ -1,7 +1,7 @@
 import * as Router from "koa-router";
 
 import {createUser, createUserWithSkills, getUser, getUserWithSkills, updateUser} from "./user";
-import {getSkills, updateSkill} from "./skill";
+import {getSkill, getSkills, updateSkill} from "./skill";
 
 export interface IResponse<T> {
     code: number;
@@ -16,5 +16,6 @@ router.post("/users", createUser);
 router.post("/users/skills", createUserWithSkills);
 router.put("/users", updateUser);
 
-router.get("/skills/:id", getSkills);
+router.get("/skills/:id", getSkill);
+router.get("/skills/users/:id", getSkills);
 router.put("/skills", updateSkill);

@@ -85,6 +85,21 @@ export const updateUser = async (user: UserModel.IUser): Promise<UserModel.IUser
     });
 };
 
+export const getSkill = async (id: number): Promise<SkillModel.ISkill> => {
+    return new Promise((resolve, reject) => {
+        const req = new Pb.GetSkillReq();
+        req.setId(id);
+
+        client.getSkill(req, (err, res: Pb.Skill) => {
+            if (err != null) {
+                reject(err);
+                return;
+            }
+            resolve(Transformer.Skill.P2I(res));
+        });
+    });
+};
+
 export const getSkills = async (id: number): Promise<SkillModel.ISkill[]> => {
     return new Promise((resolve, reject) => {
         const req = new Pb.GetSkillsReq();
@@ -102,9 +117,13 @@ export const getSkills = async (id: number): Promise<SkillModel.ISkill[]> => {
     });
 };
 
-export const updateSkill = async (skill: SkillModel.ISkill): Promise<SkillModel.ISkill> => {
+export const updateSkill = async (userId: number, skill: SkillModel.ISkill): Promise<SkillModel.ISkill> => {
     return new Promise((resolve, reject) => {
-        client.updateSkill(Transformer.Skill.I2P(skill), (err, res: Pb.Skill) => {
+        const req = new Pb.UpdateSkillReq();
+        req.setUserid(userId);
+        req.setSkill(Transformer.Skill.I2P(skill));
+
+        client.updateSkill(req, (err, res: Pb.Skill) => {
             if (err != null) {
                 reject(err);
                 return;

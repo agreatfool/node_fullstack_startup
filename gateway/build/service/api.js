@@ -85,6 +85,19 @@ exports.updateUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
         });
     });
 });
+exports.getSkill = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    return new Promise((resolve, reject) => {
+        const req = new common_1.Pb.GetSkillReq();
+        req.setId(id);
+        client.getSkill(req, (err, res) => {
+            if (err != null) {
+                reject(err);
+                return;
+            }
+            resolve(common_1.Transformer.Skill.P2I(res));
+        });
+    });
+});
 exports.getSkills = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return new Promise((resolve, reject) => {
         const req = new common_1.Pb.GetSkillsReq();
@@ -100,9 +113,12 @@ exports.getSkills = (id) => __awaiter(void 0, void 0, void 0, function* () {
         });
     });
 });
-exports.updateSkill = (skill) => __awaiter(void 0, void 0, void 0, function* () {
+exports.updateSkill = (userId, skill) => __awaiter(void 0, void 0, void 0, function* () {
     return new Promise((resolve, reject) => {
-        client.updateSkill(common_1.Transformer.Skill.I2P(skill), (err, res) => {
+        const req = new common_1.Pb.UpdateSkillReq();
+        req.setUserid(userId);
+        req.setSkill(common_1.Transformer.Skill.I2P(skill));
+        client.updateSkill(req, (err, res) => {
             if (err != null) {
                 reject(err);
                 return;
