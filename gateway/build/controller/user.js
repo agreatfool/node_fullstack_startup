@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const common_1 = require("common");
 const ApiService = require("../service/api");
 const utility_1 = require("../utility/utility");
-const Joi = require("@hapi/joi");
 /**
  * @swagger
  * tags:
@@ -189,9 +188,9 @@ exports.createUser = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
  */
 exports.createUserWithSkills = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
     const validations = [];
-    validations.push({ schema: Joi.object({
+    validations.push({ schema: common_1.Joi.object({
             user: common_1.UserModel.UserSchemaNonId,
-            skills: Joi.array(),
+            skills: common_1.Joi.array(),
         }), data: ctx.request.body });
     if (ctx.request.body.hasOwnProperty("skills")
         && ctx.request.body.skills.hasOwnProperty("length")) {

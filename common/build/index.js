@@ -5,6 +5,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 const grpc = require("grpc");
 exports.grpc = grpc;
+const typeorm = require("typeorm");
+exports.typeorm = typeorm;
+const Joi = require("@hapi/joi");
+exports.Joi = Joi;
 // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 // -* PROTOBUF
 // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -26,6 +30,8 @@ exports.Transformer = Transformer;
 // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 // -* OTHERS
 // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+const Logger = require("./logger/logger");
+exports.Logger = Logger;
 var config_1 = require("./config/config");
 exports.Config = config_1.Config;
 var database_1 = require("./database/database");

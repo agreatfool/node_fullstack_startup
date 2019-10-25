@@ -1,5 +1,4 @@
-import {getConnection, UpdateResult} from "typeorm";
-import {SkillModel, Transformer} from "common";
+import {SkillModel, Transformer, typeorm} from "common";
 import {Cache} from "../cache/cache";
 import {genCacheKey} from "../utility/utility";
 import {CACHE_USER_WITH_SKILLS} from "./user";
@@ -16,7 +15,8 @@ export const fetchUserSkills = async (userId: number): Promise<SkillModel.Skill[
     if (cached.length > 0) {
         result = cached;
     } else {
-        result = await getConnection()
+        result = await typeorm
+            .getConnection()
             .getRepository(SkillModel.Skill)
             .find({
                 where: {userId},
@@ -28,7 +28,8 @@ export const fetchUserSkills = async (userId: number): Promise<SkillModel.Skill[
 };
 
 export const fetchSkill = async (skillId: number): Promise<SkillModel.Skill> => {
-    return await getConnection()
+    return await typeorm
+        .getConnection()
         .getRepository(SkillModel.Skill)
         .findOne({
             where: {id: skillId},
@@ -39,14 +40,15 @@ export const fetchSkill = async (skillId: number): Promise<SkillModel.Skill> => 
         });
 };
 
-export const updateSkill = async (userId: number, skill: SkillModel.ISkill): Promise<UpdateResult> => {
+export const updateSkill = async (userId: number, skill: SkillModel.ISkill): Promise<typeorm.UpdateResult> => {
     const skillModel = Transformer.Skill.I2M(skill);
 
-    const result = await getConnection()
+    const result = await typeorm
+        .getConnection()
         .getRepository(SkillModel.Skill)
         .update({id: skillModel.id}, skillModel);
     if (result.raw.hasOwnProperty("affectedRows") && result.raw.affectedRows > 0) {
-        await getConnection().queryResultCache.remove([
+        await typeorm.getConnection().queryResultCache.remove([
             genCacheKey(CACHE_SKILLS, {"%USER_ID%": userId}),
             genCacheKey(CACHE_USER_WITH_SKILLS, {"%USER_ID%": userId}),
             genCacheKey(CACHE_SKILL, {"%SKILL_ID%": skill.id}),

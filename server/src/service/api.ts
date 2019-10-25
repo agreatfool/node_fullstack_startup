@@ -1,4 +1,4 @@
-import {grpc, GrpcPb, Pb, Transformer, UserModel, SkillModel} from "common";
+import {grpc, GrpcPb, Pb, SkillModel, Transformer, UserModel} from "common";
 import * as UserDao from "../dao/user";
 import {User} from "common/build/model/user";
 import * as SkillDao from "../dao/skill";

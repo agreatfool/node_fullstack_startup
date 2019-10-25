@@ -1,10 +1,9 @@
 import * as Koa from "koa";
 
-import {IdModel, SkillModel} from "common";
+import {IdModel, SkillModel, Joi} from "common";
 
 import * as ApiService from "../service/api";
 import {buildResponse, validateWithJoi} from "../utility/utility";
-import * as Joi from "@hapi/joi";
 
 /**
  * @swagger

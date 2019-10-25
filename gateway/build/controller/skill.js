@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const common_1 = require("common");
 const ApiService = require("../service/api");
 const utility_1 = require("../utility/utility");
-const Joi = require("@hapi/joi");
 /**
  * @swagger
  * tags:
@@ -140,8 +139,8 @@ exports.getSkills = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
  *           $ref: '#/definitions/SkillResponse'
  */
 exports.updateSkill = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
-    const { error } = yield utility_1.validateWithJoi(Joi.object({
-        id: Joi.number().integer().required(),
+    const { error } = yield utility_1.validateWithJoi(common_1.Joi.object({
+        id: common_1.Joi.number().integer().required(),
         skill: common_1.SkillModel.SkillSchema,
     }), ctx.request.body);
     if (error) {

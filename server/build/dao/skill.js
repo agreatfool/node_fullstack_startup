@@ -9,7 +9,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const typeorm_1 = require("typeorm");
 const common_1 = require("common");
 const cache_1 = require("../cache/cache");
 const utility_1 = require("../utility/utility");
@@ -25,7 +24,8 @@ exports.fetchUserSkills = (userId) => __awaiter(void 0, void 0, void 0, function
         result = cached;
     }
     else {
-        result = yield typeorm_1.getConnection()
+        result = yield common_1.typeorm
+            .getConnection()
             .getRepository(common_1.SkillModel.Skill)
             .find({
             where: { userId },
@@ -35,7 +35,8 @@ exports.fetchUserSkills = (userId) => __awaiter(void 0, void 0, void 0, function
     return result;
 });
 exports.fetchSkill = (skillId) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield typeorm_1.getConnection()
+    return yield common_1.typeorm
+        .getConnection()
         .getRepository(common_1.SkillModel.Skill)
         .findOne({
         where: { id: skillId },
@@ -47,11 +48,12 @@ exports.fetchSkill = (skillId) => __awaiter(void 0, void 0, void 0, function* ()
 });
 exports.updateSkill = (userId, skill) => __awaiter(void 0, void 0, void 0, function* () {
     const skillModel = common_1.Transformer.Skill.I2M(skill);
-    const result = yield typeorm_1.getConnection()
+    const result = yield common_1.typeorm
+        .getConnection()
         .getRepository(common_1.SkillModel.Skill)
         .update({ id: skillModel.id }, skillModel);
     if (result.raw.hasOwnProperty("affectedRows") && result.raw.affectedRows > 0) {
-        yield typeorm_1.getConnection().queryResultCache.remove([
+        yield common_1.typeorm.getConnection().queryResultCache.remove([
             utility_1.genCacheKey(CACHE_SKILLS, { "%USER_ID%": userId }),
             utility_1.genCacheKey(user_1.CACHE_USER_WITH_SKILLS, { "%USER_ID%": userId }),
             utility_1.genCacheKey(CACHE_SKILL, { "%SKILL_ID%": skill.id }),

@@ -12,12 +12,14 @@
   "devDependencies": {
     "@types/hapi__joi": "16.0.2",
     "@types/node": "12.7.12",
-    "grpc_tools_node_protoc_ts": "2.5.5",
-    "typeorm": "0.2.20"
+    "grpc_tools_node_protoc_ts": "2.5.5"
   },
   "dependencies": {
     "@hapi/joi": "16.1.7",
     "grpc": "1.24.0",
+    "typeorm": "0.2.20",
+    "winston": "3.2.1",
+    "winston-daily-rotate-file": "4.2.1",
     "yaml": "1.7.2"
   }
 }

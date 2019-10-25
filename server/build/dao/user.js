@@ -9,7 +9,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const typeorm_1 = require("typeorm");
 const common_1 = require("common");
 const utility_1 = require("../utility/utility");
 const CACHE_USER = "User:%USER_ID%";
@@ -17,7 +16,8 @@ const CACHE_USER_TTL = 3600000; // milliseconds, 1 hour
 exports.CACHE_USER_WITH_SKILLS = "UserWithSkills:%USER_ID%";
 const CACHE_USER_WITH_SKILLS_TTL = 3600000; // milliseconds, 1 hour
 exports.fetchUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield typeorm_1.getConnection()
+    return yield common_1.typeorm
+        .getConnection()
         .getRepository(common_1.UserModel.User)
         .findOne({
         where: { id: userId },
@@ -28,7 +28,8 @@ exports.fetchUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     });
 });
 exports.fetchUserWithSkills = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield typeorm_1.getConnection()
+    return yield common_1.typeorm
+        .getConnection()
         .getRepository(common_1.UserModel.User)
         .createQueryBuilder("user")
         .where({ id: userId })
@@ -39,17 +40,19 @@ exports.fetchUserWithSkills = (userId) => __awaiter(void 0, void 0, void 0, func
 exports.createUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
     const userModel = common_1.Transformer.User.I2M(user);
     userModel.id = undefined; // use auto id
-    return yield typeorm_1.getConnection()
+    return yield common_1.typeorm
+        .getConnection()
         .getRepository(common_1.UserModel.User)
         .save(userModel);
 });
 exports.updateUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
     const userModel = common_1.Transformer.User.I2M(user);
-    const result = yield typeorm_1.getConnection()
+    const result = yield common_1.typeorm
+        .getConnection()
         .getRepository(common_1.UserModel.User)
         .update({ id: userModel.id }, userModel);
     if (result.raw.hasOwnProperty("affectedRows") && result.raw.affectedRows > 0) {
-        yield typeorm_1.getConnection().queryResultCache.remove([
+        yield common_1.typeorm.getConnection().queryResultCache.remove([
             utility_1.genCacheKey(CACHE_USER, { "%USER_ID%": user.id }),
             utility_1.genCacheKey(exports.CACHE_USER_WITH_SKILLS, { "%USER_ID%": user.id }),
         ]);
@@ -58,7 +61,7 @@ exports.updateUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.createUserWithSkills = (user, skills) => __awaiter(void 0, void 0, void 0, function* () {
     let result;
-    const connection = typeorm_1.getConnection();
+    const connection = common_1.typeorm.getConnection();
     const queryRunner = connection.createQueryRunner();
     yield queryRunner.connect();
     yield queryRunner.startTransaction();

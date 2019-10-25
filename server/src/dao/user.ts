@@ -1,5 +1,4 @@
-import {getConnection, UpdateResult} from "typeorm";
-import {SkillModel, Transformer, UserModel} from "common";
+import {SkillModel, Transformer, typeorm, UserModel} from "common";
 import {genCacheKey} from "../utility/utility";
 
 const CACHE_USER = "User:%USER_ID%";
@@ -8,7 +7,8 @@ export const CACHE_USER_WITH_SKILLS = "UserWithSkills:%USER_ID%";
 const CACHE_USER_WITH_SKILLS_TTL = 3600000; // milliseconds, 1 hour
 
 export const fetchUser = async (userId: number): Promise<UserModel.User> => {
-    return await getConnection()
+    return await typeorm
+        .getConnection()
         .getRepository(UserModel.User)
         .findOne({
             where: {id: userId},
@@ -20,7 +20,8 @@ export const fetchUser = async (userId: number): Promise<UserModel.User> => {
 };
 
 export const fetchUserWithSkills = async (userId: number) => {
-    return await getConnection()
+    return await typeorm
+        .getConnection()
         .getRepository(UserModel.User)
         .createQueryBuilder("user")
         .where({id: userId})
@@ -33,19 +34,21 @@ export const createUser = async (user: UserModel.IUser): Promise<UserModel.User>
     const userModel = Transformer.User.I2M(user);
     userModel.id = undefined; // use auto id
 
-    return await getConnection()
+    return await typeorm
+        .getConnection()
         .getRepository(UserModel.User)
         .save(userModel);
 };
 
-export const updateUser = async (user: UserModel.IUser): Promise<UpdateResult> => {
+export const updateUser = async (user: UserModel.IUser): Promise<typeorm.UpdateResult> => {
     const userModel = Transformer.User.I2M(user);
 
-    const result = await getConnection()
+    const result = await typeorm
+        .getConnection()
         .getRepository(UserModel.User)
         .update({id: userModel.id}, userModel);
     if (result.raw.hasOwnProperty("affectedRows") && result.raw.affectedRows > 0) {
-        await getConnection().queryResultCache.remove([
+        await typeorm.getConnection().queryResultCache.remove([
             genCacheKey(CACHE_USER, {"%USER_ID%": user.id}),
             genCacheKey(CACHE_USER_WITH_SKILLS, {"%USER_ID%": user.id}),
         ]);
@@ -59,7 +62,7 @@ export const createUserWithSkills = async (
 ): Promise<UserModel.User> => {
     let result: UserModel.User;
 
-    const connection = getConnection();
+    const connection = typeorm.getConnection();
     const queryRunner = connection.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();

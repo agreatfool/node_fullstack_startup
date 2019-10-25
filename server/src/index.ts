@@ -1,15 +1,16 @@
 #!/usr/bin/env node
 
-import * as LibPath from "path";
 import "reflect-metadata";
-import {Config, Database, grpc, GrpcPb} from "common";
+import * as LibPath from "path";
+import {Config, Database, grpc, GrpcPb, typeorm} from "common";
 import {ApiServiceImpl} from "./service/api";
-import {createConnection} from "typeorm";
+import {Logger} from "./logger/logger";
 
 const startServer = async () => {
     // init system
     Config.get(LibPath.join(__dirname, "..", "..", "fullstack.yml"));
-    await createConnection(Database.getConnectionOptions());
+    await typeorm.createConnection(Database.getConnectionOptions());
+    Logger.get();
 
     // start server
     const server = new grpc.Server();
