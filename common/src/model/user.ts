@@ -12,10 +12,10 @@ export enum UserGender {
  * @swagger
  * definitions:
  *   User:
+ *     description: User info
  *     allOf:
  *       - $ref: "#/definitions/IdObj"
  *       - type: object
- *         description: User info
  *         required:
  *           - name
  *           - age

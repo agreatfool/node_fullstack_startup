@@ -7,10 +7,10 @@ import * as Joi from "@hapi/joi";
  * @swagger
  * definitions:
  *   Skill:
+ *     description: Skill info
  *     allOf:
  *       - $ref: "#/definitions/IdObj"
  *       - type: object
- *         description: Skill info
  *         required:
  *           - name
  *         properties:
