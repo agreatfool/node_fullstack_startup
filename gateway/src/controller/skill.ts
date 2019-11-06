@@ -1,9 +1,10 @@
 import * as Koa from "koa";
 
-import {IdModel, SkillModel, Joi} from "common";
+import {IdModel, Joi, Logger as CommonLogger, SkillModel} from "common";
 
 import * as ApiService from "../service/api";
 import {buildResponse, validateWithJoi} from "../utility/utility";
+import {Logger} from "../logger/logger";
 
 /**
  * @swagger
@@ -68,6 +69,13 @@ export const getSkill = async (ctx: Koa.Context) => {
         return;
     }
 
+    Logger.get().info({
+        app: "gateway",
+        module: "SkillController",
+        action: "getSkill",
+        data: {id: ctx.params.id},
+    } as CommonLogger.ILogInfo);
+
     ctx.body = buildResponse(200, await ApiService.getSkill(ctx.params.id));
 };
 
@@ -101,6 +109,13 @@ export const getSkills = async (ctx: Koa.Context) => {
         ctx.body = buildResponse(-1, error);
         return;
     }
+
+    Logger.get().info({
+        app: "gateway",
+        module: "SkillController",
+        action: "getSkills",
+        data: {id: ctx.params.id},
+    } as CommonLogger.ILogInfo);
 
     ctx.body = buildResponse(200, await ApiService.getSkills(ctx.params.id));
 };
@@ -146,6 +161,16 @@ export const updateSkill = async (ctx: Koa.Context) => {
         ctx.body = buildResponse(-1, error);
         return;
     }
+
+    Logger.get().info({
+        app: "gateway",
+        module: "SkillController",
+        action: "updateSkill",
+        data: {
+            id: (ctx.request as any).body.id,
+            skill: (ctx.request as any).body.skill,
+        },
+    } as CommonLogger.ILogInfo);
 
     let res = await ApiService.updateSkill(
         (ctx.request as any).body.id, (ctx.request as any).body.skill,

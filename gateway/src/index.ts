@@ -4,6 +4,9 @@ import {SwaggerDefinition} from "swagger-jsdoc";
 import * as bodyParser from "koa-bodyparser";
 
 import {router} from "./controller/router";
+import * as LibPath from "path";
+import {Logger} from "./logger/logger";
+import {Config} from "common";
 
 const pkg = require("../package.json");
 
@@ -14,6 +17,9 @@ const host = process.env.HTTP_HOST;
 const port = process.env.HTTP_PORT;
 const apiVersion = `v${pkg.version}`;
 const apiBaseUrl = `/api/${apiVersion}`;
+
+Config.get(LibPath.join(__dirname, "..", "..", "fullstack.yml"));
+Logger.get();
 
 const swaggerSpec = swaggerJSDoc({
     apis: ["**/*.ts"],

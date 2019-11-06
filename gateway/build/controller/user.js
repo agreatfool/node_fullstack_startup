@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const common_1 = require("common");
 const ApiService = require("../service/api");
 const utility_1 = require("../utility/utility");
+const logger_1 = require("../logger/logger");
 /**
  * @swagger
  * tags:
@@ -77,6 +78,12 @@ exports.getUser = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
         ctx.body = utility_1.buildResponse(-1, error);
         return;
     }
+    logger_1.Logger.get().info({
+        app: "gateway",
+        module: "UserController",
+        action: "getUser",
+        data: { id: ctx.params.id },
+    });
     let res = yield ApiService.getUser(ctx.params.id);
     if (res.id === 0) {
         res = {};
@@ -113,6 +120,12 @@ exports.getUserWithSkills = (ctx) => __awaiter(void 0, void 0, void 0, function*
         ctx.body = utility_1.buildResponse(-1, error);
         return;
     }
+    logger_1.Logger.get().info({
+        app: "gateway",
+        module: "UserController",
+        action: "getUserWithSkills",
+        data: { id: ctx.params.id },
+    });
     const res = yield ApiService.getUserWithSkills(ctx.params.id);
     if (res.user.id === 0) {
         res.user = {};
@@ -148,6 +161,16 @@ exports.createUser = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
         ctx.body = utility_1.buildResponse(-1, error);
         return;
     }
+    logger_1.Logger.get().info({
+        app: "gateway",
+        module: "UserController",
+        action: "createUser",
+        data: {
+            name: ctx.request.body.name,
+            age: ctx.request.body.age,
+            gender: ctx.request.body.gender,
+        },
+    });
     ctx.body = utility_1.buildResponse(200, yield ApiService.createUser({
         name: ctx.request.body.name,
         age: ctx.request.body.age,
@@ -188,10 +211,12 @@ exports.createUser = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
  */
 exports.createUserWithSkills = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
     const validations = [];
-    validations.push({ schema: common_1.Joi.object({
+    validations.push({
+        schema: common_1.Joi.object({
             user: common_1.UserModel.UserSchemaNonId,
             skills: common_1.Joi.array(),
-        }), data: ctx.request.body });
+        }), data: ctx.request.body,
+    });
     if (ctx.request.body.hasOwnProperty("skills")
         && ctx.request.body.skills.hasOwnProperty("length")) {
         // {skills: Joi.array().items(SkillModel.SkillSchemaNonId)} not working, shall be fixed later
@@ -204,6 +229,15 @@ exports.createUserWithSkills = (ctx) => __awaiter(void 0, void 0, void 0, functi
         ctx.body = utility_1.buildResponse(-1, error);
         return;
     }
+    logger_1.Logger.get().info({
+        app: "gateway",
+        module: "UserController",
+        action: "createUserWithSkills",
+        data: {
+            user: ctx.request.body.user,
+            skills: ctx.request.body.skills,
+        },
+    });
     ctx.body = utility_1.buildResponse(200, yield ApiService.createUserWithSkills(ctx.request.body.user, ctx.request.body.skills));
 });
 /**
@@ -235,6 +269,17 @@ exports.updateUser = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
         ctx.body = utility_1.buildResponse(-1, error);
         return;
     }
+    logger_1.Logger.get().info({
+        app: "gateway",
+        module: "UserController",
+        action: "updateUser",
+        data: {
+            id: ctx.request.body.id,
+            name: ctx.request.body.name,
+            age: ctx.request.body.age,
+            gender: ctx.request.body.gender,
+        },
+    });
     let res = yield ApiService.updateUser({
         id: ctx.request.body.id,
         name: ctx.request.body.name,

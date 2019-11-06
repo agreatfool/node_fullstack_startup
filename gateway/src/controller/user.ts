@@ -1,9 +1,10 @@
 import * as Koa from "koa";
 
-import {IdModel, SkillModel, UserModel, Joi} from "common";
+import {IdModel, Joi, Logger as CommonLogger, SkillModel, UserModel} from "common";
 
 import * as ApiService from "../service/api";
 import {buildResponse, validateWithJoi, validateWithJoiMulti} from "../utility/utility";
+import {Logger} from "../logger/logger";
 
 /**
  * @swagger
@@ -73,6 +74,13 @@ export const getUser = async (ctx: Koa.Context) => {
         return;
     }
 
+    Logger.get().info({
+        app: "gateway",
+        module: "UserController",
+        action: "getUser",
+        data: {id: ctx.params.id},
+    } as CommonLogger.ILogInfo);
+
     let res = await ApiService.getUser(ctx.params.id);
     if (res.id === 0) {
         res = {} as UserModel.IUser;
@@ -111,6 +119,13 @@ export const getUserWithSkills = async (ctx: Koa.Context) => {
         return;
     }
 
+    Logger.get().info({
+        app: "gateway",
+        module: "UserController",
+        action: "getUserWithSkills",
+        data: {id: ctx.params.id},
+    } as CommonLogger.ILogInfo);
+
     const res = await ApiService.getUserWithSkills(ctx.params.id);
     if (res.user.id === 0) {
         res.user = {} as UserModel.IUser;
@@ -147,6 +162,17 @@ export const createUser = async (ctx: Koa.Context) => {
         ctx.body = buildResponse(-1, error);
         return;
     }
+
+    Logger.get().info({
+        app: "gateway",
+        module: "UserController",
+        action: "createUser",
+        data: {
+            name: (ctx.request as any).body.name,
+            age: (ctx.request as any).body.age,
+            gender: (ctx.request as any).body.gender,
+        },
+    } as CommonLogger.ILogInfo);
 
     ctx.body = buildResponse(200, await ApiService.createUser({
         name: (ctx.request as any).body.name,
@@ -189,10 +215,12 @@ export const createUser = async (ctx: Koa.Context) => {
  */
 export const createUserWithSkills = async (ctx: Koa.Context) => {
     const validations = [] as Array<{ schema: Joi.AnySchema, data: any }>;
-    validations.push({schema: Joi.object({
-        user: UserModel.UserSchemaNonId,
-        skills: Joi.array(),
-    }), data: (ctx.request as any).body});
+    validations.push({
+        schema: Joi.object({
+            user: UserModel.UserSchemaNonId,
+            skills: Joi.array(),
+        }), data: (ctx.request as any).body,
+    });
     if ((ctx.request as any).body.hasOwnProperty("skills")
         && (ctx.request as any).body.skills.hasOwnProperty("length")) {
         // {skills: Joi.array().items(SkillModel.SkillSchemaNonId)} not working, shall be fixed later
@@ -205,6 +233,16 @@ export const createUserWithSkills = async (ctx: Koa.Context) => {
         ctx.body = buildResponse(-1, error);
         return;
     }
+
+    Logger.get().info({
+        app: "gateway",
+        module: "UserController",
+        action: "createUserWithSkills",
+        data: {
+            user: (ctx.request as any).body.user,
+            skills: (ctx.request as any).body.skills,
+        },
+    } as CommonLogger.ILogInfo);
 
     ctx.body = buildResponse(200, await ApiService.createUserWithSkills(
         (ctx.request as any).body.user,
@@ -241,6 +279,18 @@ export const updateUser = async (ctx: Koa.Context) => {
         ctx.body = buildResponse(-1, error);
         return;
     }
+
+    Logger.get().info({
+        app: "gateway",
+        module: "UserController",
+        action: "updateUser",
+        data: {
+            id: (ctx.request as any).body.id,
+            name: (ctx.request as any).body.name,
+            age: (ctx.request as any).body.age,
+            gender: (ctx.request as any).body.gender,
+        },
+    } as CommonLogger.ILogInfo);
 
     let res = await ApiService.updateUser({
         id: (ctx.request as any).body.id,

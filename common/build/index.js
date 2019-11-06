@@ -9,6 +9,8 @@ const typeorm = require("typeorm");
 exports.typeorm = typeorm;
 const Joi = require("@hapi/joi");
 exports.Joi = Joi;
+const moment = require("moment");
+exports.moment = moment;
 // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 // -* PROTOBUF
 // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-

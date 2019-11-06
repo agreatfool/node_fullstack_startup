@@ -13,6 +13,9 @@ const Koa = require("koa");
 const swaggerJSDoc = require("swagger-jsdoc");
 const bodyParser = require("koa-bodyparser");
 const router_1 = require("./controller/router");
+const LibPath = require("path");
+const logger_1 = require("./logger/logger");
+const common_1 = require("common");
 const pkg = require("../package.json");
 const koaSwagger = require("koa2-swagger-ui");
 const app = new Koa();
@@ -20,6 +23,8 @@ const host = process.env.HTTP_HOST;
 const port = process.env.HTTP_PORT;
 const apiVersion = `v${pkg.version}`;
 const apiBaseUrl = `/api/${apiVersion}`;
+common_1.Config.get(LibPath.join(__dirname, "..", "..", "fullstack.yml"));
+logger_1.Logger.get();
 const swaggerSpec = swaggerJSDoc({
     apis: ["**/*.ts"],
     explorer: true,

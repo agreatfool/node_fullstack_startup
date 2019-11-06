@@ -1,4 +1,8 @@
 export interface IConfig {
+    test: boolean;
+    log: {
+        level: string;
+    };
     database: {
         type: string;
         host: string;

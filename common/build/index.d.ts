@@ -1,7 +1,8 @@
 import * as grpc from "grpc";
 import * as typeorm from "typeorm";
 import * as Joi from "@hapi/joi";
-export { grpc, typeorm, Joi, };
+import * as moment from "moment";
+export { grpc, typeorm, Joi, moment, };
 import * as Pb from "./proto/api_pb";
 import * as GrpcPb from "./proto/api_grpc_pb";
 export { Pb, GrpcPb, };

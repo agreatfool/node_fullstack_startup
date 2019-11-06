@@ -4,11 +4,13 @@
 import * as grpc from "grpc";
 import * as typeorm from "typeorm";
 import * as Joi from "@hapi/joi";
+import * as moment from "moment";
 
 export {
     grpc,
     typeorm,
     Joi,
+    moment,
 };
 
 // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-

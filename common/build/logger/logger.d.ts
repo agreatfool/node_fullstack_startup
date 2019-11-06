@@ -4,6 +4,13 @@ import { DailyRotateFileTransportOptions as TransportOptions } from "winston-dai
 export { Logger } from "winston";
 export { DailyRotateFileTransportOptions as TransportOptions } from "winston-daily-rotate-file";
 export { DailyRotateFile };
+export interface ILogInfo {
+    app: string;
+    module: string;
+    action: string;
+    data: any;
+    [key: string]: any;
+}
 export declare class Factory {
     static createLogger(): winston.Logger;
     static addTransport(logger: winston.Logger, options: TransportOptions): winston.Logger;

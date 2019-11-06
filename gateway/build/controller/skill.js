@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const common_1 = require("common");
 const ApiService = require("../service/api");
 const utility_1 = require("../utility/utility");
+const logger_1 = require("../logger/logger");
 /**
  * @swagger
  * tags:
@@ -72,6 +73,12 @@ exports.getSkill = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
         ctx.body = utility_1.buildResponse(-1, error);
         return;
     }
+    logger_1.Logger.get().info({
+        app: "gateway",
+        module: "SkillController",
+        action: "getSkill",
+        data: { id: ctx.params.id },
+    });
     ctx.body = utility_1.buildResponse(200, yield ApiService.getSkill(ctx.params.id));
 });
 /**
@@ -104,6 +111,12 @@ exports.getSkills = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
         ctx.body = utility_1.buildResponse(-1, error);
         return;
     }
+    logger_1.Logger.get().info({
+        app: "gateway",
+        module: "SkillController",
+        action: "getSkills",
+        data: { id: ctx.params.id },
+    });
     ctx.body = utility_1.buildResponse(200, yield ApiService.getSkills(ctx.params.id));
 });
 /**
@@ -147,6 +160,15 @@ exports.updateSkill = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
         ctx.body = utility_1.buildResponse(-1, error);
         return;
     }
+    logger_1.Logger.get().info({
+        app: "gateway",
+        module: "SkillController",
+        action: "updateSkill",
+        data: {
+            id: ctx.request.body.id,
+            skill: ctx.request.body.skill,
+        },
+    });
     let res = yield ApiService.updateSkill(ctx.request.body.id, ctx.request.body.skill);
     if (res.id === 0) {
         res = {};

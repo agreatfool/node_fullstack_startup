@@ -2,6 +2,10 @@ import * as YAML from "yaml";
 import * as LibFs from "fs";
 
 export interface IConfig {
+    test: boolean;
+    log: {
+        level: string,
+    };
     database: {
         type: string,
         host: string,
