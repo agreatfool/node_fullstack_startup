@@ -15,11 +15,14 @@ const startServer = async () => {
     // start server
     const server = new grpc.Server();
 
+    const host = Config.get().getRaw().server.httpHost;
+    const port = Config.get().getRaw().server.httpPort;
+
     server.addService(GrpcPb.ApiService, new ApiServiceImpl());
-    server.bind("127.0.0.1:50051", grpc.ServerCredentials.createInsecure());
+    server.bind(`${host}:${port}`, grpc.ServerCredentials.createInsecure());
     server.start();
 
-    console.log("Server started, listening: 127.0.0.1:50051");
+    console.log(`Server started, listening: ${host}:${port}`);
 };
 
 startServer().then((_) => _).catch();

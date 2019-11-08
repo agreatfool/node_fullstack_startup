@@ -17,7 +17,7 @@ rsync -av --progress \
     --exclude README.md
 
 rsync -av --progress \
-    gateway \
+    server \
     ./docker/context \
     --exclude node_modules \
     --exclude build \
@@ -32,8 +32,8 @@ mkdir -p ./docker/content/logs
 # build image
 docker build \
     --no-cache \
-    --tag fulstack_gateway:${VERSION} \
-    --file ./gateway/Dockerfile \
+    --tag fulstack_server:${VERSION} \
+    --file ./server/Dockerfile \
     ./docker
 
 # remove images without tags

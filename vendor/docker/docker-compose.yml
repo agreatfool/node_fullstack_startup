@@ -1,57 +1,106 @@
-version: "2"
+version: "2.1"
 
 networks:
   net:
     driver: "bridge"
 
 volumes:
-  mysql_data:
+  fullstack_mysql_data:
     driver: "local"
-  redis_data:
+  fullstack_redis_data:
     driver: "local"
 
 services:
   # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
   # -* MYSQL
   # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-  mysql:
-    image: "mysql:5.6.45"
-    container_name: "mysql"
-    hostname: "mysql"
+  fullstack_mysql:
+    image: mysql:5.6.45
+    container_name: fullstack_mysql
+    hostname: fullstack_mysql
     networks:
-      - "net"
+      - net
     ports:
-      - "13306:3306"
+      - 23306:3306
+    logging:
+      driver: json-file
+      options:
+        max-size: 512m
+    restart: always
+    healthcheck:
+      test: mysqladmin ping -uroot -p${MYSQL_PWD} -h127.0.0.1
+      timeout: 20s
+      retries: 10
     volumes:
-      - mysql_data:/var/lib/mysql
-      - ${BASEPATH}/vendor/mysql/config/my.cnf:/etc/mysql/my.cnf
+      - fullstack_mysql_data:/var/lib/mysql
       - ${BASEPATH}/vendor/mysql/schema/schema.sql:/docker-entrypoint-initdb.d/schema.sql
-    restart: "always"
     environment:
-      MYSQL_ROOT_PASSWORD: "abc123_"
-      MYSQL_DATABASE: "fullstack"
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PWD}
+      MYSQL_DATABASE: fullstack
     command: [
-      "--bind-address=0.0.0.0",
-      "--character-set-server=utf8mb4",
-      "--collation-server=utf8mb4_unicode_ci",
-      "--max-connections=500",
-      "--max-allowed-packet=33554432" # 32M
+      --bind-address=0.0.0.0,
+      --character-set-server=utf8mb4,
+      --collation-server=utf8mb4_unicode_ci,
+      --max-connections=500,
+      --max-allowed-packet=33554432 # 32M
     ]
   # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
   # -* REDIS
   # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-  redis:
-    image: "redis:5.0.6-alpine3.10"
-    container_name: "redis"
-    hostname: "redis"
+  fullstack_redis:
+    image: redis:5.0.6-alpine3.10
+    container_name: fullstack_redis
+    hostname: fullstack_redis
     networks:
-      - "net"
+      - net
     ports:
-      - "16379:6379"
+      - 26379:6379
+    logging:
+      driver: json-file
+      options:
+        max-size: 512m
+    restart: always
     volumes:
-      - redis_data:/data
-      - ${BASEPATH}/vendor/redis/redis.conf:/usr/local/etc/redis/redis.conf
-    restart: "always"
+      - fullstack_redis_data:/data
+    command: [
+      redis-server,
+      "--appendonly yes"
+    ]
   # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-  # -* REDIS
+  # -* GATEWAY
   # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+  fullstack_gateway:
+    image: fullstack_gateway:${GATEWAY_VERSION}
+    container_name: fullstack_gateway
+    hostname: fullstack_gateway
+    networks:
+      - net
+    ports:
+      - 23000:3000
+    logging:
+      driver: json-file
+      options:
+        max-size: 512m
+    restart: always
+    volumes:
+      - /tmp/logs/gateway:/app/logs
+      - ${BASEPATH}/fullstack.container.yml:/app/fullstack.yml
+  # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+  # -* SERVER
+  # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+  fullstack_server:
+    image: fullstack_server:${SERVER_VERSION}
+    container_name: fullstack_server
+    hostname: fullstack_server
+    networks:
+      - net
+    expose:
+      - 50051
+    logging:
+      driver: json-file
+      options:
+        max-size: 512m
+    restart: always
+    volumes:
+      - /tmp/logs/server:/app/logs
+      - ${BASEPATH}/fullstack.container.yml:/app/fullstack.yml

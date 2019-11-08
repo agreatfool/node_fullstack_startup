@@ -22,10 +22,12 @@ const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
     logger_1.Logger.get();
     // start server
     const server = new common_1.grpc.Server();
+    const host = common_1.Config.get().getRaw().server.httpHost;
+    const port = common_1.Config.get().getRaw().server.httpPort;
     server.addService(common_1.GrpcPb.ApiService, new api_1.ApiServiceImpl());
-    server.bind("127.0.0.1:50051", common_1.grpc.ServerCredentials.createInsecure());
+    server.bind(`${host}:${port}`, common_1.grpc.ServerCredentials.createInsecure());
     server.start();
-    console.log("Server started, listening: 127.0.0.1:50051");
+    console.log(`Server started, listening: ${host}:${port}`);
 });
 startServer().then((_) => _).catch();
 process.on("uncaughtException", (err) => {

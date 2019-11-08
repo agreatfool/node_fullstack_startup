@@ -13,8 +13,8 @@ const pkg = require("../package.json");
 const koaSwagger = require("koa2-swagger-ui");
 
 const app = new Koa();
-const host = process.env.HTTP_HOST;
-const port = process.env.HTTP_PORT;
+const host = Config.get().getRaw().gateway.httpHost;
+const port = Config.get().getRaw().gateway.httpPort;
 const apiVersion = `v${pkg.version}`;
 const apiBaseUrl = `/api/${apiVersion}`;
 
@@ -26,7 +26,7 @@ const swaggerSpec = swaggerJSDoc({
     explorer: true,
     swaggerDefinition: {
         basePath: apiBaseUrl,
-        host: `${process.env.TEST_HOST}:${port}`,
+        host: `${Config.get().getRaw().gateway.testHost}:${Config.get().getRaw().gateway.testPort}`,
         info: {
             description: "Fullstack app Api",
             title: "Fullstack app Api",

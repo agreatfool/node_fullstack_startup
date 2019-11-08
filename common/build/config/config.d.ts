@@ -3,6 +3,16 @@ export interface IConfig {
     log: {
         level: string;
     };
+    gateway: {
+        httpHost: string;
+        httpPort: number;
+        testHost: string;
+        testPort: number;
+    };
+    server: {
+        httpHost: string;
+        httpPort: number;
+    };
     database: {
         type: string;
         host: string;

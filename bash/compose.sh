@@ -6,18 +6,27 @@ cd ${BASEPATH}
 
 CONF="${BASEPATH}/vendor/docker/docker-compose.yml"
 
-export BASEPATH="${FULLPATH}/.."
+export BASEPATH=${BASEPATH}
+export MYSQL_PWD=abc123_
+export GATEWAY_VERSION=`cat ./gateway/package.json | jq -r '.version'`
+export SERVER_VERSION=`cat ./server/package.json | jq -r '.version'`
 
 function start() {
-    docker-compose -f ${CONF} -p "fullstack" up -d
+    mkdir -p /tmp/logs/gateway
+    mkdir -p /tmp/logs/server
+
+    docker-compose \
+        -f ${CONF} -p "fullstack" up -d
 }
 
 function stop() {
-    docker-compose -f ${CONF} -p "fullstack" down
+    docker-compose \
+        -f ${CONF} -p "fullstack" down
 }
 
 function clear() {
-    docker-compose -f ${CONF} -p "fullstack" down -v
+    docker-compose \
+        -f ${CONF} -p "fullstack" down -v
 }
 
 function usage() {
