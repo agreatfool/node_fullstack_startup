@@ -3,20 +3,13 @@
 FULLPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 cd ${FULLPATH}/../..
 
-VERSION=`cat ./package.json | jq -r '.version'`
+VERSION=`cat ./gateway/package.json | jq -r '.version'`
 
 # prepare docker context
 rm -rf ./docker
 mkdir -p ./docker/context # since docker COPY command can only copy files & sub dirs of a source dir rather than the source dir itself, so ./docker/context is the actual context dir
 
-rsync -av --progress \
-    common \
-    ./docker/context \
-    --exclude node_modules \
-    --exclude build \
-    --exclude README.md
-
-rsync -av --progress \
+rsync -av \
     gateway \
     ./docker/context \
     --exclude node_modules \
@@ -27,12 +20,12 @@ rsync -av --progress \
 cp fullstack.container.yml ./docker/context
 mv ./docker/context/fullstack.container.yml ./docker/context/fullstack.yml
 
-mkdir -p ./docker/content/logs
+mkdir -p ./docker/context/logs
 
 # build image
 docker build \
     --no-cache \
-    --tag fulstack_gateway:${VERSION} \
+    --tag fullstack_gateway:${VERSION} \
     --file ./gateway/Dockerfile \
     ./docker
 

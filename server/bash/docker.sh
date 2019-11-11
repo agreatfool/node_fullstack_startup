@@ -20,12 +20,12 @@ rsync -av \
 cp fullstack.container.yml ./docker/context
 mv ./docker/context/fullstack.container.yml ./docker/context/fullstack.yml
 
-mkdir -p ./docker/content/logs
+mkdir -p ./docker/context/logs
 
 # build image
 docker build \
     --no-cache \
-    --tag fulstack_server:${VERSION} \
+    --tag fullstack_server:${VERSION} \
     --file ./server/Dockerfile \
     ./docker
 
