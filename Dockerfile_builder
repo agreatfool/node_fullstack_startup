@@ -18,6 +18,11 @@ RUN git clone https://github.com/google/protobuf.git && \
     cd .. && \
     rm -r protobuf
 
-RUN npm i typescript -g --unsafe-perm && \
-    npm i grpc-tools -g --unsafe-perm && \
-    npm i yarn -g  --unsafe-perm
+RUN npm i typescript -g --unsafe-perm --loglevel verbose && \
+    npm i grpc-tools -g --unsafe-perm --loglevel verbose && \
+    npm i yarn -g  --unsafe-perm --loglevel verbose && \
+    which protoc && protoc --version && \
+    which tsc && tsc --version && \
+    which grpc_tools_node_protoc && grpc_tools_node_protoc --version && \
+    npm list -g --depth=0 | grep grpc-tools
+

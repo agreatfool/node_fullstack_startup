@@ -13,7 +13,7 @@ mkdir -p ./docker/context # since docker COPY command can only copy files & sub 
 docker build \
     --no-cache \
     --tag fullstack_builder:${VERSION} \
-    --file ./Dockerfile \
+    --file ./Dockerfile_builder \
     ./docker
 
 # remove images without tags
