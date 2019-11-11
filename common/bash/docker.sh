@@ -19,7 +19,7 @@ rsync -av \
 # build image
 docker build \
     --no-cache \
-    --tag fulstack_common:${VERSION} \
+    --tag fullstack_common:${VERSION} \
     --file ./common/Dockerfile \
     ./docker
 

@@ -1,27 +1,25 @@
-FROM fullstack_builder:0.0.1 as builder
+FROM fullstack_common:0.0.1 as builder
 
 WORKDIR /opt/server
 
 COPY ./context ./
 
-RUN cd common && \
-    ./bash/proto.sh && \
-    npm i --only=prod --unsafe-perm --loglevel verbose && \
-    tsc && \
-    cd ../server && \
+RUN cp -r /opt/common/common ./ && \
+    cd server && \
+    echo "server: start update_common.sh ..." && \
     ./bash/update_common.sh && \
-    npm i --only=prod --unsafe-perm --loglevel verbose && \
+    echo "server: start yarn install ..." && \
+    yarn install && \
+    echo "server: start tsc ..." && \
     tsc && \
-    cd .. && \
-    rm -rf ./common && \
+    cd .. && rm -rf ./common && \
     pwd && \
-    ls -l
+    ls -l && \
+    ls -l ./server/node_modules
 
-FROM node:10.16.3-alpine
+FROM fullstack_runner:0.0.1
 
 WORKDIR /app
-
-RUN npm i pm2 -g --unsafe-perm
 
 COPY --from=builder /opt/server .
 

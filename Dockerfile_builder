@@ -25,4 +25,3 @@ RUN npm i typescript -g --unsafe-perm --loglevel verbose && \
     which tsc && tsc --version && \
     which grpc_tools_node_protoc && grpc_tools_node_protoc --version && \
     npm list -g --depth=0 | grep grpc-tools
-

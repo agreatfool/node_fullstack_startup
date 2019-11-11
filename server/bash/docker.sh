@@ -3,20 +3,13 @@
 FULLPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 cd ${FULLPATH}/../..
 
-VERSION=`cat ./package.json | jq -r '.version'`
+VERSION=`cat ./server/package.json | jq -r '.version'`
 
 # prepare docker context
 rm -rf ./docker
 mkdir -p ./docker/context # since docker COPY command can only copy files & sub dirs of a source dir rather than the source dir itself, so ./docker/context is the actual context dir
 
-rsync -av --progress \
-    common \
-    ./docker/context \
-    --exclude node_modules \
-    --exclude build \
-    --exclude README.md
-
-rsync -av --progress \
+rsync -av \
     server \
     ./docker/context \
     --exclude node_modules \
