@@ -1,0 +1,9 @@
+FROM node:10.16.3-alpine
+
+WORKDIR /app
+
+RUN pwd && \
+    ls -l && \
+    npm i pm2 -g --unsafe-perm --loglevel verbose && \
+    which pm2 && \
+    pm2 --help
