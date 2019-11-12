@@ -15,8 +15,8 @@ log:
 gateway:
   httpHost: "0.0.0.0" # for web server listening
   httpPort: 3000
-  testHost: "127.0.0.1" # for swagger ui test purpose
-  testPort: 3000
+  publicHost: "127.0.0.1" # for swagger ui test purpose
+  publicPort: 3000
 
 # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 # -* Server
@@ -24,6 +24,8 @@ gateway:
 server:
   httpHost: "0.0.0.0"
   httpPort: 50051
+  publicHost: "127.0.0.1"
+  publicPort: 50051
 
 # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 # -* TypeOrm

@@ -6,12 +6,14 @@ export interface IConfig {
     gateway: {
         httpHost: string;
         httpPort: number;
-        testHost: string;
-        testPort: number;
+        publicHost: string;
+        publicPort: number;
     };
     server: {
         httpHost: string;
         httpPort: number;
+        publicHost: string;
+        publicPort: number;
     };
     database: {
         type: string;

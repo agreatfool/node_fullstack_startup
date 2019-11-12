@@ -13,9 +13,7 @@ RUN cp -r /opt/common/common ./ && \
     echo "server: start tsc ..." && \
     tsc && \
     cd .. && rm -rf ./common && \
-    pwd && \
-    ls -l && \
-    ls -l ./server/node_modules
+    pwd
 
 FROM fullstack_runner:0.0.1
 
@@ -23,4 +21,11 @@ WORKDIR /app
 
 COPY --from=builder /opt/server .
 
-ENTRYPOINT ["pm2", "start", "./server/build/index.js"]
+RUN cd server && \
+    echo "server: npm rebuild for common/grpc" && \
+    npm rebuild --loglevel verbose && cd .. && \
+    ls -l && \
+    ls -l ./server/node_modules
+
+#ENTRYPOINT ["pm2", "start", "./server/build/index.js"]
+ENTRYPOINT ["node", "./server/build/index.js"]

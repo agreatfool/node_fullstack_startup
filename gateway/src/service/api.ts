@@ -1,6 +1,10 @@
-import {grpc, GrpcPb, Pb, SkillModel, Transformer, UserModel} from "common";
+import * as LibPath from "path";
+import {Config, grpc, GrpcPb, Pb, SkillModel, Transformer, UserModel} from "common";
 
-const client = new GrpcPb.ApiClient("127.0.0.1:50051", grpc.credentials.createInsecure());
+const config = Config.get(LibPath.join(__dirname, "..", "..", "..", "fullstack.yml"));
+const serviceHost = config.getRaw().server.publicHost;
+const servicePort = config.getRaw().server.publicPort;
+const client = new GrpcPb.ApiClient(`${serviceHost}:${servicePort}`, grpc.credentials.createInsecure());
 
 export const getUser = async (id: number): Promise<UserModel.IUser> => {
     return new Promise((resolve, reject) => {

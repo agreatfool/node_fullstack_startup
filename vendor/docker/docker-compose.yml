@@ -5,9 +5,9 @@ networks:
     driver: "bridge"
 
 volumes:
-  fullstack_mysql_data:
+  mysql_data:
     driver: "local"
-  fullstack_redis_data:
+  redis_data:
     driver: "local"
 
 services:
@@ -32,7 +32,7 @@ services:
       timeout: 20s
       retries: 10
     volumes:
-      - fullstack_mysql_data:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
       - ${BASEPATH}/vendor/mysql/schema/schema.sql:/docker-entrypoint-initdb.d/schema.sql
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_PWD}
@@ -61,7 +61,7 @@ services:
         max-size: 512m
     restart: always
     volumes:
-      - fullstack_redis_data:/data
+      - redis_data:/data
     command: [
       redis-server,
       "--appendonly yes"
@@ -73,6 +73,11 @@ services:
     image: fullstack_gateway:${GATEWAY_VERSION}
     container_name: fullstack_gateway
     hostname: fullstack_gateway
+    depends_on:
+      fullstack_mysql:
+        condition: service_healthy
+      fullstack_redis:
+        condition: service_started
     networks:
       - net
     ports:
@@ -92,6 +97,11 @@ services:
     image: fullstack_server:${SERVER_VERSION}
     container_name: fullstack_server
     hostname: fullstack_server
+    depends_on:
+      fullstack_mysql:
+        condition: service_healthy
+      fullstack_redis:
+        condition: service_started
     networks:
       - net
     expose:

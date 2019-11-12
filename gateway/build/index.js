@@ -18,19 +18,19 @@ const logger_1 = require("./logger/logger");
 const common_1 = require("common");
 const pkg = require("../package.json");
 const koaSwagger = require("koa2-swagger-ui");
+common_1.Config.get(LibPath.join(__dirname, "..", "..", "fullstack.yml"));
+logger_1.Logger.get();
 const app = new Koa();
 const host = common_1.Config.get().getRaw().gateway.httpHost;
 const port = common_1.Config.get().getRaw().gateway.httpPort;
 const apiVersion = `v${pkg.version}`;
 const apiBaseUrl = `/api/${apiVersion}`;
-common_1.Config.get(LibPath.join(__dirname, "..", "..", "fullstack.yml"));
-logger_1.Logger.get();
 const swaggerSpec = swaggerJSDoc({
     apis: ["**/*.ts"],
     explorer: true,
     swaggerDefinition: {
         basePath: apiBaseUrl,
-        host: `${common_1.Config.get().getRaw().gateway.testHost}:${common_1.Config.get().getRaw().gateway.testPort}`,
+        host: `${common_1.Config.get().getRaw().gateway.publicHost}:${common_1.Config.get().getRaw().gateway.publicPort}`,
         info: {
             description: "Fullstack app Api",
             title: "Fullstack app Api",

@@ -13,9 +13,7 @@ RUN cp -r /opt/common/common ./ && \
     echo "gateway: start tsc ..." && \
     tsc && \
     cd .. && rm -rf ./common && \
-    pwd && \
-    ls -l && \
-    ls -l ./gateway/node_modules
+    pwd
 
 FROM fullstack_runner:0.0.1
 
@@ -23,4 +21,11 @@ WORKDIR /app
 
 COPY --from=builder /opt/gateway .
 
-ENTRYPOINT ["pm2", "start", "./gateway/build/index.js"]
+RUN cd gateway && \
+    echo "gateway: npm rebuild for common/grpc" && \
+    npm rebuild --loglevel verbose && cd .. && \
+    ls -l && \
+    ls -l ./gateway/node_modules
+
+#ENTRYPOINT ["pm2", "start", "./gateway/build/index.js"]
+ENTRYPOINT ["node", "./gateway/build/index.js"]

@@ -9,8 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const LibPath = require("path");
 const common_1 = require("common");
-const client = new common_1.GrpcPb.ApiClient("127.0.0.1:50051", common_1.grpc.credentials.createInsecure());
+const config = common_1.Config.get(LibPath.join(__dirname, "..", "..", "..", "fullstack.yml"));
+const serviceHost = config.getRaw().server.publicHost;
+const servicePort = config.getRaw().server.publicPort;
+const client = new common_1.GrpcPb.ApiClient(`${serviceHost}:${servicePort}`, common_1.grpc.credentials.createInsecure());
 exports.getUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return new Promise((resolve, reject) => {
         const request = new common_1.Pb.GetUserReq();
