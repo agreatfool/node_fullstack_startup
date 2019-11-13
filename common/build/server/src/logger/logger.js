@@ -7,7 +7,7 @@ class Logger {
         if (!Logger.instance) {
             Logger.instance = common_1.Logger.Factory.createLoggerCommon();
             common_1.Logger.Factory.addTransport(Logger.instance, {
-                filename: LibPath.join(__dirname, "../../../logs", "gateway.%DATE%.log"),
+                filename: LibPath.join(__dirname, "../../../logs", "server.%DATE%.log"),
                 datePattern: "YYYY-MM",
                 zippedArchive: true,
                 maxSize: "30m",

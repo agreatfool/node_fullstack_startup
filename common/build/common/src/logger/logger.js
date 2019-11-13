@@ -73,11 +73,6 @@ class TypeOrmLogger {
         });
     }
     log(level, message, queryRunner) {
-        console.log(message);
-        this.logger.log({
-            level,
-            message: message.toString(),
-        });
     }
 }
 exports.TypeOrmLogger = TypeOrmLogger;

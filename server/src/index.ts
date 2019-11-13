@@ -9,7 +9,9 @@ import {Logger} from "./logger/logger";
 const startServer = async () => {
     // init system
     Config.get(LibPath.join(__dirname, "..", "..", "fullstack.yml"));
-    await typeorm.createConnection(Database.getConnectionOptions());
+    await typeorm.createConnection(Object.assign({
+        logger: Logger.createDbLogger(),
+    }, Database.getConnectionOptions()));
     Logger.get();
 
     // start server

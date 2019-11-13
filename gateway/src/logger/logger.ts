@@ -4,7 +4,7 @@ import {Config, Logger as CommonLogger} from "common";
 export class Logger {
     public static get() {
         if (!Logger.instance) {
-            Logger.instance = CommonLogger.Factory.createLogger();
+            Logger.instance = CommonLogger.Factory.createLoggerCommon();
             CommonLogger.Factory.addTransport(Logger.instance, {
                 filename: LibPath.join(__dirname, "../../../logs", "gateway.%DATE%.log"),
                 datePattern: "YYYY-MM",

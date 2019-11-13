@@ -18,7 +18,9 @@ const logger_1 = require("./logger/logger");
 const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
     // init system
     common_1.Config.get(LibPath.join(__dirname, "..", "..", "fullstack.yml"));
-    yield common_1.typeorm.createConnection(common_1.Database.getConnectionOptions());
+    yield common_1.typeorm.createConnection(Object.assign({
+        logger: logger_1.Logger.createDbLogger(),
+    }, common_1.Database.getConnectionOptions()));
     logger_1.Logger.get();
     // start server
     const server = new common_1.grpc.Server();
