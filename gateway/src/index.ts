@@ -65,6 +65,9 @@ app.use(async (ctx: Koa.Context, next) => {
         ctx.status = 200;
         ctx.set("Content-Disposition", "attachment; filename=swagger.json");
         ctx.body = JSON.stringify(swaggerSpec, null, 4);
+    } else if (ctx.path === "/health") {
+        ctx.status = 200;
+        ctx.body = "OK";
     } else {
         ctx.status = 200;
         ctx.body = {

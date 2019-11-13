@@ -10,6 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "common": "file:../common",
+    "koa": "2.8.2",
     "mysql": "2.17.1",
     "redis": "2.8.0",
     "reflect-metadata": "0.1.13"

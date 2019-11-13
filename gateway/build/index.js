@@ -65,6 +65,10 @@ app.use((ctx, next) => __awaiter(void 0, void 0, void 0, function* () {
         ctx.set("Content-Disposition", "attachment; filename=swagger.json");
         ctx.body = JSON.stringify(swaggerSpec, null, 4);
     }
+    else if (ctx.path === "/health") {
+        ctx.status = 200;
+        ctx.body = "OK";
+    }
     else {
         ctx.status = 200;
         ctx.body = {

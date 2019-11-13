@@ -14,6 +14,7 @@ export interface IConfig {
         httpPort: number;
         publicHost: string;
         publicPort: number;
+        webPort: number;
     };
     database: {
         type: string;

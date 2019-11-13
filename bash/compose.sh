@@ -29,6 +29,13 @@ function clear() {
         -f ${CONF} -p "fullstack" down -v
 }
 
+function mysql() {
+    docker run --rm -it \
+        --network fullstack_net \
+        mysql:5.6.45 \
+        mysql -hfullstack_mysql -uroot -p${MYSQL_PWD}
+}
+
 function usage() {
     echo "Usage: compose.sh start|stop|clear"
 }
