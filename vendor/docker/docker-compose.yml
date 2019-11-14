@@ -17,6 +17,8 @@ volumes:
     driver: "local"
   consul_client_data:
     driver: "local"
+  nginx_html:
+    driver: "local"
 
 services:
   # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -37,6 +39,7 @@ services:
     restart: always
     healthcheck:
       test: mysqladmin ping -uroot -p${MYSQL_PWD} -h127.0.0.1
+      interval: 10s
       timeout: 20s
       retries: 10
     volumes:
@@ -68,12 +71,45 @@ services:
       options:
         max-size: 512m
     restart: always
+    healthcheck:
+      test: redis-cli -h 127.0.0.1 ping
+      interval: 5s
+      timeout: 10s
+      retries: 10
     volumes:
       - redis_data:/data
     command: [
       redis-server,
       "--appendonly yes"
     ]
+  # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+  # -* NGINX
+  # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+  fullstack_nginx:
+    image: nginx:1.17.5-alpine
+    container_name: fullstack_nginx
+    hostname: fullstack_nginx
+    networks:
+      - net
+    ports:
+      - 8088:80
+    depends_on:
+      fullstack_gateway:
+        condition: service_healthy
+    logging:
+      driver: json-file
+      options:
+        max-size: 512m
+    restart: always
+    healthcheck:
+      test: wget http://127.0.0.1 -q -O - > /dev/null 2>&1
+      interval: 5s
+      timeout: 10s
+      retries: 10
+    volumes:
+      - nginx_html:/usr/share/nginx/html
+      - ${BASEPATH}/vendor/nginx/nginx:/etc/nginx/nginx.conf
+      - ${BASEPATH}/vendor/nginx/sites/gateway:/etc/nginx/conf.d/default.conf
   # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
   # -* CONSUL
   # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -98,6 +134,11 @@ services:
       options:
         max-size: 512m
     restart: always
+    healthcheck:
+      test: wget http://127.0.0.1:8500/v1/health/node/consul-server1 -q -O - > /dev/null 2>&1
+      interval: 10s
+      timeout: 20s
+      retries: 10
     volumes:
       - consul_server1_data:/consul/data
     environment:
@@ -125,12 +166,18 @@ services:
       - 8302 # Wan Serf
       - 8300 # Server RPC address
     depends_on:
-      - fullstack_consul_server1
+      fullstack_consul_server1:
+        condition: service_healthy
     logging:
       driver: json-file
       options:
         max-size: 512m
     restart: always
+    healthcheck:
+      test: wget http://127.0.0.1:8500/v1/health/node/consul-server2 -q -O - > /dev/null 2>&1
+      interval: 10s
+      timeout: 20s
+      retries: 10
     volumes:
       - consul_server2_data:/consul/data
     environment:
@@ -157,12 +204,18 @@ services:
       - 8302 # Wan Serf
       - 8300 # Server RPC address
     depends_on:
-      - fullstack_consul_server1
+      fullstack_consul_server1:
+        condition: service_healthy
     logging:
       driver: json-file
       options:
         max-size: 512m
     restart: always
+    healthcheck:
+      test: wget http://127.0.0.1:8500/v1/health/node/consul-server3 -q -O - > /dev/null 2>&1
+      interval: 10s
+      timeout: 20s
+      retries: 10
     volumes:
       - consul_server3_data:/consul/data
     environment:
@@ -189,14 +242,22 @@ services:
       - 8302 # Wan Serf
       - 8300 # Server RPC address
     depends_on:
-      - fullstack_consul_server1
-      - fullstack_consul_server2
-      - fullstack_consul_server3
+      fullstack_consul_server1:
+        condition: service_healthy
+      fullstack_consul_server2:
+        condition: service_healthy
+      fullstack_consul_server3:
+        condition: service_healthy
     logging:
       driver: json-file
       options:
         max-size: 512m
     restart: always
+    healthcheck:
+      test: wget http://127.0.0.1:8500/v1/health/node/consul-client -q -O - > /dev/null 2>&1
+      interval: 10s
+      timeout: 20s
+      retries: 10
     volumes:
       - consul_client_data:/consul/data
     environment:
@@ -218,9 +279,15 @@ services:
       fullstack_mysql:
         condition: service_healthy
       fullstack_redis:
-        condition: service_started
+        condition: service_healthy
+      fullstack_server:
+        condition: service_healthy
+      fullstack_consul_client:
+        condition: service_healthy
     networks:
       - net
+    expose:
+      - 3000
     ports:
       - 23000:3000
     logging:
@@ -228,6 +295,11 @@ services:
       options:
         max-size: 512m
     restart: always
+    healthcheck:
+      test: wget http://127.0.0.1:3000/health -q -O - > /dev/null 2>&1
+      interval: 5s
+      timeout: 10s
+      retries: 10
     volumes:
       - /tmp/logs/gateway:/app/logs
       - ${BASEPATH}/fullstack.container.yml:/app/fullstack.yml
@@ -242,16 +314,24 @@ services:
       fullstack_mysql:
         condition: service_healthy
       fullstack_redis:
-        condition: service_started
+        condition: service_healthy
+      fullstack_consul_client:
+        condition: service_healthy
     networks:
       - net
     expose:
-      - 50051
+      - 50051 # gRPC
+      - 50052 # Web, Metrics
     logging:
       driver: json-file
       options:
         max-size: 512m
     restart: always
+    healthcheck:
+      test: wget http://127.0.0.1:50052/health -q -O - > /dev/null 2>&1
+      interval: 5s
+      timeout: 10s
+      retries: 10
     volumes:
       - /tmp/logs/server:/app/logs
       - ${BASEPATH}/fullstack.container.yml:/app/fullstack.yml

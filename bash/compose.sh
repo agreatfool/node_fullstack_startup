@@ -36,13 +36,18 @@ function mysql() {
         mysql -hfullstack_mysql -uroot -p${MYSQL_PWD}
 }
 
-function usage() {
-    echo "Usage: compose.sh start|stop|clear"
+function restart() {
+    docker-compose \
+        -f ${CONF} -p "fullstack" restart $1
 }
 
-if [[ $1 != "start" ]] && [[ $1 != "stop" ]] && [[ $1 != "clear" ]]; then
+function usage() {
+    echo "Usage: compose.sh start|stop|clear|mysql|restart"
+}
+
+if [[ $1 != "start" ]] && [[ $1 != "stop" ]] && [[ $1 != "clear" ]] && [[ $1 != "mysql" ]] && [[ $1 != "restart" ]]; then
     usage
     exit 0
 fi
 
-eval $1
+eval $1 $2

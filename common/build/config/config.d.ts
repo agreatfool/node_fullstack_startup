@@ -34,6 +34,12 @@ export interface IConfig {
             duration: number;
         };
     };
+    consul: {
+        client: {
+            host: string;
+            port: number;
+        };
+    };
 }
 export declare class Config {
     static get(configPath?: string): Config;
