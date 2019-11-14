@@ -9,6 +9,14 @@ volumes:
     driver: "local"
   redis_data:
     driver: "local"
+  consul_server1_data:
+    driver: "local"
+  consul_server2_data:
+    driver: "local"
+  consul_server3_data:
+    driver: "local"
+  consul_client_data:
+    driver: "local"
 
 services:
   # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -65,6 +73,139 @@ services:
     command: [
       redis-server,
       "--appendonly yes"
+    ]
+  # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+  # -* CONSUL
+  # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+  fullstack_consul_server1:
+    image: consul:1.6.1
+    container_name: fullstack_consul_server1
+    hostname: fullstack_consul_server1
+    networks:
+      - net
+    ports:
+      - 18500:8500
+    expose:
+      - 8600 # DNS
+      - 8500 # HTTP API
+      - 8501 # HTTPS API
+      - 8502 # gRPC API
+      - 8301 # LAN Serf
+      - 8302 # Wan Serf
+      - 8300 # Server RPC address
+    logging:
+      driver: json-file
+      options:
+        max-size: 512m
+    restart: always
+    volumes:
+      - consul_server1_data:/consul/data
+    environment:
+      - CONSUL_BIND_INTERFACE=eth0
+    command: [
+      agent,
+      --node=consul-server1,
+      --server,
+      --bootstrap,
+      --client=0.0.0.0,
+      --ui
+    ]
+  fullstack_consul_server2:
+    image: consul:1.6.1
+    container_name: fullstack_consul_server2
+    hostname: fullstack_consul_server2
+    networks:
+      - net
+    expose:
+      - 8600 # DNS
+      - 8500 # HTTP API
+      - 8501 # HTTPS API
+      - 8502 # gRPC API
+      - 8301 # LAN Serf
+      - 8302 # Wan Serf
+      - 8300 # Server RPC address
+    depends_on:
+      - fullstack_consul_server1
+    logging:
+      driver: json-file
+      options:
+        max-size: 512m
+    restart: always
+    volumes:
+      - consul_server2_data:/consul/data
+    environment:
+      - CONSUL_BIND_INTERFACE=eth0
+    command: [
+      agent,
+      --node=consul-server2,
+      --server,
+      --client=0.0.0.0,
+      --join=fullstack_consul_server1
+    ]
+  fullstack_consul_server3:
+    image: consul:1.6.1
+    container_name: fullstack_consul_server3
+    hostname: fullstack_consul_server3
+    networks:
+      - net
+    expose:
+      - 8600 # DNS
+      - 8500 # HTTP API
+      - 8501 # HTTPS API
+      - 8502 # gRPC API
+      - 8301 # LAN Serf
+      - 8302 # Wan Serf
+      - 8300 # Server RPC address
+    depends_on:
+      - fullstack_consul_server1
+    logging:
+      driver: json-file
+      options:
+        max-size: 512m
+    restart: always
+    volumes:
+      - consul_server3_data:/consul/data
+    environment:
+      - CONSUL_BIND_INTERFACE=eth0
+    command: [
+      agent,
+      --node=consul-server3,
+      --server,
+      --client=0.0.0.0,
+      --join=fullstack_consul_server1
+    ]
+  fullstack_consul_client:
+    image: consul:1.6.1
+    container_name: fullstack_consul_client
+    hostname: fullstack_consul_client
+    networks:
+      - net
+    expose:
+      - 8600 # DNS
+      - 8500 # HTTP API
+      - 8501 # HTTPS API
+      - 8502 # gRPC API
+      - 8301 # LAN Serf
+      - 8302 # Wan Serf
+      - 8300 # Server RPC address
+    depends_on:
+      - fullstack_consul_server1
+      - fullstack_consul_server2
+      - fullstack_consul_server3
+    logging:
+      driver: json-file
+      options:
+        max-size: 512m
+    restart: always
+    volumes:
+      - consul_client_data:/consul/data
+    environment:
+      - CONSUL_BIND_INTERFACE=eth0
+    command: [
+      agent,
+      --node=consul-client,
+      --client=0.0.0.0,
+      --join=fullstack_consul_server1
     ]
   # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
   # -* GATEWAY
