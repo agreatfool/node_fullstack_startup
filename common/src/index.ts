@@ -5,12 +5,18 @@ import * as grpc from "grpc";
 import * as typeorm from "typeorm";
 import * as Joi from "@hapi/joi";
 import * as moment from "moment";
+import * as Consul from "consul";
+import * as exitHook from "async-exit-hook";
+const uniqid = require("uniqid");
 
 export {
     grpc,
     typeorm,
     Joi,
     moment,
+    Consul,
+    exitHook,
+    uniqid,
 };
 
 // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -43,10 +49,12 @@ export {
 // -* OTHERS
 // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 import * as Logger from "./logger/logger";
+import * as ConsulSign from "./consul/consul";
 
 export {Config} from "./config/config";
 export {Database} from "./database/database";
 
 export {
     Logger,
+    ConsulSign,
 };

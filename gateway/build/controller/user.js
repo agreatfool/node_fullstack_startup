@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const common_1 = require("common");
-const ApiService = require("../service/api");
+const api_1 = require("../service/api");
 const utility_1 = require("../utility/utility");
 const logger_1 = require("../logger/logger");
 /**
@@ -84,11 +84,17 @@ exports.getUser = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
         action: "getUser",
         data: { id: ctx.params.id },
     });
-    let res = yield ApiService.getUser(ctx.params.id);
-    if (res.id === 0) {
-        res = {};
+    try {
+        let res = yield api_1.ApiService.get().getUser(ctx.params.id);
+        if (res.id === 0) {
+            res = {};
+        }
+        ctx.body = utility_1.buildResponse(200, res);
     }
-    ctx.body = utility_1.buildResponse(200, res);
+    catch (err) {
+        utility_1.handleReconnecting(err).catch((_) => _); // dismiss reconnection result
+        ctx.body = utility_1.buildResponse(-1, err.stack);
+    }
 });
 /**
  * @swagger
@@ -126,11 +132,17 @@ exports.getUserWithSkills = (ctx) => __awaiter(void 0, void 0, void 0, function*
         action: "getUserWithSkills",
         data: { id: ctx.params.id },
     });
-    const res = yield ApiService.getUserWithSkills(ctx.params.id);
-    if (res.user.id === 0) {
-        res.user = {};
+    try {
+        const res = yield api_1.ApiService.get().getUserWithSkills(ctx.params.id);
+        if (res.user.id === 0) {
+            res.user = {};
+        }
+        ctx.body = utility_1.buildResponse(200, res);
     }
-    ctx.body = utility_1.buildResponse(200, res);
+    catch (err) {
+        utility_1.handleReconnecting(err).catch((_) => _); // dismiss reconnection result
+        ctx.body = utility_1.buildResponse(-1, err.stack);
+    }
 });
 /**
  * @swagger
@@ -171,11 +183,17 @@ exports.createUser = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
             gender: ctx.request.body.gender,
         },
     });
-    ctx.body = utility_1.buildResponse(200, yield ApiService.createUser({
-        name: ctx.request.body.name,
-        age: ctx.request.body.age,
-        gender: ctx.request.body.gender,
-    }));
+    try {
+        ctx.body = utility_1.buildResponse(200, yield api_1.ApiService.get().createUser({
+            name: ctx.request.body.name,
+            age: ctx.request.body.age,
+            gender: ctx.request.body.gender,
+        }));
+    }
+    catch (err) {
+        utility_1.handleReconnecting(err).catch((_) => _); // dismiss reconnection result
+        ctx.body = utility_1.buildResponse(-1, err.stack);
+    }
 });
 /**
  * @swagger
@@ -238,7 +256,13 @@ exports.createUserWithSkills = (ctx) => __awaiter(void 0, void 0, void 0, functi
             skills: ctx.request.body.skills,
         },
     });
-    ctx.body = utility_1.buildResponse(200, yield ApiService.createUserWithSkills(ctx.request.body.user, ctx.request.body.skills));
+    try {
+        ctx.body = utility_1.buildResponse(200, yield api_1.ApiService.get().createUserWithSkills(ctx.request.body.user, ctx.request.body.skills));
+    }
+    catch (err) {
+        utility_1.handleReconnecting(err).catch((_) => _); // dismiss reconnection result
+        ctx.body = utility_1.buildResponse(-1, err.stack);
+    }
 });
 /**
  * @swagger
@@ -280,15 +304,21 @@ exports.updateUser = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
             gender: ctx.request.body.gender,
         },
     });
-    let res = yield ApiService.updateUser({
-        id: ctx.request.body.id,
-        name: ctx.request.body.name,
-        age: ctx.request.body.age,
-        gender: ctx.request.body.gender,
-    });
-    if (res.id === 0) {
-        res = {};
+    try {
+        let res = yield api_1.ApiService.get().updateUser({
+            id: ctx.request.body.id,
+            name: ctx.request.body.name,
+            age: ctx.request.body.age,
+            gender: ctx.request.body.gender,
+        });
+        if (res.id === 0) {
+            res = {};
+        }
+        ctx.body = utility_1.buildResponse(200, res);
     }
-    ctx.body = utility_1.buildResponse(200, res);
+    catch (err) {
+        utility_1.handleReconnecting(err).catch((_) => _); // dismiss reconnection result
+        ctx.body = utility_1.buildResponse(-1, err.stack);
+    }
 });
 //# sourceMappingURL=user.js.map

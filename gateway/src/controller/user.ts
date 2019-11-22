@@ -2,8 +2,8 @@ import * as Koa from "koa";
 
 import {IdModel, Joi, Logger as CommonLogger, SkillModel, UserModel} from "common";
 
-import * as ApiService from "../service/api";
-import {buildResponse, validateWithJoi, validateWithJoiMulti} from "../utility/utility";
+import {ApiService} from "../service/api";
+import {buildResponse, handleReconnecting, validateWithJoi, validateWithJoiMulti} from "../utility/utility";
 import {Logger} from "../logger/logger";
 
 /**
@@ -81,11 +81,16 @@ export const getUser = async (ctx: Koa.Context) => {
         data: {id: ctx.params.id},
     } as CommonLogger.ILogInfo);
 
-    let res = await ApiService.getUser(ctx.params.id);
-    if (res.id === 0) {
-        res = {} as UserModel.IUser;
+    try {
+        let res = await ApiService.get().getUser(ctx.params.id);
+        if (res.id === 0) {
+            res = {} as UserModel.IUser;
+        }
+        ctx.body = buildResponse(200, res);
+    } catch (err) {
+        handleReconnecting(err).catch((_) => _); // dismiss reconnection result
+        ctx.body = buildResponse(-1, err.stack);
     }
-    ctx.body = buildResponse(200, res);
 };
 
 /**
@@ -126,11 +131,16 @@ export const getUserWithSkills = async (ctx: Koa.Context) => {
         data: {id: ctx.params.id},
     } as CommonLogger.ILogInfo);
 
-    const res = await ApiService.getUserWithSkills(ctx.params.id);
-    if (res.user.id === 0) {
-        res.user = {} as UserModel.IUser;
+    try {
+        const res = await ApiService.get().getUserWithSkills(ctx.params.id);
+        if (res.user.id === 0) {
+            res.user = {} as UserModel.IUser;
+        }
+        ctx.body = buildResponse(200, res);
+    } catch (err) {
+        handleReconnecting(err).catch((_) => _); // dismiss reconnection result
+        ctx.body = buildResponse(-1, err.stack);
     }
-    ctx.body = buildResponse(200, res);
 };
 
 /**
@@ -174,11 +184,16 @@ export const createUser = async (ctx: Koa.Context) => {
         },
     } as CommonLogger.ILogInfo);
 
-    ctx.body = buildResponse(200, await ApiService.createUser({
-        name: (ctx.request as any).body.name,
-        age: (ctx.request as any).body.age,
-        gender: (ctx.request as any).body.gender,
-    } as UserModel.IUser));
+    try {
+        ctx.body = buildResponse(200, await ApiService.get().createUser({
+            name: (ctx.request as any).body.name,
+            age: (ctx.request as any).body.age,
+            gender: (ctx.request as any).body.gender,
+        } as UserModel.IUser));
+    } catch (err) {
+        handleReconnecting(err).catch((_) => _); // dismiss reconnection result
+        ctx.body = buildResponse(-1, err.stack);
+    }
 };
 
 /**
@@ -244,10 +259,15 @@ export const createUserWithSkills = async (ctx: Koa.Context) => {
         },
     } as CommonLogger.ILogInfo);
 
-    ctx.body = buildResponse(200, await ApiService.createUserWithSkills(
-        (ctx.request as any).body.user,
-        (ctx.request as any).body.skills,
-    ));
+    try {
+        ctx.body = buildResponse(200, await ApiService.get().createUserWithSkills(
+            (ctx.request as any).body.user,
+            (ctx.request as any).body.skills,
+        ));
+    } catch (err) {
+        handleReconnecting(err).catch((_) => _); // dismiss reconnection result
+        ctx.body = buildResponse(-1, err.stack);
+    }
 };
 
 /**
@@ -292,14 +312,19 @@ export const updateUser = async (ctx: Koa.Context) => {
         },
     } as CommonLogger.ILogInfo);
 
-    let res = await ApiService.updateUser({
-        id: (ctx.request as any).body.id,
-        name: (ctx.request as any).body.name,
-        age: (ctx.request as any).body.age,
-        gender: (ctx.request as any).body.gender,
-    } as UserModel.IUser);
-    if (res.id === 0) {
-        res = {} as UserModel.IUser;
+    try {
+        let res = await ApiService.get().updateUser({
+            id: (ctx.request as any).body.id,
+            name: (ctx.request as any).body.name,
+            age: (ctx.request as any).body.age,
+            gender: (ctx.request as any).body.gender,
+        } as UserModel.IUser);
+        if (res.id === 0) {
+            res = {} as UserModel.IUser;
+        }
+        ctx.body = buildResponse(200, res);
+    } catch (err) {
+        handleReconnecting(err).catch((_) => _); // dismiss reconnection result
+        ctx.body = buildResponse(-1, err.stack);
     }
-    ctx.body = buildResponse(200, res);
 };

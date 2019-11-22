@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const common_1 = require("common");
-const ApiService = require("../service/api");
+const api_1 = require("../service/api");
 const utility_1 = require("../utility/utility");
 const logger_1 = require("../logger/logger");
 /**
@@ -79,7 +79,17 @@ exports.getSkill = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
         action: "getSkill",
         data: { id: ctx.params.id },
     });
-    ctx.body = utility_1.buildResponse(200, yield ApiService.getSkill(ctx.params.id));
+    try {
+        let res = yield api_1.ApiService.get().getSkill(ctx.params.id);
+        if (res.id === 0) {
+            res = {};
+        }
+        ctx.body = utility_1.buildResponse(200, res);
+    }
+    catch (err) {
+        utility_1.handleReconnecting(err).catch((_) => _); // dismiss reconnection result
+        ctx.body = utility_1.buildResponse(-1, err.stack);
+    }
 });
 /**
  * @swagger
@@ -117,7 +127,13 @@ exports.getSkills = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
         action: "getSkills",
         data: { id: ctx.params.id },
     });
-    ctx.body = utility_1.buildResponse(200, yield ApiService.getSkills(ctx.params.id));
+    try {
+        ctx.body = utility_1.buildResponse(200, yield api_1.ApiService.get().getSkills(ctx.params.id));
+    }
+    catch (err) {
+        utility_1.handleReconnecting(err).catch((_) => _); // dismiss reconnection result
+        ctx.body = utility_1.buildResponse(-1, err.stack);
+    }
 });
 /**
  * @swagger
@@ -169,10 +185,17 @@ exports.updateSkill = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
             skill: ctx.request.body.skill,
         },
     });
-    let res = yield ApiService.updateSkill(ctx.request.body.id, ctx.request.body.skill);
-    if (res.id === 0) {
-        res = {};
+    const reqBody = ctx.request.body;
+    try {
+        let res = yield api_1.ApiService.get().updateSkill(reqBody.id, reqBody.skill);
+        if (res.id === 0) {
+            res = {};
+        }
+        ctx.body = utility_1.buildResponse(200, res);
     }
-    ctx.body = utility_1.buildResponse(200, res);
+    catch (err) {
+        utility_1.handleReconnecting(err).catch((_) => _); // dismiss reconnection result
+        ctx.body = utility_1.buildResponse(-1, err.stack);
+    }
 });
 //# sourceMappingURL=skill.js.map

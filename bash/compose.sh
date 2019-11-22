@@ -11,6 +11,16 @@ export MYSQL_PWD=abc123_
 export GATEWAY_VERSION=`cat ./gateway/package.json | jq -r '.version'`
 export SERVER_VERSION=`cat ./server/package.json | jq -r '.version'`
 
+# consul commands:
+# nodes:
+#   list all: curl http://127.0.0.1:18500/v1/health/state/any | jq .
+#   list all services: curl http://127.0.0.1:18500/v1/catalog/services | jq .
+#   detail service: curl http://127.0.0.1:18500/v1/catalog/service/:service_name | jq .
+# services:
+#   list all: curl http://127.0.0.1:18500/v1/agent/services | jq .
+#   detail: curl http://127.0.0.1:18500/v1/agent/service/:service_id | jq .
+#   deregister: curl --request PUT http://127.0.0.1:18500/v1/agent/service/deregister/:service_id
+
 function start() {
     mkdir -p /tmp/logs/gateway
     mkdir -p /tmp/logs/server
@@ -36,6 +46,11 @@ function mysql() {
         mysql -hfullstack_mysql -uroot -p${MYSQL_PWD}
 }
 
+function rebuild() {
+    docker-compose \
+        -f ${CONF} -p "fullstack" up -d $1
+}
+
 function restart() {
     docker-compose \
         -f ${CONF} -p "fullstack" restart $1
@@ -45,7 +60,7 @@ function usage() {
     echo "Usage: compose.sh start|stop|clear|mysql|restart"
 }
 
-if [[ $1 != "start" ]] && [[ $1 != "stop" ]] && [[ $1 != "clear" ]] && [[ $1 != "mysql" ]] && [[ $1 != "restart" ]]; then
+if [[ $1 != "start" ]] && [[ $1 != "stop" ]] && [[ $1 != "clear" ]] && [[ $1 != "mysql" ]] && [[ $1 != "restart" ]] && [[ $1 != "rebuild" ]]; then
     usage
     exit 0
 fi

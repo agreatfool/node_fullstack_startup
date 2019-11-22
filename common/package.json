@@ -10,15 +10,19 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@types/consul": "0.23.34",
     "@types/hapi__joi": "16.0.2",
     "@types/node": "12.7.12"
   },
   "dependencies": {
     "@hapi/joi": "16.1.7",
+    "async-exit-hook": "2.0.1",
+    "consul": "0.36.0",
     "grpc": "1.24.0",
     "grpc_tools_node_protoc_ts": "2.5.5",
     "moment": "2.24.0",
     "typeorm": "0.2.20",
+    "uniqid": "5.1.0",
     "winston": "3.2.1",
     "winston-daily-rotate-file": "4.2.1",
     "yaml": "1.7.2"

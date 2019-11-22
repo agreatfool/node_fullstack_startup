@@ -2,8 +2,8 @@ import * as Koa from "koa";
 
 import {IdModel, Joi, Logger as CommonLogger, SkillModel} from "common";
 
-import * as ApiService from "../service/api";
-import {buildResponse, validateWithJoi} from "../utility/utility";
+import {ApiService} from "../service/api";
+import {buildResponse, handleReconnecting, validateWithJoi} from "../utility/utility";
 import {Logger} from "../logger/logger";
 
 /**
@@ -76,7 +76,16 @@ export const getSkill = async (ctx: Koa.Context) => {
         data: {id: ctx.params.id},
     } as CommonLogger.ILogInfo);
 
-    ctx.body = buildResponse(200, await ApiService.getSkill(ctx.params.id));
+    try {
+        let res = await ApiService.get().getSkill(ctx.params.id) as SkillModel.ISkill;
+        if (res.id === 0) {
+            res = {} as SkillModel.ISkill;
+        }
+        ctx.body = buildResponse(200, res);
+    } catch (err) {
+        handleReconnecting(err).catch((_) => _); // dismiss reconnection result
+        ctx.body = buildResponse(-1, err.stack);
+    }
 };
 
 /**
@@ -117,7 +126,12 @@ export const getSkills = async (ctx: Koa.Context) => {
         data: {id: ctx.params.id},
     } as CommonLogger.ILogInfo);
 
-    ctx.body = buildResponse(200, await ApiService.getSkills(ctx.params.id));
+    try {
+        ctx.body = buildResponse(200, await ApiService.get().getSkills(ctx.params.id));
+    } catch (err) {
+        handleReconnecting(err).catch((_) => _); // dismiss reconnection result
+        ctx.body = buildResponse(-1, err.stack);
+    }
 };
 
 /**
@@ -172,11 +186,16 @@ export const updateSkill = async (ctx: Koa.Context) => {
         },
     } as CommonLogger.ILogInfo);
 
-    let res = await ApiService.updateSkill(
-        (ctx.request as any).body.id, (ctx.request as any).body.skill,
-    ) as SkillModel.ISkill;
-    if (res.id === 0) {
-        res = {} as SkillModel.ISkill;
+    const reqBody = (ctx.request as any).body;
+
+    try {
+        let res = await ApiService.get().updateSkill(reqBody.id, reqBody.skill) as SkillModel.ISkill;
+        if (res.id === 0) {
+            res = {} as SkillModel.ISkill;
+        }
+        ctx.body = buildResponse(200, res);
+    } catch (err) {
+        handleReconnecting(err).catch((_) => _); // dismiss reconnection result
+        ctx.body = buildResponse(-1, err.stack);
     }
-    ctx.body = buildResponse(200, res);
 };

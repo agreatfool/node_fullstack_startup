@@ -11,6 +11,12 @@ const Joi = require("@hapi/joi");
 exports.Joi = Joi;
 const moment = require("moment");
 exports.moment = moment;
+const Consul = require("consul");
+exports.Consul = Consul;
+const exitHook = require("async-exit-hook");
+exports.exitHook = exitHook;
+const uniqid = require("uniqid");
+exports.uniqid = uniqid;
 // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 // -* PROTOBUF
 // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -34,6 +40,8 @@ exports.Transformer = Transformer;
 // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 const Logger = require("./logger/logger");
 exports.Logger = Logger;
+const ConsulSign = require("./consul/consul");
+exports.ConsulSign = ConsulSign;
 var config_1 = require("./config/config");
 exports.Config = config_1.Config;
 var database_1 = require("./database/database");

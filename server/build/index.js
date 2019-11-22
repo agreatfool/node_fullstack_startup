@@ -16,6 +16,12 @@ const common_1 = require("common");
 const api_1 = require("./service/api");
 const logger_1 = require("./logger/logger");
 const Koa = require("koa");
+const serviceId = common_1.uniqid();
+const consul = new common_1.Consul({
+    host: common_1.Config.get().getRaw().consul.client.host,
+    port: common_1.Config.get().getRaw().consul.client.port.toString(),
+    promisify: true,
+});
 const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
     // init system
     common_1.Config.get(LibPath.join(__dirname, "..", "..", "fullstack.yml"));
@@ -25,8 +31,8 @@ const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
     logger_1.Logger.get();
     // start server
     const server = new common_1.grpc.Server();
-    const host = common_1.Config.get().getRaw().server.httpHost;
-    const port = common_1.Config.get().getRaw().server.httpPort;
+    const host = common_1.Config.get().getRaw().server.listeningHost;
+    const port = common_1.Config.get().getRaw().server.listeningPort;
     server.addService(common_1.GrpcPb.ApiService, new api_1.ApiServiceImpl());
     server.bind(`${host}:${port}`, common_1.grpc.ServerCredentials.createInsecure());
     server.start();
@@ -34,7 +40,7 @@ const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
 });
 const startWeb = () => __awaiter(void 0, void 0, void 0, function* () {
     const app = new Koa();
-    const host = common_1.Config.get().getRaw().server.httpHost;
+    const host = common_1.Config.get().getRaw().server.listeningHost;
     const port = common_1.Config.get().getRaw().server.webPort;
     app.use((ctx, next) => __awaiter(void 0, void 0, void 0, function* () {
         yield next();
@@ -65,11 +71,42 @@ const startWeb = () => __awaiter(void 0, void 0, void 0, function* () {
     console.log(`Web started, listening: ${host}:${port}`);
     app.listen(port, host);
 });
-startServer().then(() => startWeb()).then((_) => _).catch();
+const register = () => __awaiter(void 0, void 0, void 0, function* () {
+    const serverConf = common_1.Config.get().getRaw().server;
+    yield consul.agent.service.register({
+        name: serverConf.serviceName,
+        id: serviceId,
+        address: serverConf.serviceHost,
+        port: serverConf.servicePort,
+        check: {
+            http: `http://${serverConf.serviceHost}:${serverConf.webPort}/health`,
+            interval: "10s",
+            ttl: "15s",
+        },
+    });
+});
+const cleanup = (done) => {
+    consul.agent.service.deregister(serviceId)
+        .then(() => {
+        console.log("cleanup done");
+        done();
+    })
+        .catch((err) => {
+        console.log(err);
+        done();
+    });
+};
 process.on("uncaughtException", (err) => {
-    console.log(`process on uncaughtException error: ${err}`);
+    console.log("process on unhandledRejection error:", err);
 });
-process.on("unhandledRejection", (err) => {
-    console.log(`process on unhandledRejection error: ${err}`);
+process.on("unhandledRejection", (reason, p) => {
+    console.log("process on unhandledRejection:", reason, "promise:", p);
 });
+// exit
+common_1.exitHook.forceExitTimeout(500); // wait 0.5s before force exit
+common_1.exitHook((done) => {
+    console.log("Process::exitHook - Got exit signal");
+    cleanup(done);
+});
+startServer().then(() => startWeb()).then(() => register()).catch((err) => console.log(err));
 //# sourceMappingURL=index.js.map

@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const api_1 = require("../service/api");
 exports.buildResponse = (code, data) => {
     return {
         code,
@@ -37,5 +38,25 @@ exports.validateWithJoiMulti = (data) => __awaiter(void 0, void 0, void 0, funct
         }
     }
     return null;
+});
+exports.getRandomIntInclusive = (min, max) => {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+exports.handleReconnecting = (err) => __awaiter(void 0, void 0, void 0, function* () {
+    if (err.message.indexOf("14 UNAVAILABLE: failed to connect to all addresses") !== -1) {
+        console.log("Gateway::handleReconnect, gRPC connection failed, start reconnecting ...");
+        try {
+            yield api_1.ApiService.connect();
+            return true;
+        }
+        catch (err) {
+            return false;
+        }
+    }
+    else {
+        return false;
+    }
 });
 //# sourceMappingURL=utility.js.map

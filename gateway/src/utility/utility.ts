@@ -1,5 +1,6 @@
 import {Joi} from "common";
 import {IResponse} from "../controller/router";
+import {ApiService} from "../service/api";
 
 export const buildResponse = <T>(code: number, data: T) => {
     return {
@@ -30,4 +31,24 @@ export const validateWithJoiMulti = async (data: Array<{ schema: Joi.AnySchema, 
         }
     }
     return null;
+};
+
+export const getRandomIntInclusive = (min, max) => {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+export const handleReconnecting = async (err: Error) => { // true: reconnected; false: not connection error | not connected
+    if (err.message.indexOf("14 UNAVAILABLE: failed to connect to all addresses") !== -1) {
+        console.log("Gateway::handleReconnect, gRPC connection failed, start reconnecting ...");
+        try {
+            await ApiService.connect();
+            return true;
+        } catch (err) {
+            return false;
+        }
+    } else {
+        return false;
+    }
 };

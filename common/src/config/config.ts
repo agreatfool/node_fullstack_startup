@@ -7,17 +7,21 @@ export interface IConfig {
         level: string,
     };
     gateway: {
-        httpHost: string, // listening
-        httpPort: number,
-        publicHost: string, // calling
-        publicPort: number,
+        listeningHost: string,
+        listeningPort: number,
+        uiHost: string,
+        uiPort: number,
+        serviceHost: string,
+        servicePort: number,
+        serviceName: string,
     };
     server: {
-        httpHost: string, // listening
-        httpPort: number,
-        publicHost: string, // calling
-        publicPort: number,
+        listeningHost: string,
+        listeningPort: number,
         webPort: number,
+        serviceHost: string,
+        servicePort: number,
+        serviceName: string,
     };
     database: {
         type: string,

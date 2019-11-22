@@ -13,20 +13,24 @@ log:
 # -* Gateway
 # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 gateway:
-  httpHost: "0.0.0.0" # for web server listening
-  httpPort: 3000
-  publicHost: "127.0.0.1" # for swagger ui test purpose
-  publicPort: 3000
+  listeningHost: "0.0.0.0"
+  listeningPort: 3000
+  uiHost: "127.0.0.1"
+  uiPort: 3000
+  serviceHost: "192.168.3.15"
+  servicePort: 3000
+  serviceName: "gateway"
 
 # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 # -* Server
 # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 server:
-  httpHost: "0.0.0.0"
-  httpPort: 50051
-  publicHost: "127.0.0.1"
-  publicPort: 50051
+  listeningHost: "0.0.0.0"
+  listeningPort: 50051
   webPort: 50052
+  serviceHost: "192.168.3.15"
+  servicePort: 50051
+  serviceName: "server"
 
 # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 # -* TypeOrm
