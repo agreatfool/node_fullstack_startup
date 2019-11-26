@@ -16,10 +16,16 @@ const common_1 = require("common");
 const api_1 = require("./service/api");
 const logger_1 = require("./logger/logger");
 const Koa = require("koa");
+const SERVICE_HOST = process.env.hasOwnProperty("SERVICE_HOST") ? process.env.SERVICE_HOST : "";
+const CONSUL_HOST = process.env.hasOwnProperty("CONSUL_HOST") ? process.env.CONSUL_HOST : "";
+const CONSUL_PORT = process.env.hasOwnProperty("CONSUL_PORT") ? process.env.CONSUL_PORT : "";
+if (!SERVICE_HOST || !CONSUL_HOST || !CONSUL_PORT) {
+    throw new Error("server: env variable missing ...");
+}
 const serviceId = common_1.uniqid();
 const consul = new common_1.Consul({
-    host: common_1.Config.get().getRaw().consul.client.host,
-    port: common_1.Config.get().getRaw().consul.client.port.toString(),
+    host: CONSUL_HOST,
+    port: CONSUL_PORT,
     promisify: true,
 });
 const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -76,10 +82,10 @@ const register = () => __awaiter(void 0, void 0, void 0, function* () {
     yield consul.agent.service.register({
         name: serverConf.serviceName,
         id: serviceId,
-        address: serverConf.serviceHost,
+        address: SERVICE_HOST,
         port: serverConf.servicePort,
         check: {
-            http: `http://${serverConf.serviceHost}:${serverConf.webPort}/health`,
+            http: `http://${SERVICE_HOST}:${serverConf.webPort}/health`,
             interval: "10s",
             ttl: "15s",
         },

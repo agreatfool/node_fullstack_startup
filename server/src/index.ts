@@ -7,10 +7,18 @@ import {ApiServiceImpl} from "./service/api";
 import {Logger} from "./logger/logger";
 import * as Koa from "koa";
 
+const SERVICE_HOST = process.env.hasOwnProperty("SERVICE_HOST") ? process.env.SERVICE_HOST : "";
+const CONSUL_HOST = process.env.hasOwnProperty("CONSUL_HOST") ? process.env.CONSUL_HOST : "";
+const CONSUL_PORT = process.env.hasOwnProperty("CONSUL_PORT") ? process.env.CONSUL_PORT : "";
+
+if (!SERVICE_HOST || !CONSUL_HOST || !CONSUL_PORT) {
+    throw new Error("server: env variable missing ...");
+}
+
 const serviceId: string = uniqid();
 const consul = new Consul({
-    host: Config.get().getRaw().consul.client.host,
-    port: Config.get().getRaw().consul.client.port.toString(),
+    host: CONSUL_HOST,
+    port: CONSUL_PORT,
     promisify: true,
 });
 
@@ -76,10 +84,10 @@ const register = async () => {
     await consul.agent.service.register({
         name: serverConf.serviceName,
         id: serviceId,
-        address: serverConf.serviceHost,
+        address: SERVICE_HOST,
         port: serverConf.servicePort,
         check: {
-            http: `http://${serverConf.serviceHost}:${serverConf.webPort}/health`,
+            http: `http://${SERVICE_HOST}:${serverConf.webPort}/health`,
             interval: "10s",
             ttl: "15s",
         },

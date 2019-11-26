@@ -3,9 +3,12 @@ import {Config, Consul, grpc, GrpcPb, Pb, SkillModel, Transformer, UserModel} fr
 import {IResHealthService, IResService} from "common/build/consul/consul";
 import {getRandomIntInclusive} from "../utility/utility";
 
-const config = Config.get(LibPath.join(__dirname, "..", "..", "..", "fullstack.yml"));
+const CONFIG = Config.get(LibPath.join(__dirname, "..", "..", "..", "fullstack.yml"));
 
-const MAX_RETRIES = 2; // FIXME magic number
+const CONSUL_HOST = process.env.hasOwnProperty("CONSUL_HOST") ? process.env.CONSUL_HOST : "";
+const CONSUL_PORT = process.env.hasOwnProperty("CONSUL_PORT") ? process.env.CONSUL_PORT : "";
+
+const MAX_RETRIES = 5; // FIXME magic number
 let RETRIES = 0;
 
 export class ApiService {
@@ -20,16 +23,14 @@ export class ApiService {
     public static async connect() {
         ApiService.get(); // ensure instance existing
 
-        const consulConf = config.getRaw().consul;
         const consul = new Consul({
-            host: consulConf.client.host,
-            port: consulConf.client.port.toString(),
+            host: CONSUL_HOST,
+            port: CONSUL_PORT,
             promisify: true,
         });
 
-        const serverConf = config.getRaw().server;
         const servers = await consul.health.service({
-            service: serverConf.serviceName,
+            service: CONFIG.getRaw().server.serviceName,
             passing: true,
         }) as IResHealthService[];
 
@@ -49,7 +50,7 @@ export class ApiService {
                     } catch (err) {
                         reject(err);
                     }
-                }, 2 * 1000); // retry 10s later // FIXME magic number
+                }, 10 * 1000); // retry 10s later // FIXME magic number
             });
         } else {
             // got available servers

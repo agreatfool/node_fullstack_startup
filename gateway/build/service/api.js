@@ -12,8 +12,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const LibPath = require("path");
 const common_1 = require("common");
 const utility_1 = require("../utility/utility");
-const config = common_1.Config.get(LibPath.join(__dirname, "..", "..", "..", "fullstack.yml"));
-const MAX_RETRIES = 2; // FIXME magic number
+const CONFIG = common_1.Config.get(LibPath.join(__dirname, "..", "..", "..", "fullstack.yml"));
+const CONSUL_HOST = process.env.hasOwnProperty("CONSUL_HOST") ? process.env.CONSUL_HOST : "";
+const CONSUL_PORT = process.env.hasOwnProperty("CONSUL_PORT") ? process.env.CONSUL_PORT : "";
+const MAX_RETRIES = 5; // FIXME magic number
 let RETRIES = 0;
 class ApiService {
     static get() {
@@ -25,15 +27,13 @@ class ApiService {
     static connect() {
         return __awaiter(this, void 0, void 0, function* () {
             ApiService.get(); // ensure instance existing
-            const consulConf = config.getRaw().consul;
             const consul = new common_1.Consul({
-                host: consulConf.client.host,
-                port: consulConf.client.port.toString(),
+                host: CONSUL_HOST,
+                port: CONSUL_PORT,
                 promisify: true,
             });
-            const serverConf = config.getRaw().server;
             const servers = yield consul.health.service({
-                service: serverConf.serviceName,
+                service: CONFIG.getRaw().server.serviceName,
                 passing: true,
             });
             if (servers.length === 0) {
@@ -54,7 +54,7 @@ class ApiService {
                         catch (err) {
                             reject(err);
                         }
-                    }), 2 * 1000); // retry 10s later // FIXME magic number
+                    }), 10 * 1000); // retry 10s later // FIXME magic number
                 });
             }
             else {

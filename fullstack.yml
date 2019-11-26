@@ -17,7 +17,6 @@ gateway:
   listeningPort: 3000
   uiHost: "127.0.0.1"
   uiPort: 3000
-  serviceHost: "192.168.3.15"
   servicePort: 3000
   serviceName: "gateway"
 
@@ -28,7 +27,6 @@ server:
   listeningHost: "0.0.0.0"
   listeningPort: 50051
   webPort: 50052
-  serviceHost: "192.168.3.15"
   servicePort: 50051
   serviceName: "server"
 
@@ -51,11 +49,3 @@ database:
       host: "127.0.0.1"
       port: 16379
     duration: 300000 # 5 minutes
-
-# -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-# -* Consul
-# -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-consul:
-  client:
-    host: "127.0.0.1"
-    port: 18500

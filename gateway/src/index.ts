@@ -13,10 +13,18 @@ const pkg = require("../package.json");
 
 const koaSwagger = require("koa2-swagger-ui");
 
+const SERVICE_HOST = process.env.hasOwnProperty("SERVICE_HOST") ? process.env.SERVICE_HOST : "";
+const CONSUL_HOST = process.env.hasOwnProperty("CONSUL_HOST") ? process.env.CONSUL_HOST : "";
+const CONSUL_PORT = process.env.hasOwnProperty("CONSUL_PORT") ? process.env.CONSUL_PORT : "";
+
+if (!SERVICE_HOST || !CONSUL_HOST || !CONSUL_PORT) {
+    throw new Error("gateway: env variable missing ...");
+}
+
 const serviceId: string = uniqid();
 const consul = new Consul({
-    host: Config.get().getRaw().consul.client.host,
-    port: Config.get().getRaw().consul.client.port.toString(),
+    host: CONSUL_HOST,
+    port: CONSUL_PORT,
     promisify: true,
 });
 
@@ -97,10 +105,10 @@ const register = async () => {
     await consul.agent.service.register({
         name: gatewayConf.serviceName,
         id: serviceId,
-        address: gatewayConf.serviceHost,
+        address: SERVICE_HOST,
         port: gatewayConf.servicePort,
         check: {
-            http: `http://${gatewayConf.serviceHost}:${gatewayConf.servicePort}/health`,
+            http: `http://${SERVICE_HOST}:${gatewayConf.servicePort}/health`,
             interval: "10s",
             ttl: "15s",
         },

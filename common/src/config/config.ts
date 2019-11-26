@@ -11,7 +11,6 @@ export interface IConfig {
         listeningPort: number,
         uiHost: string,
         uiPort: number,
-        serviceHost: string,
         servicePort: number,
         serviceName: string,
     };
@@ -19,7 +18,6 @@ export interface IConfig {
         listeningHost: string,
         listeningPort: number,
         webPort: number,
-        serviceHost: string,
         servicePort: number,
         serviceName: string,
     };
@@ -39,12 +37,6 @@ export interface IConfig {
                 port: number,
             },
             duration: number,
-        },
-    };
-    consul: {
-        client: {
-            host: string,
-            port: number,
         },
     };
 }
