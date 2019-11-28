@@ -1,6 +1,6 @@
 import * as Koa from "koa";
 
-import {IdModel, Joi, Logger as CommonLogger, SkillModel, UserModel} from "common";
+import {Config, IdModel, Joi, Logger as CommonLogger, SkillModel, UserModel} from "common";
 
 import {ApiService} from "../service/api";
 import {buildResponse, handleReconnecting, validateWithJoi, validateWithJoiMulti} from "../utility/utility";
@@ -76,6 +76,7 @@ export const getUser = async (ctx: Koa.Context) => {
 
     Logger.get().info({
         app: "gateway",
+        host: Config.get().getEnv("SERVICE_HOST"),
         module: "UserController",
         action: "getUser",
         data: {id: ctx.params.id},
@@ -126,6 +127,7 @@ export const getUserWithSkills = async (ctx: Koa.Context) => {
 
     Logger.get().info({
         app: "gateway",
+        host: Config.get().getEnv("SERVICE_HOST"),
         module: "UserController",
         action: "getUserWithSkills",
         data: {id: ctx.params.id},
@@ -175,6 +177,7 @@ export const createUser = async (ctx: Koa.Context) => {
 
     Logger.get().info({
         app: "gateway",
+        host: Config.get().getEnv("SERVICE_HOST"),
         module: "UserController",
         action: "createUser",
         data: {
@@ -251,6 +254,7 @@ export const createUserWithSkills = async (ctx: Koa.Context) => {
 
     Logger.get().info({
         app: "gateway",
+        host: Config.get().getEnv("SERVICE_HOST"),
         module: "UserController",
         action: "createUserWithSkills",
         data: {
@@ -302,6 +306,7 @@ export const updateUser = async (ctx: Koa.Context) => {
 
     Logger.get().info({
         app: "gateway",
+        host: Config.get().getEnv("SERVICE_HOST"),
         module: "UserController",
         action: "updateUser",
         data: {

@@ -80,6 +80,7 @@ exports.getUser = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
     }
     logger_1.Logger.get().info({
         app: "gateway",
+        host: common_1.Config.get().getEnv("SERVICE_HOST"),
         module: "UserController",
         action: "getUser",
         data: { id: ctx.params.id },
@@ -128,6 +129,7 @@ exports.getUserWithSkills = (ctx) => __awaiter(void 0, void 0, void 0, function*
     }
     logger_1.Logger.get().info({
         app: "gateway",
+        host: common_1.Config.get().getEnv("SERVICE_HOST"),
         module: "UserController",
         action: "getUserWithSkills",
         data: { id: ctx.params.id },
@@ -175,6 +177,7 @@ exports.createUser = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
     }
     logger_1.Logger.get().info({
         app: "gateway",
+        host: common_1.Config.get().getEnv("SERVICE_HOST"),
         module: "UserController",
         action: "createUser",
         data: {
@@ -249,6 +252,7 @@ exports.createUserWithSkills = (ctx) => __awaiter(void 0, void 0, void 0, functi
     }
     logger_1.Logger.get().info({
         app: "gateway",
+        host: common_1.Config.get().getEnv("SERVICE_HOST"),
         module: "UserController",
         action: "createUserWithSkills",
         data: {
@@ -295,6 +299,7 @@ exports.updateUser = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
     }
     logger_1.Logger.get().info({
         app: "gateway",
+        host: common_1.Config.get().getEnv("SERVICE_HOST"),
         module: "UserController",
         action: "updateUser",
         data: {

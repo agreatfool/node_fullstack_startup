@@ -4,9 +4,11 @@
 #   Gateway servers have fixed addresses
 #   Those gateway servers shall be put under nginx as round robin load balancer
 
+{{range services}} {{$name := .Name}} {{$service := service .Name}} {{ if eq $name "gateway" }}
 upstream gateway {
-    server fullstack_gateway:3000;
-}
+    {{range $service}}server {{.Address}}:{{.Port}} max_fails=3 fail_timeout=60 weight=1;
+    {{else}}server 127.0.0.1:65535; # force a 502{{end}}
+} {{end}} {{end}}
 
 server {
     listen 80;
@@ -15,7 +17,7 @@ server {
     access_log /var/log/nginx/fullstack.access.log;
     error_log /var/log/nginx/fullstack.error.log;
 
-    root /var/www/html;
+    root /usr/share/nginx/html;
 
     index index.html index.htm index.nginx-debian.html;
 

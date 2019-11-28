@@ -7,6 +7,7 @@ export { DailyRotateFileTransportOptions as TransportOptions } from "winston-dai
 export { DailyRotateFile };
 export interface ILogInfo {
     app: string;
+    host: string;
     module: string;
     action: string;
     data: any;

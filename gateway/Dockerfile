@@ -9,7 +9,7 @@ RUN cp -r /opt/common/common ./ && \
     echo "gateway: start update_common.sh ..." && \
     ./bash/update_common.sh && \
     echo "gateway: start yarn install ..." && \
-    yarn install && \
+    yarn install --verbose && \
     echo "gateway: start tsc ..." && \
     tsc && \
     cd .. && rm -rf ./common && \

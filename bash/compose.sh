@@ -6,6 +6,8 @@ cd ${BASEPATH}
 
 CONF="${BASEPATH}/vendor/docker/docker-compose.yml"
 
+HOST_IP=`ifconfig en0 | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p'`
+
 export BASEPATH=${BASEPATH}
 export MYSQL_PWD=abc123_
 export GATEWAY_VERSION=`cat ./gateway/package.json | jq -r '.version'`
@@ -56,11 +58,27 @@ function restart() {
         -f ${CONF} -p "fullstack" restart $1
 }
 
-function usage() {
-    echo "Usage: compose.sh start|stop|clear|mysql|restart"
+function template_test() {
+    mkdir -p /tmp/template
+
+    docker run --rm -it --name template1 \
+        -v ${BASEPATH}/vendor/consul/nginx:/tmp/nginx.ctmpl \
+        -v /tmp/template:/consul-template/data \
+        hashicorp/consul-template:0.22.1-alpine \
+        -dry -log-level=debug -consul-addr=${HOST_IP}:18500 \
+        -consul-retry -consul-retry-attempts=5 -consul-retry-backoff=500ms \
+        -template=/tmp/nginx.ctmpl:/consul-template/data/default.conf
 }
 
-if [[ $1 != "start" ]] && [[ $1 != "stop" ]] && [[ $1 != "clear" ]] && [[ $1 != "mysql" ]] && [[ $1 != "restart" ]] && [[ $1 != "rebuild" ]]; then
+function nginx_reload() {
+    docker exec -it fullstack_nginx nginx -s reload
+}
+
+function usage() {
+    echo "Usage: compose.sh start|stop|clear|mysql|restart|rebuild|template_test|nginx_reload"
+}
+
+if [[ $1 != "start" ]] && [[ $1 != "stop" ]] && [[ $1 != "clear" ]] && [[ $1 != "mysql" ]] && [[ $1 != "restart" ]] && [[ $1 != "rebuild" ]] && [[ $1 != "template_test" ]] && [[ $1 != "nginx_reload" ]]; then
     usage
     exit 0
 fi

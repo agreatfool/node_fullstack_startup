@@ -1,4 +1,4 @@
-import {grpc, GrpcPb, Logger as CommonLogger, moment, Pb, SkillModel, Transformer, UserModel} from "common";
+import {Config, grpc, GrpcPb, Logger as CommonLogger, moment, Pb, SkillModel, Transformer, UserModel} from "common";
 import * as UserDao from "../dao/user";
 import * as SkillDao from "../dao/skill";
 import {Logger} from "../logger/logger";
@@ -9,6 +9,7 @@ export class ApiServiceImpl implements GrpcPb.IApiServer {
 
         Logger.get().info({
             app: "server",
+            host: Config.get().getEnv("SERVICE_HOST"),
             module: "ApiServiceImpl",
             action: "getUser",
             data: {id},
@@ -33,6 +34,7 @@ export class ApiServiceImpl implements GrpcPb.IApiServer {
 
         Logger.get().info({
             app: "server",
+            host: Config.get().getEnv("SERVICE_HOST"),
             module: "ApiServiceImpl",
             action: "getUserWithSkills",
             data: {id},
@@ -60,6 +62,7 @@ export class ApiServiceImpl implements GrpcPb.IApiServer {
 
         Logger.get().info({
             app: "server",
+            host: Config.get().getEnv("SERVICE_HOST"),
             module: "ApiServiceImpl",
             action: "createUser",
             data: {user: req.toObject()},
@@ -80,6 +83,7 @@ export class ApiServiceImpl implements GrpcPb.IApiServer {
 
         Logger.get().info({
             app: "server",
+            host: Config.get().getEnv("SERVICE_HOST"),
             module: "ApiServiceImpl",
             action: "createUserWithSkills",
             data: {
@@ -106,6 +110,7 @@ export class ApiServiceImpl implements GrpcPb.IApiServer {
 
         Logger.get().info({
             app: "server",
+            host: Config.get().getEnv("SERVICE_HOST"),
             module: "ApiServiceImpl",
             action: "updateUser",
             data: {user: req.toObject()},
@@ -129,6 +134,7 @@ export class ApiServiceImpl implements GrpcPb.IApiServer {
 
         Logger.get().info({
             app: "server",
+            host: Config.get().getEnv("SERVICE_HOST"),
             module: "ApiServiceImpl",
             action: "getSkill",
             data: {id},
@@ -151,6 +157,7 @@ export class ApiServiceImpl implements GrpcPb.IApiServer {
 
         Logger.get().info({
             app: "server",
+            host: Config.get().getEnv("SERVICE_HOST"),
             module: "ApiServiceImpl",
             action: "getSkills",
             data: {id},
@@ -174,6 +181,7 @@ export class ApiServiceImpl implements GrpcPb.IApiServer {
 
         Logger.get().info({
             app: "server",
+            host: Config.get().getEnv("SERVICE_HOST"),
             module: "ApiServiceImpl",
             action: "updateSkill",
             data: {req: req.toObject()},

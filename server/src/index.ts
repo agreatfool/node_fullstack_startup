@@ -7,9 +7,10 @@ import {ApiServiceImpl} from "./service/api";
 import {Logger} from "./logger/logger";
 import * as Koa from "koa";
 
-const SERVICE_HOST = process.env.hasOwnProperty("SERVICE_HOST") ? process.env.SERVICE_HOST : "";
-const CONSUL_HOST = process.env.hasOwnProperty("CONSUL_HOST") ? process.env.CONSUL_HOST : "";
-const CONSUL_PORT = process.env.hasOwnProperty("CONSUL_PORT") ? process.env.CONSUL_PORT : "";
+Config.get(LibPath.join(__dirname, "..", "..", "fullstack.yml"));
+const SERVICE_HOST = Config.get().getEnv("SERVICE_HOST");
+const CONSUL_HOST = Config.get().getEnv("CONSUL_HOST");
+const CONSUL_PORT = Config.get().getEnv("CONSUL_PORT");
 
 if (!SERVICE_HOST || !CONSUL_HOST || !CONSUL_PORT) {
     throw new Error("server: env variable missing ...");
@@ -24,7 +25,6 @@ const consul = new Consul({
 
 const startServer = async () => {
     // init system
-    Config.get(LibPath.join(__dirname, "..", "..", "fullstack.yml"));
     await typeorm.createConnection(Object.assign({
         logger: Logger.createDbLogger(),
     }, Database.getConnectionOptions()));

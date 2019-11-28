@@ -9,7 +9,7 @@ RUN cp -r /opt/common/common ./ && \
     echo "server: start update_common.sh ..." && \
     ./bash/update_common.sh && \
     echo "server: start yarn install ..." && \
-    yarn install && \
+    yarn install --verbose && \
     echo "server: start tsc ..." && \
     tsc && \
     cd .. && rm -rf ./common && \

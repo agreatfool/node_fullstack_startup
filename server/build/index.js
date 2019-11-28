@@ -16,9 +16,10 @@ const common_1 = require("common");
 const api_1 = require("./service/api");
 const logger_1 = require("./logger/logger");
 const Koa = require("koa");
-const SERVICE_HOST = process.env.hasOwnProperty("SERVICE_HOST") ? process.env.SERVICE_HOST : "";
-const CONSUL_HOST = process.env.hasOwnProperty("CONSUL_HOST") ? process.env.CONSUL_HOST : "";
-const CONSUL_PORT = process.env.hasOwnProperty("CONSUL_PORT") ? process.env.CONSUL_PORT : "";
+common_1.Config.get(LibPath.join(__dirname, "..", "..", "fullstack.yml"));
+const SERVICE_HOST = common_1.Config.get().getEnv("SERVICE_HOST");
+const CONSUL_HOST = common_1.Config.get().getEnv("CONSUL_HOST");
+const CONSUL_PORT = common_1.Config.get().getEnv("CONSUL_PORT");
 if (!SERVICE_HOST || !CONSUL_HOST || !CONSUL_PORT) {
     throw new Error("server: env variable missing ...");
 }
@@ -30,7 +31,6 @@ const consul = new common_1.Consul({
 });
 const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
     // init system
-    common_1.Config.get(LibPath.join(__dirname, "..", "..", "fullstack.yml"));
     yield common_1.typeorm.createConnection(Object.assign({
         logger: logger_1.Logger.createDbLogger(),
     }, common_1.Database.getConnectionOptions()));

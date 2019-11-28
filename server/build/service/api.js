@@ -9,6 +9,7 @@ class ApiServiceImpl {
         const id = call.request.getId();
         logger_1.Logger.get().info({
             app: "server",
+            host: common_1.Config.get().getEnv("SERVICE_HOST"),
             module: "ApiServiceImpl",
             action: "getUser",
             data: { id },
@@ -28,6 +29,7 @@ class ApiServiceImpl {
         const id = call.request.getId();
         logger_1.Logger.get().info({
             app: "server",
+            host: common_1.Config.get().getEnv("SERVICE_HOST"),
             module: "ApiServiceImpl",
             action: "getUserWithSkills",
             data: { id },
@@ -52,6 +54,7 @@ class ApiServiceImpl {
         const req = call.request;
         logger_1.Logger.get().info({
             app: "server",
+            host: common_1.Config.get().getEnv("SERVICE_HOST"),
             module: "ApiServiceImpl",
             action: "createUser",
             data: { user: req.toObject() },
@@ -69,6 +72,7 @@ class ApiServiceImpl {
         const skills = call.request.getSkillsList();
         logger_1.Logger.get().info({
             app: "server",
+            host: common_1.Config.get().getEnv("SERVICE_HOST"),
             module: "ApiServiceImpl",
             action: "createUserWithSkills",
             data: {
@@ -91,6 +95,7 @@ class ApiServiceImpl {
         const req = call.request;
         logger_1.Logger.get().info({
             app: "server",
+            host: common_1.Config.get().getEnv("SERVICE_HOST"),
             module: "ApiServiceImpl",
             action: "updateUser",
             data: { user: req.toObject() },
@@ -111,6 +116,7 @@ class ApiServiceImpl {
         const id = call.request.getId();
         logger_1.Logger.get().info({
             app: "server",
+            host: common_1.Config.get().getEnv("SERVICE_HOST"),
             module: "ApiServiceImpl",
             action: "getSkill",
             data: { id },
@@ -130,6 +136,7 @@ class ApiServiceImpl {
         const id = call.request.getId();
         logger_1.Logger.get().info({
             app: "server",
+            host: common_1.Config.get().getEnv("SERVICE_HOST"),
             module: "ApiServiceImpl",
             action: "getSkills",
             data: { id },
@@ -150,6 +157,7 @@ class ApiServiceImpl {
         const req = call.request;
         logger_1.Logger.get().info({
             app: "server",
+            host: common_1.Config.get().getEnv("SERVICE_HOST"),
             module: "ApiServiceImpl",
             action: "updateSkill",
             data: { req: req.toObject() },

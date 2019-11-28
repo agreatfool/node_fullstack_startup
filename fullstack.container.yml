@@ -16,7 +16,7 @@ gateway:
   listeningHost: "0.0.0.0"
   listeningPort: 3000
   uiHost: "127.0.0.1"
-  uiPort: 23000
+  uiPort: 8088 # nginx port
   servicePort: 3000
   serviceName: "gateway"
 

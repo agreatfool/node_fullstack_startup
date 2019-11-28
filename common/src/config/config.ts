@@ -55,10 +55,12 @@ export class Config {
 
     private static instance: Config;
     private readonly config: IConfig;
+    private readonly env: { [key: string]: any };
 
     constructor(configPath: string) {
         try {
             this.config = YAML.parse(LibFs.readFileSync(configPath).toString());
+            this.env = {};
         } catch (err) {
             throw err;
         }
@@ -66,5 +68,15 @@ export class Config {
 
     public getRaw(): IConfig {
         return this.config;
+    }
+
+    public getEnv(key: string, defaultVal: any = ""): any {
+        if (this.env.hasOwnProperty(key)) {
+            return this.env[key];
+        } else {
+            const val = process.env.hasOwnProperty(key) ? process.env[key] : defaultVal;
+            this.env[key] = val;
+            return val;
+        }
     }
 }

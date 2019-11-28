@@ -9,9 +9,10 @@ export {DailyRotateFileTransportOptions as TransportOptions} from "winston-daily
 export {DailyRotateFile};
 
 export interface ILogInfo {
-    app: string;
-    module: string;
-    action: string;
+    app: string; // gateway
+    host: string; // fullstack_gateway1
+    module: string; // SkillController
+    action: string; // getSkills
     data: any;
 
     [key: string]: any;

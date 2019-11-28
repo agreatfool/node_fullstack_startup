@@ -5,7 +5,7 @@ WORKDIR /opt/common
 COPY ./context ./
 
 RUN cd common && \
-    yarn install && \
+    yarn install --verbose && \
     ./bash/proto.sh && \
     tsc && \
     ls -l && \

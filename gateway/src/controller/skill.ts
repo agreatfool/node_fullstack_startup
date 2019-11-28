@@ -1,6 +1,6 @@
 import * as Koa from "koa";
 
-import {IdModel, Joi, Logger as CommonLogger, SkillModel} from "common";
+import {Config, IdModel, Joi, Logger as CommonLogger, SkillModel} from "common";
 
 import {ApiService} from "../service/api";
 import {buildResponse, handleReconnecting, validateWithJoi} from "../utility/utility";
@@ -71,6 +71,7 @@ export const getSkill = async (ctx: Koa.Context) => {
 
     Logger.get().info({
         app: "gateway",
+        host: Config.get().getEnv("SERVICE_HOST"),
         module: "SkillController",
         action: "getSkill",
         data: {id: ctx.params.id},
@@ -121,6 +122,7 @@ export const getSkills = async (ctx: Koa.Context) => {
 
     Logger.get().info({
         app: "gateway",
+        host: Config.get().getEnv("SERVICE_HOST"),
         module: "SkillController",
         action: "getSkills",
         data: {id: ctx.params.id},
@@ -178,6 +180,7 @@ export const updateSkill = async (ctx: Koa.Context) => {
 
     Logger.get().info({
         app: "gateway",
+        host: Config.get().getEnv("SERVICE_HOST"),
         module: "SkillController",
         action: "updateSkill",
         data: {

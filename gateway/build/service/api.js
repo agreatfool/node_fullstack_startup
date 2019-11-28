@@ -13,8 +13,8 @@ const LibPath = require("path");
 const common_1 = require("common");
 const utility_1 = require("../utility/utility");
 const CONFIG = common_1.Config.get(LibPath.join(__dirname, "..", "..", "..", "fullstack.yml"));
-const CONSUL_HOST = process.env.hasOwnProperty("CONSUL_HOST") ? process.env.CONSUL_HOST : "";
-const CONSUL_PORT = process.env.hasOwnProperty("CONSUL_PORT") ? process.env.CONSUL_PORT : "";
+const CONSUL_HOST = CONFIG.getEnv("CONSUL_HOST");
+const CONSUL_PORT = CONFIG.getEnv("CONSUL_PORT");
 const MAX_RETRIES = 5; // FIXME magic number
 let RETRIES = 0;
 class ApiService {

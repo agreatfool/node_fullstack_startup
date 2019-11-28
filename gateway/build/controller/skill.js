@@ -75,6 +75,7 @@ exports.getSkill = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
     }
     logger_1.Logger.get().info({
         app: "gateway",
+        host: common_1.Config.get().getEnv("SERVICE_HOST"),
         module: "SkillController",
         action: "getSkill",
         data: { id: ctx.params.id },
@@ -123,6 +124,7 @@ exports.getSkills = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
     }
     logger_1.Logger.get().info({
         app: "gateway",
+        host: common_1.Config.get().getEnv("SERVICE_HOST"),
         module: "SkillController",
         action: "getSkills",
         data: { id: ctx.params.id },
@@ -178,6 +180,7 @@ exports.updateSkill = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
     }
     logger_1.Logger.get().info({
         app: "gateway",
+        host: common_1.Config.get().getEnv("SERVICE_HOST"),
         module: "SkillController",
         action: "updateSkill",
         data: {

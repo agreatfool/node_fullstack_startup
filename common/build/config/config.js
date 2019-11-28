@@ -6,6 +6,7 @@ class Config {
     constructor(configPath) {
         try {
             this.config = YAML.parse(LibFs.readFileSync(configPath).toString());
+            this.env = {};
         }
         catch (err) {
             throw err;
@@ -22,6 +23,16 @@ class Config {
     }
     getRaw() {
         return this.config;
+    }
+    getEnv(key, defaultVal = "") {
+        if (this.env.hasOwnProperty(key)) {
+            return this.env[key];
+        }
+        else {
+            const val = process.env.hasOwnProperty(key) ? process.env[key] : defaultVal;
+            this.env[key] = val;
+            return val;
+        }
     }
 }
 exports.Config = Config;

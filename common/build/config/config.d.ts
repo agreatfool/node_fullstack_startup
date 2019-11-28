@@ -41,6 +41,8 @@ export declare class Config {
     static get(configPath?: string): Config;
     private static instance;
     private readonly config;
+    private readonly env;
     constructor(configPath: string);
     getRaw(): IConfig;
+    getEnv(key: string, defaultVal?: any): any;
 }

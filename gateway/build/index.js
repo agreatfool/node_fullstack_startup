@@ -19,9 +19,10 @@ const common_1 = require("common");
 const api_1 = require("./service/api");
 const pkg = require("../package.json");
 const koaSwagger = require("koa2-swagger-ui");
-const SERVICE_HOST = process.env.hasOwnProperty("SERVICE_HOST") ? process.env.SERVICE_HOST : "";
-const CONSUL_HOST = process.env.hasOwnProperty("CONSUL_HOST") ? process.env.CONSUL_HOST : "";
-const CONSUL_PORT = process.env.hasOwnProperty("CONSUL_PORT") ? process.env.CONSUL_PORT : "";
+common_1.Config.get(LibPath.join(__dirname, "..", "..", "fullstack.yml"));
+const SERVICE_HOST = common_1.Config.get().getEnv("SERVICE_HOST");
+const CONSUL_HOST = common_1.Config.get().getEnv("CONSUL_HOST");
+const CONSUL_PORT = common_1.Config.get().getEnv("CONSUL_PORT");
 if (!SERVICE_HOST || !CONSUL_HOST || !CONSUL_PORT) {
     throw new Error("gateway: env variable missing ...");
 }
@@ -32,7 +33,6 @@ const consul = new common_1.Consul({
     promisify: true,
 });
 const startWeb = () => __awaiter(void 0, void 0, void 0, function* () {
-    common_1.Config.get(LibPath.join(__dirname, "..", "..", "fullstack.yml"));
     logger_1.Logger.get();
     const app = new Koa();
     const host = common_1.Config.get().getRaw().gateway.listeningHost;
