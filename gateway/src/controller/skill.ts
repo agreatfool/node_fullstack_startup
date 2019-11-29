@@ -154,7 +154,8 @@ export const getSkills = async (ctx: Koa.Context) => {
  *         schema:
  *           type: object
  *           required:
- *             - user
+ *             - id
+ *             - skill
  *           properties:
  *             id:
  *               type: integer

@@ -155,7 +155,8 @@ exports.getSkills = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
  *         schema:
  *           type: object
  *           required:
- *             - user
+ *             - id
+ *             - skill
  *           properties:
  *             id:
  *               type: integer
