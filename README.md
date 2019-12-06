@@ -14,3 +14,11 @@ Consul DNS need to modify the DNS setting of host machine, so it's not implement
 3. node通用包镜像（依赖builder）：common/bash/docker.sh
 4. node网关镜像（依赖common和runner）：gateway/bash/docker.sh
 5. node服务器镜像（依赖common和runner）：server/bash/docker.sh
+
+gitea默认创建的，用户：root，密码：Abcd1234_
+默认的组织：fullstack，下属无项目
+token：fullstack，752e305de4936a769d2ed962b3e019f8866e510a
+端口13000，122
+
+jenkins默认创建的，用户：admin，密码：abc123_
+端口18080，50000
