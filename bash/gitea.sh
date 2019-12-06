@@ -10,6 +10,8 @@ GITEA_URL="127.0.0.1:13000"
 TOKEN_NAME="fullstack"
 TOKEN="752e305de4936a769d2ed962b3e019f8866e510a"
 
+# https://try.gitea.io/api/swagger#/
+
 function init() {
     # common
     curl -X POST "http://${GITEA_URL}/api/v1/admin/users/fullstack/repos" \

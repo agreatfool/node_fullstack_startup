@@ -61,3 +61,7 @@ typings/
 .next
 
 .idea
+
+vendor/gitea/git/repositories/fullstack
+vendor/gitea/gitea/indexers
+vendor/gitea/gitea/sessions
