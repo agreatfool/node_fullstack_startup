@@ -14,3 +14,12 @@
 09:44:49.840647 version@stat F·[1] S·127B[127B] Sc·[0.25]
 09:44:49.872701 db@janitor F·3 G·0
 09:44:49.873243 db@open done T·44.6784ms
+=============== Dec 6, 2019 (UTC) ===============
+11:49:22.447640 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+11:49:22.454481 version@stat F·[1] S·127B[127B] Sc·[0.25]
+11:49:22.455052 db@open opening
+11:49:22.456364 journal@recovery F·1
+11:49:22.456925 journal@recovery recovering @3
+11:49:22.466953 version@stat F·[1] S·127B[127B] Sc·[0.25]
+11:49:22.482746 db@janitor F·3 G·0
+11:49:22.483128 db@open done T·27.7734ms
