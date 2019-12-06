@@ -1,0 +1,62 @@
+version: "2.1"
+
+networks:
+  net:
+    driver: "bridge"
+
+volumes:
+  mysql_data:
+    driver: "local"
+
+services:
+  # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+  # -* GITEA
+  # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+  localbuild_gitea:
+    image: gitea/gitea:1.10.0
+    container_name: localbuild_gitea
+    hostname: localbuild_gitea
+    networks:
+      - net
+    ports:
+      - 13000:3000
+      - 122:22
+    logging:
+      driver: json-file
+      options:
+        max-size: 512m
+    restart: always
+    healthcheck:
+      test: wget http://127.0.0.1:3000 -q -O - > /dev/null 2>&1
+      interval: 10s
+      timeout: 20s
+      retries: 10
+    volumes:
+      - ${BASEPATH}/vendor/gitea:/data
+  # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+  # -* JENKINS
+  # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+  localbuild_jenkins:
+    image: jenkins/jenkins:2.190.3-alpine
+    container_name: localbuild_jenkins
+    hostname: localbuild_jenkins
+    networks:
+      - net
+    ports:
+      - 18080:8080
+      - 50000:50000
+    logging:
+      driver: json-file
+      options:
+        max-size: 512m
+    restart: always
+    healthcheck:
+      test: wget http://127.0.0.1:8080/login -q -O - > /dev/null 2>&1
+      interval: 10s
+      timeout: 20s
+      retries: 10
+    volumes:
+      - ${BASEPATH}/vendor/jenkins:/var/jenkins_home
+  # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+  # -* DOCKER REGISTRY
+  # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-

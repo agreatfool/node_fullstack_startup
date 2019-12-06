@@ -4,7 +4,7 @@ FULLPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 BASEPATH="${FULLPATH}/.."
 cd ${BASEPATH}
 
-CONF="${BASEPATH}/vendor/docker/docker-compose.yml"
+CONF="${BASEPATH}/vendor/docker/deploy-compose.yml"
 
 HOST_IP=`ifconfig en0 | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p'`
 
@@ -75,10 +75,10 @@ function nginx_reload() {
 }
 
 function usage() {
-    echo "Usage: compose.sh start|stop|clear|mysql|restart|rebuild|template_test|nginx_reload"
+    echo "Usage: deploy.sh start|stop|clear|mysql|rebuild|restart|template_test|nginx_reload"
 }
 
-if [[ $1 != "start" ]] && [[ $1 != "stop" ]] && [[ $1 != "clear" ]] && [[ $1 != "mysql" ]] && [[ $1 != "restart" ]] && [[ $1 != "rebuild" ]] && [[ $1 != "template_test" ]] && [[ $1 != "nginx_reload" ]]; then
+if [[ $1 != "start" ]] && [[ $1 != "stop" ]] && [[ $1 != "clear" ]] && [[ $1 != "mysql" ]] && [[ $1 != "rebuild" ]] && [[ $1 != "restart" ]] && [[ $1 != "template_test" ]] && [[ $1 != "nginx_reload" ]]; then
     usage
     exit 0
 fi
