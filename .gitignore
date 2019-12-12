@@ -65,3 +65,6 @@ typings/
 vendor/gitea/git/repositories/fullstack
 vendor/gitea/gitea/indexers
 vendor/gitea/gitea/sessions
+vendor/gitea/gitea/log
+
+vendor/jenkins/.owner
