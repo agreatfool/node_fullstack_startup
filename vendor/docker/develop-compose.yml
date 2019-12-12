@@ -60,3 +60,29 @@ services:
   # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
   # -* DOCKER REGISTRY
   # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+  localbuild_registry:
+    image: registry:2.7.1
+    container_name: localbuild_registry
+    hostname: localbuild_registry
+    networks:
+      - net
+    ports:
+      - 15000:5000
+    logging:
+      driver: json-file
+      options:
+        max-size: 512m
+    restart: always
+    healthcheck:
+      test: wget http://127.0.0.1:5000 -q -O - > /dev/null 2>&1
+      interval: 10s
+      timeout: 20s
+      retries: 10
+    volumes:
+      - ${BASEPATH}/vendor/registry/auth:/data/registry/auth
+      - ${BASEPATH}/vendor/registry/data:/var/lib/registry
+      - ${BASEPATH}/vendor/registry/config/config.yml:/etc/docker/registry/config.yml
+    environment:
+      - REGISTRY_AUTH=htpasswd
+      - REGISTRY_AUTH_HTPASSWD_REALM="Registry Realm"
+      - REGISTRY_AUTH_HTPASSWD_PATH=/data/registry/auth/htpasswd

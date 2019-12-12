@@ -22,3 +22,17 @@ token：fullstack，752e305de4936a769d2ed962b3e019f8866e510a
 
 jenkins默认创建的，用户：admin，密码：abc123_
 端口18080，50000
+
+需要将测试用的registry放到本机docker的daemon配置中：~/.docker/daemon.json，并重启docker后登入
+用户：test，密码：abc123_
+
+```json
+{
+  "insecure-registries" : [
+    "127.0.0.1:15000"
+  ]
+}
+```
+```bash
+$ docker login 127.0.0.1:15000
+```

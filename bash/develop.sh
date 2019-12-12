@@ -15,6 +15,7 @@ export SERVER_VERSION=`cat ./server/package.json | jq -r '.version'`
 
 # jenkins login: admin abc123_
 # gitea login: root Abcd1234_
+# registry login: 127.0.0.1:15000 test abc123_
 
 function start() {
     docker-compose \
@@ -41,11 +42,20 @@ function restart() {
         -f ${CONF} -p "localbuild" restart $1
 }
 
-function usage() {
-    echo "Usage: develop.sh start|stop|clear|mysql|restart|rebuild"
+function gen_registry_auth() {
+    mkdir -p ${BASEPATH}/vendor/registry/auth
+
+    docker run --rm \
+        --entrypoint htpasswd \
+        registry:2.7.1 \
+        -Bbn test abc123_ > ${BASEPATH}/vendor/registry/auth/htpasswd
 }
 
-if [[ $1 != "start" ]] && [[ $1 != "stop" ]] && [[ $1 != "clear" ]] && [[ $1 != "mysql" ]] && [[ $1 != "restart" ]] && [[ $1 != "rebuild" ]]; then
+function usage() {
+    echo "Usage: develop.sh start|stop|clear|mysql|restart|rebuild|gen_registry_auth"
+}
+
+if [[ $1 != "start" ]] && [[ $1 != "stop" ]] && [[ $1 != "clear" ]] && [[ $1 != "mysql" ]] && [[ $1 != "restart" ]] && [[ $1 != "rebuild" ]] && [[ $1 != "gen_registry_auth" ]]; then
     usage
     exit 0
 fi
