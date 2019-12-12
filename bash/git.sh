@@ -14,8 +14,8 @@ function init() {
         echo ".git not found, init ..."
         git init .
         git remote add origin http://${GITEA_USER}:${TOKEN}@${GITEA_URL}/fullstack/$1.git
-        git config user.name "root"
-        git config user.email "testmail@testmail.com"
+        git config --local user.name "root"
+        git config --local user.email "testmail@testmail.com"
     fi
 }
 
@@ -29,7 +29,7 @@ function push() { # commit & push
     git push origin master --follow-tags --verbose
 }
 
-function version() { # commit & bump version & push
+function patch() { # commit & bump version & push
     commit
     npm version patch
     git push origin master --follow-tags --verbose
@@ -48,10 +48,10 @@ function clear() {
 }
 
 function usage() {
-    echo "Usage: git.sh push|version|tag|clear common|gateway|server"
+    echo "Usage: git.sh push|patch|tag|clear common|gateway|server"
 }
 
-if [[ $1 != "push" ]] && [[ $1 != "version" ]] && [[ $1 != "tag" ]] && [[ $1 != "clear" ]]; then
+if [[ $1 != "push" ]] && [[ $1 != "patch" ]] && [[ $1 != "tag" ]] && [[ $1 != "clear" ]]; then
     usage
     exit 0
 fi

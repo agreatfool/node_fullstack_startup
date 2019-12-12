@@ -56,9 +56,11 @@ export class ApiService {
             RETRIES = 0;
             const randIndex = getRandomIntInclusive(1, servers.length) - 1; // not a good strategy, just for test
             const service = servers[randIndex].Service as IResService;
-            console.log(`Gateway::ApiService::connect, Connected to server: "${service.Address}:${service.Port}"`);
+            const address = service.Address === "host.docker.internal" ? "127.0.0.1" : service.Address;
+            const port = service.Port;
+            console.log(`Gateway::ApiService::connect, Connected to server: "${address}:${port}"`);
             ApiService.instance.client = new GrpcPb.ApiClient(
-                `${service.Address}:${service.Port}`, grpc.credentials.createInsecure(),
+                `${address}:${port}`, grpc.credentials.createInsecure(),
             );
         }
     }

@@ -1,0 +1,51 @@
+version: "2.1"
+
+networks:
+  net:
+    driver: "bridge"
+
+volumes:
+  consul_core_data:
+    driver: "local"
+
+services:
+  # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+  # -* CONSUL
+  # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+  consul_core:
+    image: consul:1.6.1
+    container_name: consul_core
+    networks:
+      - net
+    ports:
+      - 18510:8500
+    expose:
+      - 8600 # DNS
+      - 8500 # HTTP API
+      - 8501 # HTTPS API
+      - 8502 # gRPC API
+      - 8301 # LAN Serf
+      - 8302 # Wan Serf
+      - 8300 # Server RPC address
+    logging:
+      driver: json-file
+      options:
+        max-size: 512m
+    restart: always
+    healthcheck:
+      test: wget http://127.0.0.1:8500/v1/health/node/consul-core -q -O - > /dev/null 2>&1
+      interval: 10s
+      timeout: 20s
+      retries: 10
+    volumes:
+      - consul_core_data:/consul/data
+    environment:
+      - CONSUL_BIND_INTERFACE=eth0
+    command: [
+      agent,
+      --node=consul-core,
+      --server,
+      --bootstrap,
+      --client=0.0.0.0,
+      --ui
+    ]

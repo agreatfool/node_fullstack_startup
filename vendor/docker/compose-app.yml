@@ -382,7 +382,8 @@ services:
       timeout: 10s
       retries: 10
     volumes:
-      - /tmp/logs/gateway:/app/logs
+      - ${BASEPATH}/logs:/app/logs
+      - ${BASEPATH}/pm2:/app/pm2
       - ${BASEPATH}/fullstack.container.yml:/app/fullstack.yml
     environment:
       - SERVICE_HOST=fullstack_gateway1
@@ -428,7 +429,8 @@ services:
       timeout: 10s
       retries: 10
     volumes:
-      - /tmp/logs/gateway:/app/logs
+      - ${BASEPATH}/logs:/app/logs
+      - ${BASEPATH}/pm2:/app/pm2
       - ${BASEPATH}/fullstack.container.yml:/app/fullstack.yml
     environment:
       - SERVICE_HOST=fullstack_gateway2
@@ -474,7 +476,8 @@ services:
       timeout: 10s
       retries: 10
     volumes:
-      - /tmp/logs/gateway:/app/logs
+      - ${BASEPATH}/logs:/app/logs
+      - ${BASEPATH}/pm2:/app/pm2
       - ${BASEPATH}/fullstack.container.yml:/app/fullstack.yml
     environment:
       - SERVICE_HOST=fullstack_gateway3
@@ -518,7 +521,8 @@ services:
       timeout: 10s
       retries: 10
     volumes:
-      - /tmp/logs/server:/app/logs
+      - ${BASEPATH}/logs:/app/logs
+      - ${BASEPATH}/pm2:/app/pm2
       - ${BASEPATH}/fullstack.container.yml:/app/fullstack.yml
     environment:
       - SERVICE_HOST=fullstack_server1
@@ -559,7 +563,8 @@ services:
       timeout: 10s
       retries: 10
     volumes:
-      - /tmp/logs/server:/app/logs
+      - ${BASEPATH}/logs:/app/logs
+      - ${BASEPATH}/pm2:/app/pm2
       - ${BASEPATH}/fullstack.container.yml:/app/fullstack.yml
     environment:
       - SERVICE_HOST=fullstack_server2
@@ -600,7 +605,8 @@ services:
       timeout: 10s
       retries: 10
     volumes:
-      - /tmp/logs/server:/app/logs
+      - ${BASEPATH}/logs:/app/logs
+      - ${BASEPATH}/pm2:/app/pm2
       - ${BASEPATH}/fullstack.container.yml:/app/fullstack.yml
     environment:
       - SERVICE_HOST=fullstack_server3

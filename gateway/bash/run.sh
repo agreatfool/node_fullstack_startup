@@ -1,35 +1,14 @@
 #!/usr/bin/env bash
 
 FULLPATH="$( cd "$(dirname "$0")" ; pwd -P )"
-cd ${FULLPATH}/..
-
-HOST_IP=`ifconfig en0 | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p'`
-
-function container() {
-    docker network create fullstack
-
-#    docker run -it -d \
-#        --name fullstack_server \
-#        --network fullstack \
-#        -p 3000:3000 \
-#        -v ${FULLPATH}/../../fullstack.container.yml:/app/fullstack.yml \
-#        fullstack_gateway:0.0.1
-}
+BASEPATH="${FULLPATH}/.."
+cd ${BASEPATH}
 
 function raw() {
-    SERVICE_HOST=${HOST_IP} \
+    SERVICE_HOST=host.docker.internal \
     CONSUL_HOST=127.0.0.1 \
-    CONSUL_PORT=18500 \
+    CONSUL_PORT=18510 \
         node build/index.js
 }
 
-function usage() {
-    echo "Usage: run.sh container|raw"
-}
-
-if [[ $1 != "container" ]] && [[ $1 != "raw" ]]; then
-    usage
-    exit 0
-fi
-
-eval $1
+raw

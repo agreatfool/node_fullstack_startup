@@ -62,8 +62,10 @@ class ApiService {
                 RETRIES = 0;
                 const randIndex = utility_1.getRandomIntInclusive(1, servers.length) - 1; // not a good strategy, just for test
                 const service = servers[randIndex].Service;
-                console.log(`Gateway::ApiService::connect, Connected to server: "${service.Address}:${service.Port}"`);
-                ApiService.instance.client = new common_1.GrpcPb.ApiClient(`${service.Address}:${service.Port}`, common_1.grpc.credentials.createInsecure());
+                const address = service.Address === "host.docker.internal" ? "127.0.0.1" : service.Address;
+                const port = service.Port;
+                console.log(`Gateway::ApiService::connect, Connected to server: "${address}:${port}"`);
+                ApiService.instance.client = new common_1.GrpcPb.ApiClient(`${address}:${port}`, common_1.grpc.credentials.createInsecure());
             }
         });
     }

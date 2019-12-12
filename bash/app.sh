@@ -25,8 +25,8 @@ export SERVER_VERSION=`cat ./server/package.json | jq -r '.version'`
 #   deregister:         curl --request PUT http://127.0.0.1:18500/v1/agent/service/deregister/:service_id
 
 function start() {
-    mkdir -p /tmp/logs/gateway
-    mkdir -p /tmp/logs/server
+    mkdir -p ${BASEPATH}/logs
+    mkdir -p ${BASEPATH}/pm2
 
     docker-compose -f ${CONF} -p "fullstack" \
         up -d
@@ -34,20 +34,20 @@ function start() {
 
 function stop() {
     if [[ ! -z $1 ]]; then
-        docker-compose -f ${CONF} -p "localbuild" \
+        docker-compose -f ${CONF} -p "fullstack" \
             rm -f -s $1
     else
-        docker-compose -f ${CONF} -p "localbuild" \
+        docker-compose -f ${CONF} -p "fullstack" \
             down
     fi
 }
 
 function clear() {
     if [[ ! -z $1 ]]; then
-        docker-compose -f ${CONF} -p "localbuild" \
+        docker-compose -f ${CONF} -p "fullstack" \
             rm -f -s -v $1
     else
-        docker-compose -f ${CONF} -p "localbuild" \
+        docker-compose -f ${CONF} -p "fullstack" \
             down -v
     fi
 }
