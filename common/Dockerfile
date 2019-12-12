@@ -1,4 +1,6 @@
-FROM fullstack_builder:0.0.1 as builder
+ARG REGISTRY
+
+FROM $REGISTRY/fullstack/builder:0.0.1 as builder
 
 WORKDIR /opt/common
 

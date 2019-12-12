@@ -3,7 +3,11 @@
 FULLPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 cd ${FULLPATH}/../..
 
-VERSION=`cat ./gateway/package.json | jq -r '.version'`
+VERSION=`cat ./common/package.json | jq -r '.version'`
+
+REGISTRY="127.0.0.1:15000"
+ORIGIN_TAG=fullstack_common:${VERSION}
+REGISTRY_TAG=${REGISTRY}/fullstack/common:${VERSION}
 
 # prepare docker context
 rm -rf ./docker
@@ -12,13 +16,16 @@ mkdir -p ./docker/context # since docker COPY command can only copy files & sub 
 rsync -av \
     common \
     ./docker/context \
-    --exclude node_modules \
     --exclude build \
+    --exclude node_modules \
+    --exclude .gitignore \
+    --exclude Dockerfile \
     --exclude README.md
 
 # build image
 docker build \
     --no-cache \
+    --build-arg REGISTRY=${REGISTRY} \
     --tag fullstack_common:${VERSION} \
     --file ./common/Dockerfile \
     ./docker
@@ -28,3 +35,7 @@ docker rmi $(docker images | awk '/^<none>/ {print $3}')
 
 # remove tmp file
 rm -rf ./docker
+
+# push image
+docker tag ${ORIGIN_TAG} ${REGISTRY_TAG}
+docker push ${REGISTRY_TAG}

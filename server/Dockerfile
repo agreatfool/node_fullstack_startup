@@ -1,4 +1,7 @@
-FROM fullstack_common:0.0.1 as builder
+ARG COMMON_VERSION
+ARG REGISTRY
+
+FROM $REGISTRY/fullstack/common:$COMMON_VERSION as builder
 
 WORKDIR /opt/server
 
@@ -15,7 +18,7 @@ RUN cp -r /opt/common/common ./ && \
     cd .. && rm -rf ./common && \
     pwd
 
-FROM fullstack_runner:0.0.1
+FROM $REGISTRY/fullstack/runner:0.0.1
 
 WORKDIR /app
 
