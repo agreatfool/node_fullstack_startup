@@ -18,28 +18,38 @@ export SERVER_VERSION=`cat ./server/package.json | jq -r '.version'`
 # registry login: 127.0.0.1:15000 test abc123_
 
 function start() {
-    docker-compose \
-        -f ${CONF} -p "localbuild" up -d
+    docker-compose -f ${CONF} -p "localbuild" \
+        up -d
 }
 
 function stop() {
-    docker-compose \
-        -f ${CONF} -p "localbuild" down
+    if [[ ! -z $1 ]]; then
+        docker-compose -f ${CONF} -p "localbuild" \
+            rm -f -s $1
+    else
+        docker-compose -f ${CONF} -p "localbuild" \
+            down
+    fi
 }
 
 function clear() {
-    docker-compose \
-        -f ${CONF} -p "localbuild" down -v
+    if [[ ! -z $1 ]]; then
+        docker-compose -f ${CONF} -p "localbuild" \
+            rm -f -s -v $1
+    else
+        docker-compose -f ${CONF} -p "localbuild" \
+            down -v
+    fi
 }
 
 function rebuild() {
-    docker-compose \
-        -f ${CONF} -p "localbuild" up -d $1
+    docker-compose -f ${CONF} -p "localbuild" \
+        up -d $1
 }
 
 function restart() {
-    docker-compose \
-        -f ${CONF} -p "localbuild" restart $1
+    docker-compose -f ${CONF} -p "localbuild" \
+        restart $1
 }
 
 function gen_registry_auth() {

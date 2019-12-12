@@ -27,21 +27,31 @@ function start() {
     mkdir -p /tmp/logs/gateway
     mkdir -p /tmp/logs/server
 
-    docker-compose \
-        -f ${CONF} -p "fullstack" up -d
+    docker-compose -f ${CONF} -p "fullstack" \
+        up -d
 }
 
 function stop() {
-    docker-compose \
-        -f ${CONF} -p "fullstack" down
+    if [[ ! -z $1 ]]; then
+        docker-compose -f ${CONF} -p "localbuild" \
+            rm -f -s $1
+    else
+        docker-compose -f ${CONF} -p "localbuild" \
+            down
+    fi
 }
 
 function clear() {
-    docker-compose \
-        -f ${CONF} -p "fullstack" down -v
+    if [[ ! -z $1 ]]; then
+        docker-compose -f ${CONF} -p "localbuild" \
+            rm -f -s -v $1
+    else
+        docker-compose -f ${CONF} -p "localbuild" \
+            down -v
+    fi
 }
 
-function mysql() {
+function mysql_connect() {
     docker run --rm -it \
         --network fullstack_net \
         mysql:5.6.45 \
@@ -49,13 +59,13 @@ function mysql() {
 }
 
 function rebuild() {
-    docker-compose \
-        -f ${CONF} -p "fullstack" up -d $1
+    docker-compose -f ${CONF} -p "fullstack" \
+        up -d $1
 }
 
 function restart() {
-    docker-compose \
-        -f ${CONF} -p "fullstack" restart $1
+    docker-compose -f ${CONF} -p "fullstack" \
+        restart $1
 }
 
 function template_test() {
@@ -75,10 +85,10 @@ function nginx_reload() {
 }
 
 function usage() {
-    echo "Usage: deploy.sh start|stop|clear|mysql|rebuild|restart|template_test|nginx_reload"
+    echo "Usage: deploy.sh start|stop|clear|mysql_connect|rebuild|restart|template_test|nginx_reload"
 }
 
-if [[ $1 != "start" ]] && [[ $1 != "stop" ]] && [[ $1 != "clear" ]] && [[ $1 != "mysql" ]] && [[ $1 != "rebuild" ]] && [[ $1 != "restart" ]] && [[ $1 != "template_test" ]] && [[ $1 != "nginx_reload" ]]; then
+if [[ $1 != "start" ]] && [[ $1 != "stop" ]] && [[ $1 != "clear" ]] && [[ $1 != "mysql_connect" ]] && [[ $1 != "rebuild" ]] && [[ $1 != "restart" ]] && [[ $1 != "template_test" ]] && [[ $1 != "nginx_reload" ]]; then
     usage
     exit 0
 fi
