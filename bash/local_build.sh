@@ -4,15 +4,20 @@ FULLPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 BASEPATH="${FULLPATH}/.."
 cd ${BASEPATH}
 
-CONF="${BASEPATH}/vendor/docker/develop-compose.yml"
+CONF="${BASEPATH}/vendor/docker/compose-local-build.yml"
 
 export BASEPATH=${BASEPATH}
+
+REGISTRY_USER="test"
+REGISTRY_PWD="abc123_"
 
 # jenkins login: admin abc123_
 # gitea login: root Abcd1234_
 # registry login: 127.0.0.1:15000 test abc123_
 
 function start() {
+    mkdir -p ${BASEPATH}/vendor/registry/data
+
     docker-compose -f ${CONF} -p "localbuild" \
         up -d
 }
@@ -53,14 +58,14 @@ function gen_registry_auth() {
     docker run --rm \
         --entrypoint htpasswd \
         registry:2.7.1 \
-        -Bbn test abc123_ > ${BASEPATH}/vendor/registry/auth/htpasswd
+        -Bbn ${REGISTRY_USER} ${REGISTRY_PWD} > ${BASEPATH}/vendor/registry/auth/htpasswd
 }
 
 function usage() {
-    echo "Usage: develop.sh start|stop|clear|mysql|restart|rebuild|gen_registry_auth"
+    echo "Usage: local_build.sh start|stop|clear|restart|rebuild|gen_registry_auth"
 }
 
-if [[ $1 != "start" ]] && [[ $1 != "stop" ]] && [[ $1 != "clear" ]] && [[ $1 != "mysql" ]] && [[ $1 != "restart" ]] && [[ $1 != "rebuild" ]] && [[ $1 != "gen_registry_auth" ]]; then
+if [[ $1 != "start" ]] && [[ $1 != "stop" ]] && [[ $1 != "clear" ]] && [[ $1 != "restart" ]] && [[ $1 != "rebuild" ]] && [[ $1 != "gen_registry_auth" ]]; then
     usage
     exit 0
 fi

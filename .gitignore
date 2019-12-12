@@ -68,3 +68,5 @@ vendor/gitea/gitea/sessions
 vendor/gitea/gitea/log
 
 vendor/jenkins/.owner
+
+vendor/registry/data
