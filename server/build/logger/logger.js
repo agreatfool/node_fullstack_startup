@@ -5,9 +5,13 @@ const common_1 = require("common");
 class Logger {
     static get() {
         if (!Logger.instance) {
+            const logPath = common_1.Config.get().getRaw().server.logPath;
+            const logFile = LibPath.isAbsolute(logPath)
+                ? LibPath.join(logPath, "server.%DATE%.log")
+                : LibPath.join(__dirname, logPath, "server.%DATE%.log");
             Logger.instance = common_1.Logger.Factory.createLoggerCommon();
             common_1.Logger.Factory.addTransport(Logger.instance, {
-                filename: LibPath.join(__dirname, "../../../logs", "server.%DATE%.log"),
+                filename: logFile,
                 datePattern: "YYYY-MM",
                 zippedArchive: true,
                 maxSize: "30m",
@@ -18,9 +22,13 @@ class Logger {
         return Logger.instance;
     }
     static createDbLogger() {
+        const logPath = common_1.Config.get().getRaw().server.logPath;
+        const logFile = LibPath.isAbsolute(logPath)
+            ? LibPath.join(logPath, "server.typeorm.%DATE%.log")
+            : LibPath.join(__dirname, logPath, "server.typeorm.%DATE%.log");
         const instance = common_1.Logger.Factory.createLoggerCommon();
         common_1.Logger.Factory.addTransport(instance, {
-            filename: LibPath.join(__dirname, "../../../logs", "server.typeorm.%DATE%.log"),
+            filename: logFile,
             datePattern: "YYYY-MM",
             zippedArchive: true,
             maxSize: "30m",

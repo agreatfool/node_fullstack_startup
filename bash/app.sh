@@ -9,6 +9,7 @@ CONF="${BASEPATH}/vendor/docker/deploy-compose.yml"
 HOST_IP=`ifconfig en0 | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p'`
 
 export BASEPATH=${BASEPATH}
+export REGISTRY="127.0.0.1:15000"
 export MYSQL_PWD=abc123_
 export GATEWAY_VERSION=`cat ./gateway/package.json | jq -r '.version'`
 export SERVER_VERSION=`cat ./server/package.json | jq -r '.version'`
@@ -82,6 +83,10 @@ function template_test() {
 
 function nginx_reload() {
     docker exec -it fullstack_nginx nginx -s reload
+}
+
+function generate_compose() {
+
 }
 
 function usage() {

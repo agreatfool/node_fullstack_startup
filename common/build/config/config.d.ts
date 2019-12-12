@@ -10,6 +10,7 @@ export interface IConfig {
         uiPort: number;
         servicePort: number;
         serviceName: string;
+        logPath: string;
     };
     server: {
         listeningHost: string;
@@ -17,6 +18,7 @@ export interface IConfig {
         webPort: number;
         servicePort: number;
         serviceName: string;
+        logPath: string;
     };
     database: {
         type: string;

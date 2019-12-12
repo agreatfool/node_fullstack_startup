@@ -4,9 +4,14 @@ import {Config, Logger as CommonLogger} from "common";
 export class Logger {
     public static get() {
         if (!Logger.instance) {
+            const logPath = Config.get().getRaw().gateway.logPath;
+            const logFile = LibPath.isAbsolute(logPath)
+                ? LibPath.join(logPath, "gateway.%DATE%.log")
+                : LibPath.join(__dirname, logPath, "gateway.%DATE%.log");
+
             Logger.instance = CommonLogger.Factory.createLoggerCommon();
             CommonLogger.Factory.addTransport(Logger.instance, {
-                filename: LibPath.join(__dirname, "../../../logs", "gateway.%DATE%.log"),
+                filename: logFile,
                 datePattern: "YYYY-MM",
                 zippedArchive: true,
                 maxSize: "30m",

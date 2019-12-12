@@ -4,9 +4,14 @@ import {Config, Logger as CommonLogger} from "common";
 export class Logger {
     public static get() {
         if (!Logger.instance) {
+            const logPath = Config.get().getRaw().server.logPath;
+            const logFile = LibPath.isAbsolute(logPath)
+                ? LibPath.join(logPath, "server.%DATE%.log")
+                : LibPath.join(__dirname, logPath, "server.%DATE%.log");
+
             Logger.instance = CommonLogger.Factory.createLoggerCommon();
             CommonLogger.Factory.addTransport(Logger.instance, {
-                filename: LibPath.join(__dirname, "../../../logs", "server.%DATE%.log"),
+                filename: logFile,
                 datePattern: "YYYY-MM",
                 zippedArchive: true,
                 maxSize: "30m",
@@ -19,9 +24,14 @@ export class Logger {
     }
 
     public static createDbLogger(): CommonLogger.TypeOrmLogger {
+        const logPath = Config.get().getRaw().server.logPath;
+        const logFile = LibPath.isAbsolute(logPath)
+            ? LibPath.join(logPath, "server.typeorm.%DATE%.log")
+            : LibPath.join(__dirname, logPath, "server.typeorm.%DATE%.log");
+
         const instance = CommonLogger.Factory.createLoggerCommon();
         CommonLogger.Factory.addTransport(instance, {
-            filename: LibPath.join(__dirname, "../../../logs", "server.typeorm.%DATE%.log"),
+            filename: logFile,
             datePattern: "YYYY-MM",
             zippedArchive: true,
             maxSize: "30m",

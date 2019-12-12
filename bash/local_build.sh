@@ -6,12 +6,7 @@ cd ${BASEPATH}
 
 CONF="${BASEPATH}/vendor/docker/develop-compose.yml"
 
-HOST_IP=`ifconfig en0 | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p'`
-
 export BASEPATH=${BASEPATH}
-export COMMON_VERSION=`cat ./common/package.json | jq -r '.version'`
-export GATEWAY_VERSION=`cat ./gateway/package.json | jq -r '.version'`
-export SERVER_VERSION=`cat ./server/package.json | jq -r '.version'`
 
 # jenkins login: admin abc123_
 # gitea login: root Abcd1234_

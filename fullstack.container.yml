@@ -19,6 +19,7 @@ gateway:
   uiPort: 8088 # nginx port
   servicePort: 3000
   serviceName: "gateway"
+  logPath: "/app/logs"
 
 # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 # -* Server
@@ -29,6 +30,7 @@ server:
   webPort: 50052
   servicePort: 50051
   serviceName: "server"
+  logPath: "/app/logs"
 
 # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 # -* TypeOrm
@@ -48,4 +50,5 @@ database:
     options:
       host: "fullstack_redis"
       port: 6379
+      db: 0
     duration: 300000 # 5 minutes
