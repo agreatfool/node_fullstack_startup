@@ -27,5 +27,5 @@ RUN cd gateway && \
     ls -l && \
     ls -l ./gateway/node_modules
 
-#ENTRYPOINT ["pm2", "start", "./gateway/build/index.js"]
-ENTRYPOINT ["node", "./gateway/build/index.js"]
+ENTRYPOINT ["pm2-runtime", "start", "./gateway/build/index.js"]
+#ENTRYPOINT ["node", "./gateway/build/index.js"]

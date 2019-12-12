@@ -27,5 +27,5 @@ RUN cd server && \
     ls -l && \
     ls -l ./server/node_modules
 
-#ENTRYPOINT ["pm2", "start", "./server/build/index.js"]
-ENTRYPOINT ["node", "./server/build/index.js"]
+ENTRYPOINT ["pm2-runtime", "start", "./server/build/index.js"]
+#ENTRYPOINT ["node", "./server/build/index.js"]

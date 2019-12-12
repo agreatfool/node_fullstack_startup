@@ -347,7 +347,7 @@ services:
   # -* GATEWAY
   # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
   fullstack_gateway1:
-    image: fullstack_gateway:${GATEWAY_VERSION}
+    image: ${REGISTRY}/fullstack/gateway:${GATEWAY_VERSION}
     container_name: fullstack_gateway1
     hostname: fullstack_gateway1
     depends_on:
@@ -388,8 +388,14 @@ services:
       - SERVICE_HOST=fullstack_gateway1
       - CONSUL_HOST=fullstack_consul_client1
       - CONSUL_PORT=8500
+    command: [
+      "--name=fullstack_gateway1",
+      "--instances=1",
+      "--output=/app/pm2/fullstack_gateway1.stdout.log",
+      "--error=/app/pm2/fullstack_gateway1.stderr.log"
+    ]
   fullstack_gateway2:
-    image: fullstack_gateway:${GATEWAY_VERSION}
+    image: ${REGISTRY}/fullstack/gateway:${GATEWAY_VERSION}
     container_name: fullstack_gateway2
     hostname: fullstack_gateway2
     depends_on:
@@ -428,8 +434,14 @@ services:
       - SERVICE_HOST=fullstack_gateway2
       - CONSUL_HOST=fullstack_consul_client2
       - CONSUL_PORT=8500
+    command: [
+      "--name=fullstack_gateway2",
+      "--instances=1",
+      "--output=/app/pm2/fullstack_gateway2.stdout.log",
+      "--error=/app/pm2/fullstack_gateway2.stderr.log"
+    ]
   fullstack_gateway3:
-    image: fullstack_gateway:${GATEWAY_VERSION}
+    image: ${REGISTRY}/fullstack/gateway:${GATEWAY_VERSION}
     container_name: fullstack_gateway3
     hostname: fullstack_gateway3
     depends_on:
@@ -468,11 +480,17 @@ services:
       - SERVICE_HOST=fullstack_gateway3
       - CONSUL_HOST=fullstack_consul_client1
       - CONSUL_PORT=8500
+    command: [
+      "--name=fullstack_gateway3",
+      "--instances=1",
+      "--output=/app/pm2/fullstack_gateway3.stdout.log",
+      "--error=/app/pm2/fullstack_gateway3.stderr.log"
+    ]
   # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
   # -* SERVER
   # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
   fullstack_server1:
-    image: fullstack_server:${SERVER_VERSION}
+    image: ${REGISTRY}/fullstack/server:${SERVER_VERSION}
     container_name: fullstack_server1
     hostname: fullstack_server1
     depends_on:
@@ -506,8 +524,14 @@ services:
       - SERVICE_HOST=fullstack_server1
       - CONSUL_HOST=fullstack_consul_client2
       - CONSUL_PORT=8500
+    command: [
+      "--name=fullstack_server1",
+      "--instances=1",
+      "--output=/app/pm2/fullstack_server1.stdout.log",
+      "--error=/app/pm2/fullstack_server1.stderr.log"
+    ]
   fullstack_server2:
-    image: fullstack_server:${SERVER_VERSION}
+    image: ${REGISTRY}/fullstack/server:${SERVER_VERSION}
     container_name: fullstack_server2
     hostname: fullstack_server2
     depends_on:
@@ -541,8 +565,14 @@ services:
       - SERVICE_HOST=fullstack_server2
       - CONSUL_HOST=fullstack_consul_client1
       - CONSUL_PORT=8500
+    command: [
+      "--name=fullstack_server2",
+      "--instances=1",
+      "--output=/app/pm2/fullstack_server2.stdout.log",
+      "--error=/app/pm2/fullstack_server2.stderr.log"
+    ]
   fullstack_server3:
-    image: fullstack_server:${SERVER_VERSION}
+    image: ${REGISTRY}/fullstack/server:${SERVER_VERSION}
     container_name: fullstack_server3
     hostname: fullstack_server3
     depends_on:
@@ -576,3 +606,9 @@ services:
       - SERVICE_HOST=fullstack_server3
       - CONSUL_HOST=fullstack_consul_client2
       - CONSUL_PORT=8500
+    command: [
+      "--name=fullstack_server3",
+      "--instances=1",
+      "--output=/app/pm2/fullstack_server3.stdout.log",
+      "--error=/app/pm2/fullstack_server3.stderr.log"
+    ]
