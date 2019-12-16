@@ -11,7 +11,7 @@ export BASEPATH=${BASEPATH}
 REGISTRY_USER="test"
 REGISTRY_PWD="abc123_"
 
-# jenkins login: admin abc123_
+# drone login: oauth2
 # gitea login: root Abcd1234_
 # registry login: 127.0.0.1:15000 test abc123_
 

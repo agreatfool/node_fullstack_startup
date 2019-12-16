@@ -1,0 +1,7 @@
+{
+    "auths": {
+        "http://host.docker.internal:15000": {
+            "test": "$2y$05$7aAJWG8xh7Hdsus0ZUmpa.PGLsuopqcqv3NJDAIitePeJ8TyinHcO"
+        }
+    }
+}
