@@ -34,30 +34,6 @@ services:
     volumes:
       - ${BASEPATH}/vendor/gitea:/data
   # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-  # -* JENKINS
-  # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-#  localbuild_jenkins:
-#    image: jenkins/jenkins:2.190.3-alpine
-#    container_name: localbuild_jenkins
-#    hostname: localbuild_jenkins
-#    networks:
-#      - net
-#    ports:
-#      - 18080:8080
-#      - 50000:50000
-#    logging:
-#      driver: json-file
-#      options:
-#        max-size: 512m
-#    restart: always
-#    healthcheck:
-#      test: wget http://127.0.0.1:8080/login -q -O - > /dev/null 2>&1
-#      interval: 10s
-#      timeout: 20s
-#      retries: 10
-#    volumes:
-#      - ${BASEPATH}/vendor/jenkins:/var/jenkins_home
-  # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
   # -* DOCKER REGISTRY
   # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
   localbuild_registry:
