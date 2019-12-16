@@ -110,11 +110,12 @@ services:
     volumes:
       - ${BASEPATH}/vendor/drone:/data
     environment:
+      - DRONE_DEBUG=true
       - DRONE_AGENTS_ENABLED=true
-      - DRONE_GITEA_CLIENT_ID=3c704215-7bfe-4114-b0d6-e1a9c82e9118
-      - DRONE_GITEA_CLIENT_SECRET=zffezm9pbpmvsWyas6J61WNJgVWH8Y5NC5Z7TNSKgt4=
+      - DRONE_GITEA_SKIP_VERIFY=true
       - DRONE_GITEA_SERVER=http://host.docker.internal:13000
+      - DRONE_GITEA_CLIENT_ID=fd023edb-7976-4d50-a92f-b16612683240
+      - DRONE_GITEA_CLIENT_SECRET=S4Q6PktE3dKNHPUzZrTdyNJsTThwal4doUWf6jf4eRA=
       - DRONE_RPC_SECRET=d9856af41ffe31f5e8025be020e981be
       - DRONE_SERVER_HOST=host.docker.internal:18980
       - DRONE_SERVER_PROTO=http
-      #- DRONE_USER_CREATE=username:root,machine:true,admin:true,token:5af24ab3d61ef6ac5e23n551178638dc
