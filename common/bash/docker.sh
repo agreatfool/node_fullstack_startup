@@ -29,7 +29,7 @@ docker build \
     --build-arg REGISTRY=${REGISTRY} \
     --tag fullstack_common:${VERSION} \
     --file ./Dockerfile \
-    ./docker
+    /tmp/docker
 
 # remove images without tags
 docker rmi $(docker images | awk '/^<none>/ {print $3}')
