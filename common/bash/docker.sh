@@ -1,21 +1,22 @@
 #!/usr/bin/env bash
 
 FULLPATH="$( cd "$(dirname "$0")" ; pwd -P )"
-cd ${FULLPATH}/../..
 
-VERSION=`cat ./common/package.json | jq -r '.version'`
+cd ${FULLPATH}/.. # common root
+
+VERSION=`cat ./package.json | jq -r '.version'`
 
 REGISTRY="127.0.0.1:15000"
 ORIGIN_TAG=fullstack_common:${VERSION}
 REGISTRY_TAG=${REGISTRY}/fullstack/common:${VERSION}
 
 # prepare docker context
-rm -rf ./docker
-mkdir -p ./docker/context # since docker COPY command can only copy files & sub dirs of a source dir rather than the source dir itself, so ./docker/context is the actual context dir
+rm -rf /tmp/docker
+mkdir -p /tmp/docker/context/common # since docker COPY command can only copy files & sub dirs of a source dir rather than the source dir itself, so ./docker/context is the actual context dir
 
 rsync -av \
-    common \
-    ./docker/context \
+    ./* \
+    /tmp/docker/context/common \
     --exclude build \
     --exclude node_modules \
     --exclude .gitignore \
@@ -27,14 +28,14 @@ docker build \
     --no-cache \
     --build-arg REGISTRY=${REGISTRY} \
     --tag fullstack_common:${VERSION} \
-    --file ./common/Dockerfile \
+    --file ./Dockerfile \
     ./docker
 
 # remove images without tags
 docker rmi $(docker images | awk '/^<none>/ {print $3}')
 
 # remove tmp file
-rm -rf ./docker
+rm -rf /tmp/docker
 
 # push image
 docker tag ${ORIGIN_TAG} ${REGISTRY_TAG}

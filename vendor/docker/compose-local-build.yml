@@ -84,9 +84,12 @@ services:
       timeout: 20s
       retries: 10
     volumes:
-      - ${BASEPATH}/vendor/drone:/data
+      - ${BASEPATH}/vendor/drone/data:/data
     environment:
-      - DRONE_DEBUG=true
+      - DRONE_LOGS_DEBUG=true
+      - DRONE_LOGS_COLOR=true
+      - DRONE_LOGS_PRETTY=true
+      - DRONE_LOGS_TRACE=true
       - DRONE_AGENTS_ENABLED=true
       - DRONE_GITEA_SKIP_VERIFY=true
       - DRONE_GITEA_SERVER=http://host.docker.internal:13000

@@ -56,8 +56,30 @@ drone ci只负责common、gateway、server这三者，而构建这三者镜像�
 根据使用者的物理主机不同，exec pipeline可能需要修改平台配置，参见：https://exec-runner.docs.drone.io/configuration/platform/
 除了复用代码之外，因为docker pipeline运行在容器中，如果使用127.0.0.1:15000作为registry的地址的话，pipeline会直接失败，所以只能使用exec
 
-为了让drone能够访问你的私有registry，需要将
+为了让drone能够访问你的私有registry，需要将 dockerconfigjson 放到 .drone.yml 同一层位置
+
+```json
+{
+    "auths": {
+        "http://host.docker.internal:15000": {
+            "test": "$2y$05$7aAJWG8xh7Hdsus0ZUmpa.PGLsuopqcqv3NJDAIitePeJ8TyinHcO"
+        }
+    }
+}
+```
+
+项目在gitea创建完之后，需要在drone进行sync，才能显示在drone的ui上，并需要单独进行activate
+runner需要单独安装：
+https://docs.drone.io/installation/runners/exec/
+https://exec-runner.docs.drone.io/installation/osx/
+并需要在 /etc/drone-runner-exec/config 或 ~/.drone-runner-exec/config 创建一个配置文件
+日志文件在 ~/.drone-runner-exec/log.txt
+runner配置文件项：https://exec-runner.docs.drone.io/installation/reference/
+runner在执行构建任务的时候，会以启动runner的用户来作为构建的用户来执行，因此只要用户正确，就无需额外设置`DRONE_RUNNER_PATH`
 
 ```bash
-
+$ drone-runner-exec service install
+$ drone-runner-exec service start
 ```
+
+有一篇runner的指引，不错：[Builds are Stuck in Pending Status](https://discourse.drone.io/t/builds-are-stuck-in-pending-status/4437)

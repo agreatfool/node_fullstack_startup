@@ -10,3 +10,6 @@ steps:
   - name: build
     commands:
       - /bin/bash bash/docker.sh
+    when:
+      event:
+        - tag
