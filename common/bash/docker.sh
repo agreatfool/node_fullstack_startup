@@ -38,5 +38,9 @@ docker rmi $(docker images | awk '/^<none>/ {print $3}')
 rm -rf /tmp/docker
 
 # push image
+if [[ ! -d "~/.docker" ]];then
+    mkdir ~/.docker
+    cp ./dockerconfigjson ~/.docker/config.json
+fi
 docker tag ${ORIGIN_TAG} ${REGISTRY_TAG}
 docker push ${REGISTRY_TAG}
