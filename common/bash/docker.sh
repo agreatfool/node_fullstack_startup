@@ -43,9 +43,6 @@ docker build \
     --file ./Dockerfile \
     /tmp/docker
 
-# remove images without tags
-docker rmi $(docker images | awk '/^<none>/ {print $3}')
-
 # remove tmp file
 rm -rf /tmp/docker
 

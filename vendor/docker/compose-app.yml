@@ -384,7 +384,7 @@ services:
     volumes:
       - ${BASEPATH}/logs:/app/logs
       - ${BASEPATH}/pm2:/app/pm2
-      - ${BASEPATH}/fullstack.container.yml:/app/fullstack.yml
+      - ${BASEPATH}/gateway/fullstack.container.yml:/app/fullstack.yml
     environment:
       - SERVICE_HOST=fullstack_gateway1
       - CONSUL_HOST=fullstack_consul_client1
@@ -431,7 +431,7 @@ services:
     volumes:
       - ${BASEPATH}/logs:/app/logs
       - ${BASEPATH}/pm2:/app/pm2
-      - ${BASEPATH}/fullstack.container.yml:/app/fullstack.yml
+      - ${BASEPATH}/gateway/fullstack.container.yml:/app/fullstack.yml
     environment:
       - SERVICE_HOST=fullstack_gateway2
       - CONSUL_HOST=fullstack_consul_client2
@@ -478,7 +478,7 @@ services:
     volumes:
       - ${BASEPATH}/logs:/app/logs
       - ${BASEPATH}/pm2:/app/pm2
-      - ${BASEPATH}/fullstack.container.yml:/app/fullstack.yml
+      - ${BASEPATH}/gateway/fullstack.container.yml:/app/fullstack.yml
     environment:
       - SERVICE_HOST=fullstack_gateway3
       - CONSUL_HOST=fullstack_consul_client1
@@ -523,7 +523,7 @@ services:
     volumes:
       - ${BASEPATH}/logs:/app/logs
       - ${BASEPATH}/pm2:/app/pm2
-      - ${BASEPATH}/fullstack.container.yml:/app/fullstack.yml
+      - ${BASEPATH}/server/fullstack.container.yml:/app/fullstack.yml
     environment:
       - SERVICE_HOST=fullstack_server1
       - CONSUL_HOST=fullstack_consul_client2
@@ -565,7 +565,7 @@ services:
     volumes:
       - ${BASEPATH}/logs:/app/logs
       - ${BASEPATH}/pm2:/app/pm2
-      - ${BASEPATH}/fullstack.container.yml:/app/fullstack.yml
+      - ${BASEPATH}/server/fullstack.container.yml:/app/fullstack.yml
     environment:
       - SERVICE_HOST=fullstack_server2
       - CONSUL_HOST=fullstack_consul_client1
@@ -607,7 +607,7 @@ services:
     volumes:
       - ${BASEPATH}/logs:/app/logs
       - ${BASEPATH}/pm2:/app/pm2
-      - ${BASEPATH}/fullstack.container.yml:/app/fullstack.yml
+      - ${BASEPATH}/server/fullstack.container.yml:/app/fullstack.yml
     environment:
       - SERVICE_HOST=fullstack_server3
       - CONSUL_HOST=fullstack_consul_client2
