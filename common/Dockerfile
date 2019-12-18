@@ -1,6 +1,7 @@
 ARG REGISTRY
+ARG BUILDER_VER
 
-FROM $REGISTRY/fullstack/builder:0.0.1 as builder
+FROM $REGISTRY/fullstack/builder:$BUILDER_VER as builder
 
 WORKDIR /opt/common
 

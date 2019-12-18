@@ -1,7 +1,8 @@
-ARG COMMON_VERSION
 ARG REGISTRY
+ARG COMMON_VER
+ARG RUNNER_VER
 
-FROM $REGISTRY/fullstack/common:$COMMON_VERSION as builder
+FROM $REGISTRY/fullstack/common:$COMMON_VER as builder
 
 WORKDIR /opt/gateway
 
@@ -18,7 +19,7 @@ RUN cp -r /opt/common/common ./ && \
     cd .. && rm -rf ./common && \
     pwd
 
-FROM $REGISTRY/fullstack/runner:0.0.1
+FROM $REGISTRY/fullstack/runner:$RUNNER_VER
 
 WORKDIR /app
 

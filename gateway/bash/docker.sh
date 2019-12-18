@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 FULLPATH="$( cd "$(dirname "$0")" ; pwd -P )"
-
 cd ${FULLPATH}/.. # gateway root
 
 # prepare private registry secret
@@ -10,12 +9,19 @@ if [[ ! -d "~/.docker" ]];then
     cp ./dockerconfigjson ~/.docker/config.json
 fi
 
+# versions
 VERSION=`cat ./package.json | jq -r '.version'`
-COMMON_VERSION="0.0.28" # since drone env has current repo only, it has to be hard-coded
+COMMON_VER=`cat ./docker_dep.json | jq -r '.common'`
+RUNNER_VER=`cat ./docker_dep.json | jq -r '.runner'`
 
+# global variables
 REGISTRY="127.0.0.1:15000"
 ORIGIN_TAG=fullstack_gateway:${VERSION}
 REGISTRY_TAG=${REGISTRY}/fullstack/gateway:${VERSION}
+
+# pull necessary images
+docker pull ${REGISTRY}/fullstack/common:${COMMON_VER}
+docker pull ${REGISTRY}/fullstack/runner:${RUNNER_VER}
 
 # prepare docker context
 rm -rf /tmp/docker
@@ -38,7 +44,8 @@ mv /tmp/docker/context/gateway/fullstack.container.yml /tmp/docker/context/gatew
 # build image
 docker build \
     --no-cache \
-    --build-arg COMMON_VERSION=${COMMON_VERSION} \
+    --build-arg COMMON_VER=${COMMON_VER} \
+    --build-arg RUNNER_VER=${RUNNER_VER} \
     --build-arg REGISTRY=${REGISTRY} \
     --tag ${ORIGIN_TAG} \
     --file ./Dockerfile \

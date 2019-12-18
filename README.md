@@ -84,3 +84,5 @@ $ drone-runner-exec service start
 ```
 
 有一篇runner的指引，不错：[Builds are Stuck in Pending Status](https://discourse.drone.io/t/builds-are-stuck-in-pending-status/4437)
+
+多runner之间的协作，任务的组合：https://docs.drone.io/configure/pipeline/multiple/

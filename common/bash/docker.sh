@@ -1,14 +1,25 @@
 #!/usr/bin/env bash
 
 FULLPATH="$( cd "$(dirname "$0")" ; pwd -P )"
-
 cd ${FULLPATH}/.. # common root
 
-VERSION=`cat ./package.json | jq -r '.version'`
+# prepare private registry secret
+if [[ ! -d "~/.docker" ]];then
+    mkdir ~/.docker
+    cp ./dockerconfigjson ~/.docker/config.json
+fi
 
+# versions
+VERSION=`cat ./package.json | jq -r '.version'`
+BUILDER_VER=`cat ./docker_dep.json | jq -r '.builder'`
+
+# global variables
 REGISTRY="127.0.0.1:15000"
 ORIGIN_TAG=fullstack_common:${VERSION}
 REGISTRY_TAG=${REGISTRY}/fullstack/common:${VERSION}
+
+# pull necessary images
+docker pull ${REGISTRY}/fullstack/builder:${BUILDER_VER}
 
 # prepare docker context
 rm -rf /tmp/docker
@@ -27,6 +38,7 @@ rsync -av \
 docker build \
     --no-cache \
     --build-arg REGISTRY=${REGISTRY} \
+    --build-arg BUILDER_VER=${BUILDER_VER} \
     --tag fullstack_common:${VERSION} \
     --file ./Dockerfile \
     /tmp/docker
@@ -38,9 +50,5 @@ docker rmi $(docker images | awk '/^<none>/ {print $3}')
 rm -rf /tmp/docker
 
 # push image
-if [[ ! -d "~/.docker" ]];then
-    mkdir ~/.docker
-    cp ./dockerconfigjson ~/.docker/config.json
-fi
 docker tag ${ORIGIN_TAG} ${REGISTRY_TAG}
 docker push ${REGISTRY_TAG}

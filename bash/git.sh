@@ -5,7 +5,6 @@ BASEPATH="${FULLPATH}/.."
 cd ${BASEPATH}
 
 GITEA_USER="root"
-GITEA_PWD="Abcd1234_"
 GITEA_URL="127.0.0.1:13000"
 TOKEN="752e305de4936a769d2ed962b3e019f8866e510a"
 
@@ -26,21 +25,19 @@ function commit() {
 
 function push() { # commit & push
     commit
-    git push origin master --follow-tags --verbose
+    git push origin master --verbose
 }
 
-function patch() { # commit & bump version & push
+function patch() { # commit & bump version (with new tag) & push
     commit
-    npm version patch
-    git push origin master --follow-tags --verbose
+    npm version patch # this step also tagged new version "v${VERSION}"
+    git push origin master --verbose # push code without tag
 }
 
-function tag() { # commit & bump version & create tag & push
-    commit
-    npm version patch
+function tag() { # commit & bump version (with new tag) & push with this new tag
+    patch
     VERSION=`cat ./package.json | jq -r '.version'`
-    git tag ${VERSION}
-    git push origin master --follow-tags --verbose
+    git push origin "v${VERSION}" --verbose # push only the new tag
 }
 
 function clear() {
