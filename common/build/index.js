@@ -15,6 +15,10 @@ const Consul = require("consul");
 exports.Consul = Consul;
 const exitHook = require("async-exit-hook");
 exports.exitHook = exitHook;
+const mocha = require("mocha");
+exports.mocha = mocha;
+const chai = require("chai");
+exports.chai = chai;
 const uniqid = require("uniqid");
 exports.uniqid = uniqid;
 // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-

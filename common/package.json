@@ -10,16 +10,22 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@hapi/joi": "16.1.7",
+    "@types/chai": "4.2.7",
     "@types/consul": "0.23.34",
     "@types/hapi__joi": "16.0.2",
-    "@types/node": "12.7.12"
+    "@types/mocha": "5.2.7",
+    "@types/node": "12.7.12",
+    "ts-node": "8.5.4",
+    "typescript": "3.7.3"
   },
   "dependencies": {
-    "@hapi/joi": "16.1.7",
     "async-exit-hook": "2.0.1",
+    "chai": "4.2.0",
     "consul": "0.36.0",
     "grpc": "1.24.0",
     "grpc_tools_node_protoc_ts": "2.5.5",
+    "mocha": "6.2.2",
     "moment": "2.24.0",
     "typeorm": "0.2.20",
     "uniqid": "5.1.0",

@@ -6,4 +6,4 @@ DRONE_RPC_DUMP_HTTP_BODY=true
 DRONE_RPC_PROTO=http
 DRONE_RPC_HOST=host.docker.internal:18980
 DRONE_RPC_SECRET=d9856af41ffe31f5e8025be020e981be
-DRONE_RUNNER_PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+DRONE_RUNNER_PATH=$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
