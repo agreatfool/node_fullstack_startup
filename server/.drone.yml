@@ -1,6 +1,23 @@
 kind: pipeline
 type: exec
-name: default
+name: test
+
+platform:
+  os: darwin
+  arch: amd64
+
+steps:
+  - name: test
+    commands:
+      - /bin/bash bash/unit.sh
+    when:
+      event:
+        - tag
+
+---
+kind: pipeline
+type: exec
+name: build
 
 platform:
   os: darwin
@@ -13,3 +30,6 @@ steps:
     when:
       event:
         - tag
+
+depends_on:
+  - test

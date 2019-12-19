@@ -1,6 +1,6 @@
 {
   "name": "common",
-  "version": "0.0.33",
+  "version": "0.0.41",
   "description": "",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -15,9 +15,7 @@
     "@types/consul": "0.23.34",
     "@types/hapi__joi": "16.0.2",
     "@types/mocha": "5.2.7",
-    "@types/node": "12.7.12",
-    "ts-node": "8.5.4",
-    "typescript": "3.7.3"
+    "@types/node": "12.7.12"
   },
   "dependencies": {
     "async-exit-hook": "2.0.1",
@@ -27,7 +25,9 @@
     "grpc_tools_node_protoc_ts": "2.5.5",
     "mocha": "6.2.2",
     "moment": "2.24.0",
+    "ts-node": "8.5.4",
     "typeorm": "0.2.20",
+    "typescript": "3.7.3",
     "uniqid": "5.1.0",
     "winston": "3.2.1",
     "winston-daily-rotate-file": "4.2.1",

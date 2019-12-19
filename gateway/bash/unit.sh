@@ -1,10 +1,23 @@
 #!/usr/bin/env bash
 
 FULLPATH="$( cd "$(dirname "$0")" ; pwd -P )"
-cd ${FULLPATH}/..
+BASEPATH=${FULLPATH}/..
+cd ${BASEPATH}
 
-yarn install
+# means this testing running in the drone env, need to handle common lib cloning
+if [[ ! -d "../common" ]];then
+    GITEA_USER="root"
+    GITEA_URL="127.0.0.1:13000"
+    TOKEN="752e305de4936a769d2ed962b3e019f8866e510a"
 
-MOCHA=./node_modules/mocha/bin/mocha
+    COMMON_VER=`cat ./docker_dep.json | jq -r '.common'`
 
-${MOCHA} -r ts-node/register "./test/**/*.spec.ts"
+    git clone http://${GITEA_USER}:${TOKEN}@${GITEA_URL}/fullstack/common.git ../common
+    cd ../common
+    git checkout "v${COMMON_VER}"
+    yarn install --verbose
+    cd ${BASEPATH}
+fi
+
+# install packages & run tests
+yarn install --verbose && ./node_modules/mocha/bin/mocha -r ts-node/register "./test/**/*.spec.ts"

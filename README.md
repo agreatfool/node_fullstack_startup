@@ -77,6 +77,7 @@ https://exec-runner.docs.drone.io/installation/osx/
 runner配置文件项：https://exec-runner.docs.drone.io/installation/reference/
 runner在执行构建任务的时候，会以启动runner的用户来作为构建的用户来执行，因此只要用户正确，就无需额外设置`DRONE_RUNNER_PATH`
 如果有类似于dart等第三方的一些PATH，就需要单独在`DRONE_RUNNER_PATH`中指明
+exec pipeline可用的env：https://exec-runner.docs.drone.io/configuration/variables/
 
 ```bash
 $ drone-runner-exec service install
