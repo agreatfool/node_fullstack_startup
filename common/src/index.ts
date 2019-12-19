@@ -7,8 +7,6 @@ import * as Joi from "@hapi/joi";
 import * as moment from "moment";
 import * as Consul from "consul";
 import * as exitHook from "async-exit-hook";
-import * as mocha from "mocha";
-import * as chai from "chai";
 const uniqid = require("uniqid");
 
 export {
@@ -19,8 +17,6 @@ export {
     Consul,
     exitHook,
     uniqid,
-    mocha,
-    chai,
 };
 
 // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-

@@ -1,7 +1,8 @@
-import {chai, mocha} from "common";
+import {describe} from "mocha";
+import {expect} from "chai";
 
-mocha.describe("Tests of src/config", () => {
+describe("Tests of src/config", () => {
     it("sample test case, always true", () => {
-        chai.expect(true).to.equal(true);
+        expect(true).to.equal(true);
     });
 });
