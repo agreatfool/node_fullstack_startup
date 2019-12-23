@@ -89,3 +89,41 @@ $ drone-runner-exec service start
 多runner之间的协作，任务的组合：https://docs.drone.io/configure/pipeline/multiple/
 
 drone中的每一个step都是完全独立的，会单独启一个镜像或一个本机的context
+
+drone webhook:
+https://discourse.drone.io/t/how-to-use-global-webhooks/3755
+http://plugins.drone.io/drone-plugins/drone-webhook/
+
+drone cli安装https://docs.drone.io/cli/install/
+drone的deployment可以通过cli命令触发，在某个build的最后一步，制作deploy的触发，然后另做一个task来进行deploy
+docker pull drone/cli:1.2.0
+
+插件downstream可以直接触发：http://plugins.drone.io/drone-plugins/drone-downstream/
+插件需要的token是账号的token，也就是 http://host.docker.internal:18980/account 页面的，而不是服务器启动时设定的RPC TOKEN
+结果插件step一直是pending，不好用；单独镜像命令测试，发现这货的功能和我想象中不太一样，可能是根据某个已经存在的build，进行XXX
+看了下源码，果然如此，其实downstream就是对drone API的一个封装（drone命令行工具也是如此）
+而我查了下官方API手册：https://docs.drone.io/api/overview/，并没有开始一个新的build的方法
+有一个issue，但实际上也没实现，参见：https://github.com/drone/drone/issues/2679#issue-435262568
+解决方案最后只可能是webhook了，尴尬
+```bash
+$ docker run --rm \
+        -e PLUGIN_REPOSITORIES=fullstack/gateway@master \
+        -e PLUGIN_TOKEN=K5i8g6PMlLM3tWaPDRagigPkBrl1YKGu \
+        -e PLUGIN_SERVER=host.docker.internal:18980 \
+        -e PLUGIN_PROTO=http \
+        -e PLUGIN_DEPLOY=production \
+        -e PLUGIN_LAST_SUCCESSFUL=true \
+    plugins/downstream:latest
+time="2019-12-20T09:27:09Z" level=fatal msg="Error: unable to get build list for fullstack/gateway@master"
+
+$ docker run --rm \
+        -e PLUGIN_REPOSITORIES=fullstack/gateway@master \
+        -e PLUGIN_TOKEN=K5i8g6PMlLM3tWaPDRagigPkBrl1YKGu \
+        -e PLUGIN_SERVER=host.docker.internal:18980 \
+        -e PLUGIN_PROTO=http \
+        -e PLUGIN_DEPLOY=production \
+    plugins/downstream:latest
+time="2019-12-20T09:24:45Z" level=fatal msg="Error: for deploy build no must be numeric only  or for branch deploy last_successful should be true, format repository@build/branch"
+```
+
+关于secret和ssh，可以看：https://segmentfault.com/a/1190000018459195

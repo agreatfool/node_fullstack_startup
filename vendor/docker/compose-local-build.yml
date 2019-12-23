@@ -90,7 +90,7 @@ services:
       - DRONE_LOGS_COLOR=true
       - DRONE_LOGS_PRETTY=true
       - DRONE_LOGS_TRACE=true
-      - DRONE_AGENTS_ENABLED=true
+      - DRONE_AGENTS_ENABLED=true # running with no agents, start runners manually
       - DRONE_GITEA_SKIP_VERIFY=true
       - DRONE_GITEA_SERVER=http://host.docker.internal:13000
       - DRONE_GITEA_CLIENT_ID=fd023edb-7976-4d50-a92f-b16612683240
