@@ -45,15 +45,3 @@ drone ci只负责common、gateway、server这三者，而构建这三者镜像�
 因为之前开发基本上已经把所有的制作脚本都写全了，所以用drone的时候就只使用了exec pipeline，实际上为了可移植性和可携带型，在镜像中运行是最好的选择
 根据使用者的物理主机不同，exec pipeline可能需要修改平台配置，参见：https://exec-runner.docs.drone.io/configuration/platform/
 除了复用代码之外，因为docker pipeline运行在容器中，如果使用127.0.0.1:15000作为registry的地址的话，pipeline会直接失败，所以只能使用exec
-
-为了让drone能够访问你的私有registry，需要将 dockerconfigjson 放到 .drone.yml 同一层位置
-
-```json
-{
-    "auths": {
-        "http://host.docker.internal:15000": {
-            "test": "$2y$05$7aAJWG8xh7Hdsus0ZUmpa.PGLsuopqcqv3NJDAIitePeJ8TyinHcO"
-        }
-    }
-}
-```
