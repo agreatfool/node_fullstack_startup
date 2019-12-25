@@ -1,6 +1,6 @@
 {
   "name": "gateway",
-  "version": "0.0.26",
+  "version": "0.0.13",
   "description": "",
   "main": "build/index.js",
   "scripts": {
