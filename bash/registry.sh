@@ -7,11 +7,11 @@ REGISTRY_PWD="abc123_"
 # /# /bin/registry garbage-collect /etc/docker/registry/config.yml
 
 function catalog() {
-    curl -u ${REGISTRY_USER}:${REGISTRY_PWD} http://${REGISTRY}/v2/_catalog
+    curl -u ${REGISTRY_USER}:${REGISTRY_PWD} http://${REGISTRY}/v2/_catalog | jq .
 }
 
 function tags() {
-    curl -u ${REGISTRY_USER}:${REGISTRY_PWD} http://${REGISTRY}/v2/$1/tags/list
+    curl -u ${REGISTRY_USER}:${REGISTRY_PWD} http://${REGISTRY}/v2/$1/tags/list | jq .
 }
 
 function digest() {
